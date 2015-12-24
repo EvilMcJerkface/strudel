@@ -13,9 +13,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
  <modules>
+  <module>common</module>
   <module>epi</module>
   <module>jmx-tool</module>
   <module>epi-tkvs</module>
+  <module>session</module>
+  <module>workload-api</module>
+  <module>bench</module>
  </modules>
  <dependencies>
      <dependency>
