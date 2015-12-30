@@ -16,9 +16,10 @@
   <module>common</module>
   <module>epi</module>
   <module>jmx-tool</module>
-  <module>epi-tkvs</module>
-  <module>session</module>
   <module>workload-api</module>
+  <module>epi-tkvs</module>
+  <module>epi-jpa</module>
+  <module>session</module>
   <module>bench</module>
  </modules>
  <dependencies>
