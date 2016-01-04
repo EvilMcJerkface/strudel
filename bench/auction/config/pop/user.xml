@@ -1,0 +1,9 @@
+<Populate name="User">
+	<minUid/>
+	<userNum/>
+	<min ref="minUid"/>
+	<size ref="userNum"/>
+	<params>
+	  <UNAME_LENGTH>10</UNAME_LENGTH>
+	</params>
+</Populate>

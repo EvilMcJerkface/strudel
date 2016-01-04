@@ -1,0 +1,15 @@
+<transitions>
+	<transition name="START">
+		<Next name="GET_SHARED"/>
+	</transition>
+	<transition name="GET_SHARED">
+		<Next name="GET_SHARED" prob="0.3" />
+		<Next name="UPDATE_SHARED" prob="0.7" />
+	</transition>
+	<transition name="GET_SHARED@EMPTY_RESULT">
+		<Next name="GET_SHARED"/>
+	</transition>
+	<transition name="UPDATE_SHARED">
+	   <Next name="GET_SHARED"/>
+	</transition>
+</transitions>

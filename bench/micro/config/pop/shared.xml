@@ -1,0 +1,11 @@
+<Populate name="Shared">
+	<setNum/>
+	<minSetId>1</minSetId>
+	<itemsPerSet>50</itemsPerSet>
+	<min ref="minSetId"/>
+	<size ref="setNum"/>
+	<params>
+		<ITEMS_PER_SET ref="itemsPerSet"/>
+		<CONTENT_LENGTH>100</CONTENT_LENGTH>
+	</params>
+</Populate>

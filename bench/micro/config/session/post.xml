@@ -1,0 +1,42 @@
+<transitions>
+		<transition name="START">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="HOME">
+			<Next name="LIST_POSTS" prob="0.2" />
+			<Next name="LIST_MY_POSTS" prob="0.3" />
+			<Next name="GET_POST" prob="0.1" />
+			<Next name="GET_MY_POST" prob="0.2" />
+			<Next name="CREATE_POST" prob="0.2" />
+		</transition>
+		<transition name="GET_POST">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="LIST_POSTS">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="LIST_MY_POSTS@EMPTY_RESULT">
+			<Next name="CREATE_POST" prob="0.5" />
+			<Next name="HOME" prob="0.5" />
+		</transition>
+		<transition name="LIST_MY_POSTS">
+			<Next name="CREATE_POST" prob="0.3" />
+			<Next name="UPDATE_POST" prob="0.5" />
+			<Next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="GET_MY_POST">
+			<Next name="GET_MY_POST" prob="0.3" />
+			<Next name="UPDATE_POST" prob="0.5" />
+			<Next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="GET_MY_POST@EMPTY_RESULT">
+			<Next name="LIST_MY_POSTS" prob="0.5" />
+			<Next name="HOME" prob="0.5" />
+		</transition>
+		<transition name="UPDATE_POST">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="CREATE_POST">
+			<Next name="HOME"/>
+		</transition>
+</transitions>

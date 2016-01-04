@@ -1,0 +1,9 @@
+<job extends="job-item">
+  <tasks>
+    <workload>
+      <session extends=".">
+        <transitions extends="session/item-put"/>
+      </session>
+    </workload>
+  </tasks>
+</job>

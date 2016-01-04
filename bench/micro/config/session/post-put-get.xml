@@ -1,0 +1,23 @@
+<transitions>
+	<transition name="START">
+		<Next name="GET_MY_POST" prob="0.5" />
+		<Next name="GET_POST" prob="0.5" />
+	</transition>
+	<transition name="GET_MY_POST">
+		<Next name="GET_MY_POST" prob="0.2" />
+		<Next name="UPDATE_POST" prob="0.7" />
+		<Next name="GET_POST" prob="0.1" />
+	</transition>
+	<transition name="GET_MY_POST@EMPTY_RESULT">
+		<Next name="GET_MY_POST" prob="0.9" />
+		<Next name="GET_POST" prob="0.1" />
+	</transition>
+	<transition name="UPDATE_POST">
+		<Next name="GET_MY_POST" prob="0.75" />
+		<Next name="GET_POST" prob="0.25" />
+	</transition>
+	<transition name="GET_POST">
+		<Next name="GET_MY_POST" prob="0.25" />
+		<Next name="GET_POST" prob="0.75" />
+	</transition>
+</transitions>

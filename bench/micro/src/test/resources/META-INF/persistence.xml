@@ -1,0 +1,24 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+   xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+  <persistence-unit name="micro"
+  	transaction-type="RESOURCE_LOCAL">
+  	 <class>com.nec.strudel.bench.micro.entity.Item</class>
+  	 <class>com.nec.strudel.bench.micro.entity.ItemId</class>
+  	 <class>com.nec.strudel.bench.micro.entity.Shared</class>
+  	 <class>com.nec.strudel.bench.micro.entity.SharedId</class>
+  	 <class>com.nec.strudel.bench.micro.entity.Post</class>
+  	 <class>com.nec.strudel.bench.micro.entity.Submission</class>
+  	 <class>com.nec.strudel.bench.micro.entity.SubmissionId</class>
+  	 <properties>
+  	    <!-- test uses embedded Derby -->
+  	    <property name="javax.persistence.jdbc.driver"
+				value="org.apache.derby.jdbc.EmbeddedDriver"/>
+		<!-- default db /tmp/testDb -->
+		<property name="javax.persistence.jdbc.url"
+				value="jdbc:derby:/tmp/testDb;create=true"/>
+		<property name="javax.persistence.jdbc.user" value="test"/>
+		<property name="javax.persistence.jdbc.password" value="test"/>
+  	 </properties>
+  </persistence-unit>
+</persistence>

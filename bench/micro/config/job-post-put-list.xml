@@ -1,0 +1,9 @@
+<job extends="job-post">
+  <tasks>
+    <workload>
+      <session extends=".">
+        <transitions extends="session/post-put-list"/>
+      </session>
+    </workload>
+  </tasks>
+</job>

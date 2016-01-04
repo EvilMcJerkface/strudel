@@ -1,0 +1,3 @@
+<Populate extends="populate">
+  <validate>true</validate>
+</Populate>

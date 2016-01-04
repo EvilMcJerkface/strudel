@@ -1,0 +1,14 @@
+<transitions>
+	<transition name="START">
+		<Next name="LIST_SHARED"/>
+	</transition>
+	<transition name="LIST_SHARED">
+		<Next name="UPDATE_SHARED"/>
+	</transition>
+	<transition name="LIST_SHARED@EMPTY_RESULT">
+		<Next name="LIST_SHARED"/>
+	</transition>
+	<transition name="UPDATE_SHARED">
+	   <Next name="LIST_SHARED"/>
+	</transition>
+</transitions>

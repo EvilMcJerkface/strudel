@@ -1,0 +1,32 @@
+<transitions>
+		<transition name="START">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="HOME">
+			<Next name="LIST_SHARED" prob="0.4" />
+			<Next name="GET_SHARED" prob="0.3" />
+			<Next name="CREATE_SHARED" prob="0.3" />
+		</transition>
+		<transition name="LIST_SHARED@EMPTY_RESULT">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="LIST_SHARED">
+			<Next name="CREATE_SHARED" prob="0.3" />
+			<Next name="UPDATE_SHARED" prob="0.5" />
+			<Next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="GET_SHARED">
+			<Next name="GET_SHARED" prob="0.3" />
+			<Next name="UPDATE_SHARED" prob="0.5" />
+			<Next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="GET_SHARED@EMPTY_RESULT">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="UPDATE_SHARED">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="CREATE_SHARED">
+			<Next name="HOME"/>
+		</transition>
+</transitions>

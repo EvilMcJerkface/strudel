@@ -1,0 +1,40 @@
+<job extends="job">
+  <userNum>4000</userNum>
+  <setNum>1000</setNum>
+  <itemsPerSet>50</itemsPerSet>
+  <numUpdateItems>1</numUpdateItems>
+  <minUid>1</minUid>
+  <minSetId>1</minSetId>
+  <populateThreads>10</populateThreads>
+  <threadPerNode>16</threadPerNode>
+  <rampupTime>30</rampupTime>
+  <measureTime>60</measureTime>
+  <beforeThinkTime>0</beforeThinkTime>
+  <afterThinkTime>0</afterThinkTime>
+  <maxTimePerSession>0</maxTimePerSession>
+  <minTimePerSession>0</minTimePerSession>
+  <maxCountPerSession>0</maxCountPerSession>
+  <tasks>
+    <populate>
+      <process extends=".">
+			<populate extends="pop/shared">
+				<minSetId ref="minSetId"/>
+				<setNum ref="setNum"/>
+				<itemsPerSet ref="itemsPerSet"/>
+			</populate>
+	   </process>
+    </populate>
+    <workload>
+	  <session extends=".">
+	    <transitions extends="session/shared"/>
+		<params extends=".">
+			<ITEMS_PER_SET ref="itemsPerSet"/>
+			<MIN_SET_ID ref="minSetId"/>
+			<SET_NUM ref="setNum"/>
+			<NUM_UPDATE_ITEMS ref="numUpdateItems"/>
+		</params>
+	  </session>
+    </workload>
+  </tasks>
+
+</job>

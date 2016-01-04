@@ -1,0 +1,9 @@
+<Job extends="job-item">
+  <Tasks>
+    <Workload>
+      <session extends=".">
+        <transitions extends="session/item-put-get"/>
+      </session>
+    </Workload>
+  </Tasks>
+</Job>

@@ -1,0 +1,14 @@
+<Populate>
+	<numOfThreads/>
+	<minUid/>
+	<userNum/>
+	<itemsPerUser/>
+	<packageName>com.nec.bench.micro.populate.entity</packageName>
+	<process>
+			<Populate extends="item">
+				<minUid ref="minUid"/>
+				<userNum ref="userNum"/>
+				<itemsPerUser ref="itemsPerUser"/>
+			</Populate>
+	</process>
+</Populate>

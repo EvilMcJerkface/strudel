@@ -1,0 +1,29 @@
+<transitions>
+  <transition name="START">
+    <Next name="HOME"/>
+  </transition>
+  <transition name="HOME">
+    <Next name="LIST_SUBMISSIONS_TO_ME" prob="0.5" />
+    <Next name="LIST_SUBMISSIONS_BY_ME" prob="0.5" />
+  </transition>
+  <transition name="LIST_SUBMISSIONS_TO_ME">
+    <Next name="LIST_SUBMISSIONS_BY_RECEIVER" prob="0.5"/>
+    <Next name="HOME" prob="0.5"/>
+  </transition>
+  <transition name="LIST_SUBMISSIONS_TO_ME@EMPTY_RESULT">
+    <Next name="LIST_SUBMISSIONS_BY_ME"/>
+  </transition>
+  <transition name="LIST_SUBMISSIONS_BY_ME">
+    <Next name="UPDATE_SUBMISSION"/>
+  </transition>
+  <transition name="LIST_SUBMISSIONS_BY_ME@EMPTY_RESULT">
+    <Next name="LIST_SUBMISSIONS_TO_ME"/>
+  </transition>
+  <transition name="UPDATE_SUBMISSION">
+    <Next name="LIST_SUBMISSIONS_BY_RECEIVER" prob="0.25"/>
+    <Next name="LIST_SUBMISSIONS_BY_ME" prob="0.75" />
+  </transition>
+  <transition name="LIST_SUBMISSIONS_BY_RECEIVER">
+    <Next name="HOME"/>
+  </transition>
+</transitions>

@@ -1,0 +1,32 @@
+<transitions>
+		<transition name="START">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="HOME">
+			<Next name="LIST_ITEMS" prob="0.4" />
+			<Next name="GET_ITEM" prob="0.3" />
+			<Next name="CREATE_ITEM" prob="0.3" />
+		</transition>
+		<transition name="LIST_ITEMS@EMPTY_RESULT">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="LIST_ITEMS">
+			<Next name="CREATE_ITEM" prob="0.3" />
+			<Next name="UPDATE_ITEM" prob="0.5" />
+			<Next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="GET_ITEM">
+			<Next name="GET_ITEM" prob="0.3" />
+			<Next name="UPDATE_ITEM" prob="0.5" />
+			<Next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="GET_ITEM@EMPTY_RESULT">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="UPDATE_ITEM">
+			<Next name="HOME"/>
+		</transition>
+		<transition name="CREATE_ITEM">
+			<Next name="HOME"/>
+		</transition>
+</transitions>

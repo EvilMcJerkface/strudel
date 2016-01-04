@@ -1,0 +1,8 @@
+<transitions>
+	<transition name="START">
+		<Next name="UPDATE_ITEM"/>
+	</transition>
+	<transition name="UPDATE_ITEM">
+		<Next name="UPDATE_ITEM"/>
+	</transition>
+</transitions>

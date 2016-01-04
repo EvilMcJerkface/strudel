@@ -1,0 +1,69 @@
+<session extends="session">
+	<transitions>
+		<transition name="START">
+			<next name="HOME"/>
+		</transition>
+		<transition name="HOME">
+			<next name="VIEW_AUCTION_ITEMS_BY_SELLER" prob="0.1" />
+			<next name="VIEW_SALE_ITEMS_BY_SELLER" prob="0.1" />
+			<next name="VIEW_AUCTION_ITEMS_BY_BUYER" prob="0.1" />
+			<next name="VIEW_SALE_ITEMS_BY_BUYER" prob="0.1" />
+			<next name="VIEW_BIDS_BY_BIDDER" prob="0.1" />
+			<next name="VIEW_WINNING_BIDS_BY_BIDDER" prob="0.1" />
+			<next name="END" prob="0.1" />
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_SELLER">
+			<next name="VIEW_AUCTION_ITEM" prob="0.7" />
+			<next name="HOME" prob="0.3" />
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_SELLER@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_SELLER">
+			<next name="VIEW_SALE_ITEM" prob="0.7" />
+			<next name="HOME" prob="0.3" />
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_SELLER@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_BUYER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_BUYER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_BIDS_BY_BIDDER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_WINNING_BIDS_BY_BIDDER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM">
+			<next name="VIEW_AUCTION_BID_HISTORY" prob="0.7" />
+			<next name="HOME" prob="0.3" />
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM@AUCTION_SOLD">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEM">
+			<next name="VIEW_SALE_BUY_NOW_HISTORY" prob="0.7" />
+			<next name="HOME" prob="0.3" />
+		</transition>
+		<transition name="VIEW_SALE_ITEM@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEM@SALE_NO_QTY">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_BID_HISTORY">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_BUY_NOW_HISTORY">
+			<next name="HOME"/>
+		</transition>
+	</transitions>
+
+</session>

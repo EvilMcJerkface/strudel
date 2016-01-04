@@ -1,0 +1,11 @@
+<Populate name="Item">
+	<userNum/>
+	<minUid/>
+	<itemsPerUser>50</itemsPerUser>
+	<min ref="minUid"/>
+	<size ref="userNum"/>
+	<params>
+		<ITEMS_PER_USER ref="itemsPerUser"/>
+		<CONTENT_LENGTH>100</CONTENT_LENGTH>
+	</params>
+</Populate>

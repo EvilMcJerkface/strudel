@@ -1,0 +1,14 @@
+<transitions>
+		<transition name="START">
+			<Next name="LIST_ITEMS"/>
+		</transition>
+		<transition name="LIST_ITEMS">
+			<Next name="UPDATE_ITEM"/>
+		</transition>
+		<transition name="LIST_ITEMS@EMPTY_RESULT">
+			<Next name="LIST_ITEMS"/>
+		</transition>
+		<transition name="UPDATE_ITEM">
+		   <Next name="LIST_ITEMS"/>
+		</transition>
+</transitions>

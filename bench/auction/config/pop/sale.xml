@@ -1,0 +1,17 @@
+<Populate name="SaleItem">
+	<userNum/>
+	<minUid/>
+	<salesPerUser>5</salesPerUser>
+	<min ref="minUid"/>
+	<size ref="userNum"/>
+	<params>
+		<ITEMS_PER_USER ref="salesPerUser"/>
+		<ITEM_NAME_LEN>16</ITEM_NAME_LEN>
+		<PRICE>100</PRICE>
+		<QNTY>100</QNTY>
+		<BUYNOW_RATIO>80</BUYNOW_RATIO>
+		<BUYNOW_PER_ITEM>2</BUYNOW_PER_ITEM>
+		<BNS_DATE_ADJUSTER>5</BNS_DATE_ADJUSTER>
+		<USER_NUM ref="userNum"/>
+	</params>
+</Populate>

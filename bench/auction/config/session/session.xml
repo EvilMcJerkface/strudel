@@ -1,0 +1,143 @@
+<session>
+	<maxTime>0</maxTime>
+	<minTime>0</minTime>
+	<maxCount>0</maxCount>
+
+	<packageName>com.nec.bench.auction.interactions.entity</packageName>
+	<transitions>
+		<transition name="START">
+			<next name="HOME"/>
+		</transition>
+		<transition name="HOME">
+			<next name="SELL_AUCTION_ITEM" prob="0.2" />
+			<next name="SELL_SALE_ITEM" prob="0.1" />
+			<next name="VIEW_AUCTION_ITEMS_BY_SELLER" prob="0.1" />
+			<next name="VIEW_SALE_ITEMS_BY_SELLER" prob="0.1" />
+			<next name="VIEW_AUCTION_ITEMS_BY_BUYER" prob="0.1" />
+			<next name="VIEW_SALE_ITEMS_BY_BUYER" prob="0.1" />
+			<next name="VIEW_BIDS_BY_BIDDER" prob="0.1" />
+			<next name="VIEW_WINNING_BIDS_BY_BIDDER" prob="0.1" />
+			<next name="END" prob="0.1" />
+		</transition>
+		<transition name="SELL_AUCTION_ITEM">
+			<next name="HOME"/>
+		</transition>
+		<transition name="SELL_SALE_ITEM">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_SELLER">
+			<next name="VIEW_AUCTION_ITEM" prob="0.7" />
+			<next name="HOME" prob="0.3" />
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_SELLER@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_SELLER">
+			<next name="VIEW_SALE_ITEM" prob="0.7" />
+			<next name="HOME" prob="0.3" />
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_SELLER@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_BUYER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_BUYER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_BIDS_BY_BIDDER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_WINNING_BIDS_BY_BIDDER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM">
+			<next name="VIEW_AUCTION_BID_HISTORY" prob="0.3" />
+			<next name="STORE_BID" prob="0.3" />
+			<next name="STORE_AUCTION_BUY_NOW" prob="0.3" />
+			<next name="HOME" prob="0.1" />
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM@AUCTION_SOLD">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM@AUCTION_EXPIRED">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEM">
+			<next name="VIEW_SALE_BUY_NOW_HISTORY" prob="0.4" />
+			<next name="STORE_SALE_BUY_NOW" prob="0.4" />
+			<next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="VIEW_SALE_ITEM@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEM@SALE_NO_QTY">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_BID_HISTORY">
+			<next name="STORE_BID" prob="0.4" />
+			<next name="STORE_AUCTION_BUY_NOW" prob="0.4" />
+			<next name="HOME" prob="0.2" />
+		</transition>
+		<transition name="VIEW_AUCTION_BID_HISTORY@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_BUY_NOW_HISTORY">
+			<next name="STORE_SALE_BUY_NOW" prob="0.7" />
+			<next name="HOME" prob="0.3" />
+		</transition>
+		<transition name="VIEW_SALE_BUY_NOW_HISTORY@EMPTY_RESULT">
+			<next name="HOME" prob="1.0" />
+		</transition>
+		<transition name="STORE_BID">
+			<next name="VIEW_AUCTION_ITEM" prob="0.3" />
+			<next name="HOME" prob="0.7" />
+		</transition>
+		<transition name="STORE_AUCTION_BUY_NOW">
+			<next name="HOME"/>
+		</transition>
+		<transition name="STORE_SALE_BUY_NOW">
+			<next name="HOME"/>
+		</transition>
+	</transitions>
+	<thinkTime>
+		<before>
+			<time>0</time>
+		</before>
+		<after>
+			<time>0</time>
+		</after>
+	</thinkTime>
+	<params>
+		<!-- here are alternative ways to specify a parameter -->
+		<!-- <Param name="AUCTION_INIT_BID_MIN" value="50"/> -->
+		<!-- <AUCTION_INIT_BID_MIN value="50"/> -->
+		<!-- <AUCTION_INIT_BID_MIN>50</AUCTION_INIT_BID_MIN> -->
+
+		<AUCTION_INIT_BID_MIN>50</AUCTION_INIT_BID_MIN>
+		<AUCTION_INIT_BID_MAX>500</AUCTION_INIT_BID_MAX>
+		<AUCTION_BUY_NOW_RATIO_MIN>2</AUCTION_BUY_NOW_RATIO_MIN>
+		<AUCTION_BUY_NOW_RATIO_MAX>4</AUCTION_BUY_NOW_RATIO_MAX>
+		<AUCTION_DURATION_DATE_MIN>2</AUCTION_DURATION_DATE_MIN>
+		<AUCTION_DURATION_DATE_MAX>10</AUCTION_DURATION_DATE_MAX>
+		<BID_AMOUNT_ADJUSTER>2</BID_AMOUNT_ADJUSTER>
+		<SALE_PRICE_MIN>50</SALE_PRICE_MIN>
+		<SALE_PRICE_MAX>1000</SALE_PRICE_MAX>
+		<SALE_QNTY_MIN>10</SALE_QNTY_MIN>
+		<SALE_QNTY_MAX>500</SALE_QNTY_MAX>
+		<QNTY_ADJUSTER>5</QNTY_ADJUSTER>
+		<ITEM_NAME_LEN>16</ITEM_NAME_LEN>
+		<USER_ID>
+			<random partition="true">
+			    <type>int</type>
+				<min>1</min>
+				<max>10000</max>
+			</random>
+		</USER_ID>
+		<TOTAL_USER>10000</TOTAL_USER>
+		<MIN_USER_ID>1</MIN_USER_ID>
+	</params>
+</session>

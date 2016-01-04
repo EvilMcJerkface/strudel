@@ -1,0 +1,22 @@
+<transitions>
+	<transition name="START">
+		<Next name="LIST_MY_POSTS" prob="0.5" />
+		<Next name="LIST_POSTS" prob="0.5" />
+	</transition>
+	<transition name="LIST_MY_POSTS">
+		<Next name="UPDATE_POST" prob="0.9" />
+		<Next name="LIST_POSTS" prob="0.1" />
+	</transition>
+	<transition name="LIST_MY_POSTS@EMPTY_RESULT">
+		<Next name="LIST_MY_POSTS" prob="0.9" />
+		<Next name="LIST_POSTS" prob="0.1" />
+	</transition>
+	<transition name="UPDATE_POST">
+		<Next name="LIST_MY_POSTS" prob="0.75" />
+		<Next name="LIST_POSTS" prob="0.25" />
+	</transition>
+	<transition name="LIST_POSTS">
+		<Next name="LIST_MY_POSTS" prob="0.25" />
+		<Next name="LIST_POSTS" prob="0.75" />
+	</transition>
+</transitions>

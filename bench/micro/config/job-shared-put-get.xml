@@ -1,0 +1,9 @@
+<job extends="job-shared">
+  <tasks>
+    <workload>
+      <session extends=".">
+        <transitions extends="session/shared-put-list"/>
+      </session>
+    </workload>
+  </tasks>
+</job>

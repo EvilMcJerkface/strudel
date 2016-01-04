@@ -1,0 +1,19 @@
+<Populate name="AuctionItem">
+	<userNum/>
+	<minUid/>
+	<auctionsPerUser>5</auctionsPerUser>
+	<min ref="minUid"/>
+	<size ref="userNum"/>
+	<params>
+		<ITEMS_PER_USER ref="auctionsPerUser"/>
+		<ITEM_NAME_LEN>16</ITEM_NAME_LEN>
+		<INITIAL_BID value="100.0"/>
+		<BUYNOW_ADJUSTER value="5"/>
+		<END_DATE_ADJUSTER value="5"/>
+		<BIDS_PER_ITEM value="5"/>
+		<USER_NUM ref="userNum"/>
+		<BID_DATE_ADJUSTER value="3"/>
+		<BUYNOW_RATIO value="20"/>
+		<BNA_DATE_ADJUSTER value="1"/>
+	</params>
+</Populate>

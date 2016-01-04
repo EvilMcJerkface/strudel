@@ -1,0 +1,13 @@
+<Populate name="Submission">
+	<userNum/>
+	<minUid/>
+	<submissionsPerUser>50</submissionsPerUser>
+	<min ref="minUid"/>
+	<size ref="userNum"/>
+	<params>
+		<SUBMISSIONS_PER_USER ref="submissionsPerUser"/>
+		<USER_NUM ref="userNum"/>
+		<MIN_USER_ID ref="minUid"/>
+		<CONTENT_LENGTH>100</CONTENT_LENGTH>
+	</params>
+</Populate>

@@ -1,0 +1,11 @@
+<Populate name="Post">
+	<userNum/>
+	<minUid/>
+	<postsPerUser>50</postsPerUser>
+	<min ref="minUid"/>
+	<size ref="userNum"/>
+	<params>
+		<POSTS_PER_USER ref="postsPerUser"/>
+		<CONTENT_LENGTH>100</CONTENT_LENGTH>
+	</params>
+</Populate>

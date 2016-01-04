@@ -1,0 +1,98 @@
+<session extends="session">
+	<transitions>
+		<transition name="START">
+			<next name="HOME"/>
+		</transition>
+		<transition name="HOME">
+			<next name="SELL_AUCTION_ITEM" prob="0.4" />
+			<next name="SELL_SALE_ITEM" prob="0.1" />
+			<next name="VIEW_AUCTION_ITEMS_BY_SELLER" prob="0.1" />
+			<next name="VIEW_SALE_ITEMS_BY_SELLER" prob="0.1" />
+			<next name="VIEW_AUCTION_ITEMS_BY_BUYER" prob="0.01" />
+			<next name="VIEW_SALE_ITEMS_BY_BUYER" prob="0.01" />
+			<next name="VIEW_BIDS_BY_BIDDER" prob="0.01" />
+			<next name="VIEW_WINNING_BIDS_BY_BIDDER" prob="0.01" />
+			<next name="END" prob="0.01" />
+		</transition>
+		<transition name="SELL_AUCTION_ITEM">
+			<next name="HOME"/>
+		</transition>
+		<transition name="SELL_SALE_ITEM">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_SELLER">
+			<next name="VIEW_AUCTION_ITEM" prob="0.95" />
+			<next name="HOME" prob="0.05" />
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_SELLER@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_SELLER">
+			<next name="VIEW_SALE_ITEM" prob="0.95" />
+			<next name="HOME" prob="0.05" />
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_SELLER@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEMS_BY_BUYER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEMS_BY_BUYER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_BIDS_BY_BIDDER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_WINNING_BIDS_BY_BIDDER">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM">
+			<next name="VIEW_AUCTION_BID_HISTORY" prob="0.3" />
+			<next name="STORE_BID" prob="0.34" />
+			<next name="STORE_AUCTION_BUY_NOW" prob="0.34" />
+			<next name="HOME" prob="0.02" />
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM@AUCTION_SOLD">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_ITEM@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEM">
+			<next name="VIEW_SALE_BUY_NOW_HISTORY" prob="0.49" />
+			<next name="STORE_SALE_BUY_NOW" prob="0.5" />
+			<next name="HOME" prob="0.01" />
+		</transition>
+		<transition name="VIEW_SALE_ITEM@SALE_NO_QTY">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_ITEM@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_AUCTION_BID_HISTORY">
+			<next name="STORE_BID" prob="0.49" />
+			<next name="STORE_AUCTION_BUY_NOW" prob="0.49" />
+			<next name="HOME" prob="0.02" />
+		</transition>
+		<transition name="VIEW_AUCTION_BID_HISTORY@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="VIEW_SALE_BUY_NOW_HISTORY">
+			<next name="STORE_SALE_BUY_NOW" prob="0.98" />
+			<next name="HOME" prob="0.02" />
+		</transition>
+		<transition name="VIEW_SALE_BUY_NOW_HISTORY@EMPTY_RESULT">
+			<next name="HOME"/>
+		</transition>
+		<transition name="STORE_BID">
+			<next name="VIEW_AUCTION_ITEM" prob="0.3" />
+			<next name="HOME" prob="0.7" />
+		</transition>
+		<transition name="STORE_AUCTION_BUY_NOW">
+			<next name="HOME"/>
+		</transition>
+		<transition name="STORE_SALE_BUY_NOW">
+			<next name="HOME"/>
+		</transition>
+	</transitions>
+</session>

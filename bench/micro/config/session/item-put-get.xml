@@ -1,0 +1,15 @@
+<transitions>
+		<transition name="START">
+			<Next name="GET_ITEM"/>
+		</transition>
+		<transition name="GET_ITEM">
+			<Next name="GET_ITEM" prob="0.3" />
+			<Next name="UPDATE_ITEM" prob="0.7" />
+		</transition>
+		<transition name="GET_ITEM@EMPTY_RESULT">
+			<Next name="GET_ITEM"/>
+		</transition>
+		<transition name="UPDATE_ITEM">
+		   <Next name="GET_ITEM"/>
+		</transition>
+</transitions>
