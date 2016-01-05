@@ -1,0 +1,10 @@
+<database>
+	<type>tkve</type>
+	<className>com.nec.strudel.tkvs.store.mongodb.MongodbStore</className>
+	<classPath>tkvs-mongodb/target/dependency/*</classPath>
+	<name>test</name>
+	<mongos/>
+	<params>
+	  <property name="mongodb.mongos" ref="mongos"/>
+	</params>
+</database>

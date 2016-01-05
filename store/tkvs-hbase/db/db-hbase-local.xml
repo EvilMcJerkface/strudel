@@ -1,0 +1,10 @@
+<database>
+	<type>tkve</type>
+	<className>com.nec.strudel.tkvs.store.hbase.HBaseStore</className>
+    <classPath>tkvs-hbase/target/dependency/*</classPath>
+	<name>test</name>
+	<params>
+	  <property name="hbase.zookeeper.quorum">localhost</property>
+	  <property name="hbase.zookeeper.property.clientPort">2181</property>
+	</params>
+</database>

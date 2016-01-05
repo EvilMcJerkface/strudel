@@ -19,7 +19,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
  <modules>
-  <module>tkv-test</module>
+  <module>tkvs-test</module>
+  <module>tkvs-hbase</module>
+  <module>tkvs-mongodb</module>
  </modules>
  <dependencyManagement>
    <dependencies>
@@ -27,6 +29,7 @@
        <groupId>com.nec.strudel</groupId>
        <artifactId>strudel-tkv-test</artifactId>
        <version>0.0.1-SNAPSHOT</version>
+       <scope>test</scope>
      </dependency>
    </dependencies>
  </dependencyManagement> 
