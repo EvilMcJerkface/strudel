@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>strudel-workload</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>com.nec.strudel</groupId>
+		<artifactId>strudel</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.nec.strudel</groupId>
+			<artifactId>strudel-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.nec.strudel</groupId>
+			<artifactId>strudel-jmx</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.nec.strudel</groupId>
+			<artifactId>strudel-workload-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.nec.strudel</groupId>
+			<artifactId>strudel-session-api</artifactId>
+		</dependency>
+
+	    <dependency>
+	    	<groupId>com.nec.congenio</groupId>
+	    	<artifactId>congenio</artifactId>
+	    	<version>0.0.4</version>
+	    </dependency>
+
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>annotations</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.json</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+		<dependency>
+			<!-- to create package-based class factories -->
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.9-RC1</version>
+		</dependency>
+
+	<!-- javax.ws.rs for worker server -->
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-processing</artifactId>
+			<version>2.5.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.json</groupId>
+					<artifactId>javax.json-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	<!-- REST server -->
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-grizzly2-http</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+
+	</dependencies>
+</project>

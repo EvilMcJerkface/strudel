@@ -20,6 +20,7 @@
   <module>epi-tkvs</module>
   <module>epi-jpa</module>
   <module>session</module>
+  <module>workload</module>
   <module>bench</module>
  </modules>
  <dependencies>
