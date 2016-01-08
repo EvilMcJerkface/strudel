@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <name>Strudel Entity Transaction Workload Framework</name>
-  <url>http://www.nec-labs.com</url>
+  <url>https://github.com/tatemura/strudel</url>
  <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

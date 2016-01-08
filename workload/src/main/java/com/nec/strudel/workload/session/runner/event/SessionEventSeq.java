@@ -47,7 +47,6 @@ public class SessionEventSeq<T> implements EventSeq<ActionResult<T>> {
 		this.rand = new Random(rand.nextLong());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<TimedEvent<ActionResult<T>>> next(ActionResult<T> res) {
 		Result r = res.getResult();

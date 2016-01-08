@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 public final class ClassUtil {
-	public static final String PARAM_CLASSPATH_BASE = "workload.classpath.base";
+	public static final String PARAM_CLASSPATH_BASE = "strudel.classpath.base";
 	/**
 	 * Cache ClassLoader of the same path.
 	 */
