@@ -1,0 +1,9 @@
+<Database>
+	<type>tkve</type>
+	<className>com.nec.strudel.tkvs.store.tokumx.TokumxStore</className>
+	<name>test</name>
+	<params>
+	  <property name="mongodb.mongos">localhost</property>
+	  <property name="mongodb.mongods">localhost</property>
+	</params>
+</Database>

@@ -1,0 +1,16 @@
+<Database>
+    <type>tkve</type>
+	<className>com.nec.strudel.tkvs.store.omid.OmidStore</className>
+	<classPath>tkvs-omid/target/classes:tkvs-omid/target/dependency/*</classPath>
+	<name>test</name>
+	<zookeepers/>
+	<clientPort/>
+	<tso-host/>
+	<tso-port/>
+	<params>
+	  <property name="hbase.zookeeper.quorum" ref="zookeepers"/>
+	  <property name="hbase.zookeeper.property.clientPort" ref="clientPort"/>
+	  <property name="tso.host" ref="tso-host"/>
+	  <property name="tso.port" ref="tso-port"/>
+	</params>
+</Database>

@@ -1,0 +1,12 @@
+<Database>
+    <Type>tkve</Type>
+	<Class>com.nec.strudel.tkvs.store.omid.OmidStore</Class>
+	<Name>test</Name>
+	<Params>
+	  <property name="hbase.zookeeper.quorum">localhost</property>
+	  <property name="hbase.zookeeper.property.clientPort">2181</property>
+	  <property name="tso.host">localhost</property>
+	  <property name="tso.port">1234</property>
+	  <property name="omid.maxItems">100000</property>
+	</Params>
+</Database>
