@@ -27,6 +27,14 @@ import com.nec.strudel.tkvs.impl.TransactionalDbServer;
 import com.nec.strudel.tkvs.store.TransactionalStore;
 import com.nec.strudel.tkvs.store.impl.AbstractTransactionalStore;
 
+/**
+ * TokuMX-based implementation of TransactionalDB
+ * <ul>
+ * <li> mongodb.mongos (localhost)
+ * </ul>
+ * @author tatemura, Zheng Li (initial version)
+ *
+ */
 public class TokumxStore extends AbstractTransactionalStore implements TransactionalStore {
 	@Override
 	public TokumxDbServer createDbServer(String dbName, Properties props) {

@@ -34,6 +34,11 @@ import com.nec.strudel.tkvs.impl.KVStore;
 import com.nec.strudel.tkvs.impl.TransactionBaseImpl;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 
+/**
+*
+* @author tatemura, Zheng Li (initial version)
+*
+*/
 public class HBaseTransaction extends TransactionBaseImpl {
 	private final HTableInterface htable;
 	private final long vnum;

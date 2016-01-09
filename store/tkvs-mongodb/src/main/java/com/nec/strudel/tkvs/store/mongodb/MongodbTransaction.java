@@ -40,6 +40,11 @@ import com.nec.strudel.tkvs.impl.TransactionBaseImpl;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.nec.strudel.tkvs.store.mongodb.MongodbStore.MongoDbServer;
 
+/**
+*
+* @author tatemura, Zheng Li (initial version)
+*
+*/
 public class MongodbTransaction extends TransactionBaseImpl {
 	private static final Logger LOGGER = Logger.getLogger(
 			MongodbTransaction.class);

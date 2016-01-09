@@ -41,6 +41,11 @@ import com.nec.strudel.tkvs.impl.TransactionBaseImpl;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.nec.strudel.tkvs.store.tokumx.TokumxStore.TokumxDbServer;
 
+/**
+ *
+ * @author tatemura, Zheng Li (initial version)
+ *
+ */
 public class TokumxTransaction extends TransactionBaseImpl {
 	private static final Logger LOGGER = Logger.getLogger(TokumxTransaction.class);
 	public static final long INIT_WAIT = 1000;

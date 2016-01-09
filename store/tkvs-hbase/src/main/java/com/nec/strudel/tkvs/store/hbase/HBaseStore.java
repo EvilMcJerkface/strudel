@@ -35,6 +35,11 @@ import com.nec.strudel.tkvs.impl.TransactionalDbServer;
 import com.nec.strudel.tkvs.store.TransactionalStore;
 import com.nec.strudel.tkvs.store.impl.AbstractTransactionalStore;
 
+/**
+ * HBase-based implementation of TransactionalDB
+ * @author tatemura, Zheng Li (initial version)
+ *
+ */
 public class HBaseStore extends AbstractTransactionalStore implements TransactionalStore {
 	@Override
 	public HBaseDbServer createDbServer(String dbName, Properties props) {

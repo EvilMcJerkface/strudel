@@ -35,6 +35,17 @@ import com.nec.strudel.tkvs.store.hbase.HBaseUtil;
 import com.nec.strudel.tkvs.store.impl.AbstractTransactionalStore;
 import com.yahoo.omid.transaction.OmidInstantiationException;
 
+/**
+ * Omid-based implementation of TransactionalDB
+ * <ul>
+ * <li> tso.host (localhost)
+ * <li> tso.port  (1234)
+ * <li> hbase.zookeeper.quorum (localhost)
+ * <li> hbase.zookeeper.property.clientPort (2181)
+ * </ul>
+ * @author tatemura, Zheng Li (initial version)
+ *
+ */
 public class OmidStore extends AbstractTransactionalStore implements TransactionalStore {
 	private static final int TSOPORT = 1234;
 	private static final int CLIENTPORT = 2181;

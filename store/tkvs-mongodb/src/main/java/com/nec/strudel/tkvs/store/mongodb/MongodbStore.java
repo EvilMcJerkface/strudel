@@ -46,7 +46,7 @@ import com.nec.strudel.tkvs.store.impl.AbstractTransactionalStore;
  * The store uses the local one if it is in the list.
  * Otherwise, it randomly chooses one in the list.
  * </ul>
- * @author tatemura
+ * @author tatemura, Zheng Li (initial version)
  *
  */
 public class MongodbStore extends AbstractTransactionalStore implements TransactionalStore {

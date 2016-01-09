@@ -35,6 +35,11 @@ import com.yahoo.omid.transaction.TTable;
 import com.yahoo.omid.transaction.Transaction;
 import com.yahoo.omid.transaction.TransactionException;
 
+/**
+*
+* @author tatemura, Zheng Li (initial version)
+*
+*/
 public class OmidTransaction extends TransactionBaseImpl {
 	private final HBaseTransactionManager tm;
 	//Have to use one TTable per transaction because the
