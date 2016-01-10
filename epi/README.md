@@ -12,17 +12,30 @@ of SQL and the relational model. For the purpose of a common
 performance analysis platform, we have designed a simplified version of APIs.
 
 ### Entity Group Annotations
+In addition to annotations provided by JPA, we introduce
+the following annotations to represent entity groups (which
+are analogous to JPA's @Entity, @Id, @IdClass):
 
 - @Group
 - @GroupId
 - @GroupIdClass
 
 ### EntityDB: Data Access API
+We provide a simplified data access API (instead of
+JPA's EntityManager).
 
-- CRUD operations
-- Secondary key access
-- Group transactions
+- CRUD operations: read-write operations on a single entity
+(similar to JPA's find/persist/merge/remove operations).
+- Secondary key access: read operation on multiple entities by
+specifying a secondary key.
+- Group transactions: multi-statement transactions on a single
+entity group.
 
 ### Secondary Index
+In order to specify a secondary key of an entity, we provide
+the following annotation.
 
 - @Indexes
+
+The actual way to provide accessibility with a secondary key
+is specific to implementations.
