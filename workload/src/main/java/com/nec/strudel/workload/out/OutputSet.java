@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.json.JsonObject;
 
+import com.nec.strudel.metrics.Output;
+
 public class OutputSet {
 	private final List<String> names;
 	private final Map<String, Output> outs;

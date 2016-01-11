@@ -18,13 +18,13 @@ package com.nec.strudel.workload.exec;
 import com.nec.strudel.exceptions.ConfigException;
 import com.nec.strudel.instrument.impl.ProfilerServiceImpl;
 import com.nec.strudel.management.ManagementService;
+import com.nec.strudel.metrics.Output;
 import com.nec.strudel.util.ClassUtil;
 import com.nec.strudel.workload.exec.populate.PopulateWorkload;
 import com.nec.strudel.workload.job.PopulateWorkItem;
 import com.nec.strudel.workload.job.WorkItem;
 import com.nec.strudel.workload.job.WorkRequest;
 import com.nec.strudel.workload.job.WorkloadTask;
-import com.nec.strudel.workload.out.Output;
 import com.nec.strudel.workload.session.SessionWorkload;
 import com.nec.strudel.workload.state.BatchWorkState;
 import com.nec.strudel.workload.state.MeasureWorkState;
@@ -60,7 +60,7 @@ public class WorkloadFactory {
 			return new BatchWorkState();
 		} else {
 			/**
-			 * TODO make if configurable
+			 * TODO make it configurable
 			 */
 			return new MeasureWorkState();
 		}

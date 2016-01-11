@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.nec.strudel.workload.out;
+package com.nec.strudel.metrics;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 
-import com.nec.strudel.instrument.impl.NamedFunc;
 import com.nec.strudel.json.func.Constant;
 import com.nec.strudel.json.func.Func;
 import com.nec.strudel.json.func.Value;

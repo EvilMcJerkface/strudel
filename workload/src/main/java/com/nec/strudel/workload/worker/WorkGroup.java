@@ -29,8 +29,8 @@ import javax.json.JsonObject;
 import org.apache.log4j.Logger;
 
 import com.nec.strudel.exceptions.WorkloadException;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.com.Caller;
-import com.nec.strudel.workload.exec.Report;
 import com.nec.strudel.workload.job.WorkRequest;
 import com.nec.strudel.workload.server.WorkerClient;
 import com.nec.strudel.workload.util.TimeUtil;

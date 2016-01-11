@@ -17,8 +17,8 @@ package com.nec.strudel.workload.session.runner.event;
 
 import com.nec.strudel.session.Result;
 import com.nec.strudel.target.Target;
+import com.nec.strudel.workload.exec.event.TimedEvent;
 import com.nec.strudel.workload.session.SessionContainer;
-import com.nec.strudel.workload.util.event.TimedEvent;
 
 public class SessionEvent<T> implements TimedEvent<ActionResult<T>> {
 	private final long time;

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import com.nec.strudel.instrument.ProfilerService;
 import com.nec.strudel.instrument.impl.ProfilerServiceImpl;
+import com.nec.strudel.metrics.Output;
 import com.nec.strudel.target.Target;
 import com.nec.strudel.target.impl.TargetFactory;
 import com.nec.strudel.workload.exec.WorkExec;
@@ -29,7 +30,6 @@ import com.nec.strudel.workload.job.ConfigParam;
 import com.nec.strudel.workload.job.PopulateWorkItem;
 import com.nec.strudel.workload.job.ThreadIds;
 import com.nec.strudel.workload.job.WorkConfig;
-import com.nec.strudel.workload.out.Output;
 import com.nec.strudel.workload.populator.PopulateStat;
 import com.nec.strudel.workload.state.WorkState;
 

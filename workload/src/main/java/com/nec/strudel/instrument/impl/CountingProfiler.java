@@ -24,6 +24,7 @@ import javax.json.JsonObject;
 
 import com.nec.strudel.instrument.CountInstrument;
 import com.nec.strudel.instrument.Profiler;
+import com.nec.strudel.metrics.ProfilerValue;
 
 @NotThreadSafe
 public class CountingProfiler implements Profiler, CountInstrument {

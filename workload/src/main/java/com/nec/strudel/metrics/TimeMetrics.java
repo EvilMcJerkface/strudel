@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.nec.strudel.instrument.impl;
+package com.nec.strudel.metrics;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,9 +21,9 @@ import java.util.List;
 import com.nec.strudel.json.func.Div;
 import com.nec.strudel.json.func.Value;
 
-public class TimeOutput {
+public class TimeMetrics {
 	public static List<NamedFunc> outputsOf(String name) {
-		return new TimeOutput(name).outputs();
+		return new TimeMetrics(name).outputs();
 	}
 	public static String countOf(String name) {
 		return name + "_count";
@@ -38,16 +38,16 @@ public class TimeOutput {
 	private String count;
 	private String time;
 	private String avg;
-	public TimeOutput(String name) {
+	public TimeMetrics(String name) {
 		this.count = countOf(name);
 		this.time = timeOf(name);
 		this.avg = avgOf(name);
 	}
-	public TimeOutput avg(String avg) {
+	public TimeMetrics avg(String avg) {
 		this.avg = avg;
 		return this;
 	}
-	public TimeOutput count(String count) {
+	public TimeMetrics count(String count) {
 		this.count = count;
 		return this;
 	}

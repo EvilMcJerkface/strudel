@@ -20,10 +20,10 @@ import org.apache.log4j.Logger;
 import com.nec.strudel.instrument.Instrumented;
 import com.nec.strudel.instrument.Profiler;
 import com.nec.strudel.instrument.impl.ProfilerUtil;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.Result.Warn;
 import com.nec.strudel.target.Target;
-import com.nec.strudel.workload.exec.Report;
 import com.nec.strudel.workload.session.SessionProfiler;
 import com.nec.strudel.workload.util.WarningReporter;
 

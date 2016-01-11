@@ -24,8 +24,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
+import com.nec.strudel.metrics.Output;
 import com.nec.strudel.workload.job.JobInfo;
-import com.nec.strudel.workload.out.Output;
 
 public class WorkloadProfile {
 	private static final String NAME = "name";

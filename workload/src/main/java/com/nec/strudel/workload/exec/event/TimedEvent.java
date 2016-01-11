@@ -13,23 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.nec.strudel.workload.exec;
+package com.nec.strudel.workload.exec.event;
 
-import javax.annotation.concurrent.NotThreadSafe;
+import java.util.concurrent.Callable;
 
-import com.nec.strudel.instrument.ProfilerService;
-import com.nec.strudel.metrics.Output;
-import com.nec.strudel.workload.job.ConfigParam;
-import com.nec.strudel.workload.job.WorkConfig;
-import com.nec.strudel.workload.state.WorkState;
-
-@NotThreadSafe
-public interface Workload {
-
-	WorkExec createWorkExec(WorkConfig conf,
-			WorkState state,
-			ProfilerService profs);
-
-	Output output(ConfigParam param);
+public interface TimedEvent<R> extends Callable<R> {
+	/**
+	 * The time this event should be executed.
+	 * @return a long value that corresponds to System.currentTimeMillis().
+	 */
+	long getTime();
 
 }

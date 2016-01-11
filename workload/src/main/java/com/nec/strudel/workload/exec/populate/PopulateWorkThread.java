@@ -22,11 +22,11 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import com.nec.strudel.instrument.Instrumented;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.target.Target;
 import com.nec.strudel.workload.api.PopulateParam;
 import com.nec.strudel.workload.api.Populator;
 import com.nec.strudel.workload.api.ValidateReporter;
-import com.nec.strudel.workload.exec.Report;
 import com.nec.strudel.workload.exec.batch.WorkThread;
 import com.nec.strudel.workload.populator.PopulateProfiler;
 

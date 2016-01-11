@@ -17,7 +17,7 @@ package com.nec.strudel.workload.worker;
 
 import javax.json.JsonObject;
 
-import com.nec.strudel.workload.exec.Report;
+import com.nec.strudel.metrics.Report;
 
 public interface Worker {
 

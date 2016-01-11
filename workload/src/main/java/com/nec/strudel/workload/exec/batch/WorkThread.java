@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.nec.strudel.workload.exec.batch;
 
-import com.nec.strudel.workload.exec.Report;
+import com.nec.strudel.metrics.Report;
 
 
 

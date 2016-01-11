@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.nec.strudel.exceptions.ConfigException;
-import com.nec.strudel.instrument.impl.NamedFunc;
 import com.nec.strudel.instrument.impl.ProfilerOutput;
+import com.nec.strudel.metrics.NamedFunc;
 import com.nec.strudel.target.FactoryClass;
 import com.nec.strudel.target.Target;
 import com.nec.strudel.target.TargetConfig;

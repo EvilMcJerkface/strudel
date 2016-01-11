@@ -25,7 +25,7 @@ import javax.json.JsonObject;
 
 import org.apache.log4j.Logger;
 
-import com.nec.strudel.workload.exec.Report;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.job.WorkRequest;
 import com.nec.strudel.workload.worker.LocalWorker;
 import com.nec.strudel.workload.worker.Worker;

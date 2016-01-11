@@ -21,7 +21,8 @@ import javax.json.JsonObject;
 import org.apache.log4j.Logger;
 
 import com.nec.strudel.exceptions.WorkloadException;
-import com.nec.strudel.instrument.impl.ProfilerValue;
+import com.nec.strudel.metrics.Output;
+import com.nec.strudel.metrics.ProfilerValue;
 import com.nec.strudel.target.impl.DatabaseConfig;
 import com.nec.strudel.target.impl.TargetFactory;
 import com.nec.strudel.workload.cluster.Cluster;
@@ -33,7 +34,6 @@ import com.nec.strudel.workload.job.Job;
 import com.nec.strudel.workload.job.WorkRequest;
 import com.nec.strudel.workload.job.WorkloadTask;
 import com.nec.strudel.workload.jobexec.com.OutputFinder;
-import com.nec.strudel.workload.out.Output;
 import com.nec.strudel.workload.out.OutputConfig;
 import com.nec.strudel.workload.out.OutputSet;
 import com.nec.strudel.workload.worker.WorkGroup;

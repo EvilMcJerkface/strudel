@@ -24,6 +24,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 import com.nec.strudel.json.func.Func;
+import com.nec.strudel.metrics.Output;
 
 public class ResultQuery {
 	public static ResultQuery query() {

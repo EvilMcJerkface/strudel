@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import javax.json.JsonObject;
 
 import com.nec.strudel.Closeable;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.util.TimeValue;
 
 public abstract class WorkExec implements Closeable {

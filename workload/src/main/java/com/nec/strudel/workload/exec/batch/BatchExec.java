@@ -25,7 +25,7 @@ import javax.json.JsonObject;
 import org.apache.log4j.Logger;
 
 import com.nec.strudel.Closeable;
-import com.nec.strudel.workload.exec.Report;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.exec.WorkExec;
 import com.nec.strudel.workload.state.WorkState;
 import com.nec.strudel.workload.util.TimeValue;

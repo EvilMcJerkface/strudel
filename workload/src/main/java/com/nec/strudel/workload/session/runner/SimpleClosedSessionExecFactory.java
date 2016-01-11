@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.nec.strudel.instrument.ProfilerService;
+import com.nec.strudel.metrics.Output;
 import com.nec.strudel.param.ParamConfig;
 import com.nec.strudel.param.ParamSequence;
 import com.nec.strudel.target.Target;
@@ -28,7 +29,6 @@ import com.nec.strudel.workload.exec.batch.BatchExec;
 import com.nec.strudel.workload.exec.batch.WorkThread;
 import com.nec.strudel.workload.job.ThreadIds;
 import com.nec.strudel.workload.job.WorkNodeInfo;
-import com.nec.strudel.workload.out.Output;
 import com.nec.strudel.workload.session.SessionConfig;
 import com.nec.strudel.workload.session.SessionFactory;
 import com.nec.strudel.workload.session.SessionProfilerImpl;

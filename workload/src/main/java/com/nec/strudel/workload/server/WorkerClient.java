@@ -17,8 +17,8 @@ package com.nec.strudel.workload.server;
 
 import javax.json.JsonObject;
 
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.cluster.Node;
-import com.nec.strudel.workload.exec.Report;
 import com.nec.strudel.workload.job.WorkRequest;
 import com.nec.strudel.workload.server.rest.client.RestWorkerServiceProvider;
 import com.nec.strudel.workload.worker.Worker;

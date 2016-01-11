@@ -16,11 +16,11 @@
 package com.nec.strudel.workload.session;
 
 import com.nec.strudel.exceptions.ConfigException;
+import com.nec.strudel.metrics.Output;
 import com.nec.strudel.param.ParamConfig;
 import com.nec.strudel.session.InteractionFactory;
 import com.nec.strudel.util.ClassUtil;
 import com.nec.strudel.workload.job.ConfigParam;
-import com.nec.strudel.workload.out.Output;
 import com.nec.strudel.workload.session.runner.SessionExecFactory;
 import com.nec.strudel.workload.session.runner.SessionExecs;
 

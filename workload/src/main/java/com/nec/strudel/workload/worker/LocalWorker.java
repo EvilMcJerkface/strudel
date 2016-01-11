@@ -28,7 +28,7 @@ import com.nec.strudel.management.resource.Getter;
 import com.nec.strudel.management.resource.ManagedResource;
 import com.nec.strudel.management.resource.Operation;
 import com.nec.strudel.management.resource.ResourceId;
-import com.nec.strudel.workload.exec.Report;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.exec.WorkExec;
 import com.nec.strudel.workload.exec.WorkloadFactory;
 import com.nec.strudel.workload.job.WorkRequest;

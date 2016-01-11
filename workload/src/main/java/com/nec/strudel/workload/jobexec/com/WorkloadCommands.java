@@ -18,15 +18,15 @@ package com.nec.strudel.workload.jobexec.com;
 import javax.json.Json;
 import javax.json.JsonObject;
 
+import com.nec.strudel.metrics.Output;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.com.CommandContext;
 import com.nec.strudel.workload.com.CommandResult;
-import com.nec.strudel.workload.exec.Report;
 import com.nec.strudel.workload.jobexec.WorkExecContext;
 import com.nec.strudel.workload.jobexec.WorkloadResult;
 import com.nec.strudel.workload.measure.JmxMonitorFactory;
 import com.nec.strudel.workload.measure.ResourceMonitor;
 import com.nec.strudel.workload.measure.jmx.JmxMonitorConfig;
-import com.nec.strudel.workload.out.Output;
 import com.nec.strudel.workload.out.OutputSet;
 import com.nec.strudel.workload.util.TimeUtil;
 import com.nec.strudel.workload.util.TimeValue;

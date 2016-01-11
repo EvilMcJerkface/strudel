@@ -21,6 +21,8 @@ import java.util.List;
 
 import com.nec.strudel.instrument.Profiling;
 import com.nec.strudel.json.func.Value;
+import com.nec.strudel.metrics.NamedFunc;
+import com.nec.strudel.metrics.TimeMetrics;
 
 public final class ProfilerOutput {
 
@@ -36,7 +38,7 @@ public final class ProfilerOutput {
 				funcs.add(new NamedFunc(instr.getName(), Value.of(instr.getName())));
 				break;
 			case TIME:
-				funcs.addAll(TimeOutput.outputsOf(instr.getName()));
+				funcs.addAll(TimeMetrics.outputsOf(instr.getName()));
 				break;
 			default:
 				throw new IllegalArgumentException(

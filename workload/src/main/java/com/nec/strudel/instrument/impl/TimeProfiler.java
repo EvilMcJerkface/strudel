@@ -25,6 +25,7 @@ import com.nec.strudel.instrument.OperationListener;
 import com.nec.strudel.instrument.Profiler;
 import com.nec.strudel.instrument.TimeInstrument;
 import com.nec.strudel.json.JsonValues;
+import com.nec.strudel.metrics.TimeMetrics;
 
 @NotThreadSafe
 public class TimeProfiler implements Profiler, TimeInstrument {
@@ -34,8 +35,8 @@ public class TimeProfiler implements Profiler, TimeInstrument {
 	private final OperationListener listener;
 	private String current = "";
 	private long start;
-	public static TimeOutput output(String name) {
-		return new TimeOutput(name);
+	public static TimeMetrics output(String name) {
+		return new TimeMetrics(name);
 	}
 
 	public TimeProfiler(String name, MeasurementState measure) {
@@ -43,8 +44,8 @@ public class TimeProfiler implements Profiler, TimeInstrument {
 	}
 	public TimeProfiler(String name,
 			MeasurementState measure, OperationListener listener) {
-		this.count = new CountingProfiler(TimeOutput.countOf(name));
-		this.time = new CountingProfiler(TimeOutput.timeOf(name));
+		this.count = new CountingProfiler(TimeMetrics.countOf(name));
+		this.time = new CountingProfiler(TimeMetrics.timeOf(name));
 		this.measure = measure;
 		this.listener = listener;
 	}

@@ -18,22 +18,22 @@ package com.nec.strudel.workload.session;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.nec.strudel.instrument.Instrument;
-import com.nec.strudel.instrument.impl.TimeOutput;
-import com.nec.strudel.instrument.impl.TimeProfiler;
+import com.nec.strudel.instrument.TimeInstrument;
 import com.nec.strudel.json.func.Div;
 import com.nec.strudel.json.func.Sum;
 import com.nec.strudel.json.func.Value;
+import com.nec.strudel.metrics.Output;
+import com.nec.strudel.metrics.TimeMetrics;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.workload.exec.ReportNames;
-import com.nec.strudel.workload.out.Output;
 import com.nec.strudel.workload.session.runner.SessionStatMonitor;
 
 @NotThreadSafe
 public class SessionProfilerImpl implements SessionProfiler {
 	public static final String PROFILE_NAME = "session";
 	public static final String INTERACTION = "interaction";
-	public static final String COUNT_TIMES = TimeOutput.timeOf(INTERACTION);
-	public static final String COUNT_COUNTS = TimeOutput.countOf(INTERACTION);
+	public static final String COUNT_TIMES = TimeMetrics.timeOf(INTERACTION);
+	public static final String COUNT_COUNTS = TimeMetrics.countOf(INTERACTION);
 
 	public static final String INTERACTION_PER_SEC =
 			"interaction_per_sec";
@@ -53,20 +53,20 @@ public class SessionProfilerImpl implements SessionProfiler {
 					Sum.of(Value.of(COUNT_TIMES)),
 					Sum.of(Value.of(COUNT_COUNTS))))
 
-			.add(new TimeOutput(INTERACTION)
+			.add(new TimeMetrics(INTERACTION)
 					.avg(COUNT_AVG_TIMES).outputs())
 			.build();
 
 	@Instrument
-	private TimeProfiler interaction;
+	private TimeInstrument interaction;
 	private SessionStatMonitor mon;
 
 	public SessionProfilerImpl() {
 	}
-	public TimeProfiler getInteraction() {
+	public TimeInstrument getInteraction() {
 		return interaction;
 	}
-	public void setInteraction(TimeProfiler interaction) {
+	public void setInteraction(TimeInstrument interaction) {
 		this.interaction = interaction;
 	}
 	public void setMon(SessionStatMonitor mon) {

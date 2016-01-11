@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.nec.strudel.workload.exec;
+package com.nec.strudel.metrics;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,8 +26,6 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
-
-import com.nec.strudel.instrument.impl.ProfilerValue;
 
 public class Report {
 	public static final String VALUE_COUNTERS = "Values";

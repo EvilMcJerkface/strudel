@@ -22,22 +22,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.json.JsonObject;
+
 import com.nec.strudel.instrument.Instrumented;
 import com.nec.strudel.instrument.ProfilerService;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.impl.State;
 import com.nec.strudel.target.Target;
-import com.nec.strudel.workload.exec.Report;
+import com.nec.strudel.workload.exec.event.EventController;
+import com.nec.strudel.workload.exec.event.EventSeq;
+import com.nec.strudel.workload.exec.event.TimedEvent;
 import com.nec.strudel.workload.session.SessionContainer;
 import com.nec.strudel.workload.session.SessionFactory;
 import com.nec.strudel.workload.session.SessionProfiler;
 import com.nec.strudel.workload.session.StateFactory;
 import com.nec.strudel.workload.session.runner.SessionProfilerServer;
 import com.nec.strudel.workload.util.TimeValue;
-import com.nec.strudel.workload.util.event.EventSeq;
-import com.nec.strudel.workload.util.event.TimedEvent;
 
-public class SessionEventSeq<T> implements EventSeq<ActionResult<T>> {
+public class SessionEventSeq<T> implements EventSeq<ActionResult<T>>, EventController {
     private final SessionFactory<T> sfactory;
     private final StateFactory states;
     private final SessionProfilerServer sps;
@@ -83,6 +86,15 @@ public class SessionEventSeq<T> implements EventSeq<ActionResult<T>> {
 		 * TODO do something
 		 */
 	}
+	@Override
+	public boolean operate(String name, JsonObject data) {
+		/**
+		 * TODO support control of the session concurrency
+		 */
+		return false; // no operation supported
+	}
+
+	@Override
 	public void setStartSlack(TimeValue slackTime) {
 		startSlackMS = slackTime.toMillis();
 	}
