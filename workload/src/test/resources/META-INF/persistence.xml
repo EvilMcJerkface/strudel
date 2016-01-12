@@ -1,0 +1,13 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+   xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+  <persistence-unit name="test_auction"
+  	transaction-type="RESOURCE_LOCAL">
+  	 <class>com.nec.strudel.entity.test.auction.User</class>
+  	 <class>com.nec.strudel.entity.test.auction.Item</class>
+  	 <class>com.nec.strudel.entity.test.auction.Bid</class>
+  	 <properties>
+  	    <!-- properties should be set dynamically -->
+  	 </properties>
+  </persistence-unit>
+</persistence>

@@ -1,0 +1,24 @@
+<Session>
+    <!-- this is an example of random (stateless) session -->
+    <factory>com.nec.strudel.workload.session.test.tool.Factory</factory>
+	<interactions>
+		<Interaction name="I0" prob="0.4">
+			<thinkTime>
+				<before time="5" />
+				<after time="2" />
+			</thinkTime>
+		</Interaction>
+		<Interaction name="I1" prob="0.3" />
+		<Interaction name="I2" prob="0.2" />
+		<Interaction name="I3" prob="0.1" />
+	</interactions>
+	<thinkTime>
+		<before time="3" />
+		<after avg="4" max="40" />
+	</thinkTime>
+	<params>
+		<param name="k1" value="v1" />
+		<param name="k2" value="v2" />
+		<param name="k3" value="v3" />
+	</params>
+</Session>

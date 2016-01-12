@@ -1,0 +1,24 @@
+<JobSuite>
+ <dir>dir</dir>
+ <output ref="dir"/>
+ <x>100</x>
+ <y>200</y>
+ <b1>10</b1>
+ <b2>20</b2>
+ <foreach name="w" sep=" ">1 2 3 4</foreach>
+ <foreach name="c">
+    <c><a>1</a><b ref="b1"/></c>
+    <c><a>2</a><b ref="b2"/></c>
+ </foreach>
+ <job>
+   <a1 ref="a"/>
+   <a ref="c/a"/>
+   <b ref="c/b"/>
+   <w ref="w"/>
+   <x ref="x"/>
+   <y ref="y"/>
+   <z>300</z>
+   <database/>
+   <tasks></tasks>
+ </job>
+</JobSuite>

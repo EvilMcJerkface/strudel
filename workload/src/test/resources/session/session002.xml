@@ -1,0 +1,38 @@
+<Session>
+	<!-- this is an example of Markov session -->
+	<factory>com.nec.strudel.workload.session.test.tool.Factory</factory>
+	<transitions>
+	    <!-- 
+	       either <START> or <Transition name="START">
+	       either <Home> or <Next name="Home">
+	     -->
+		<START>
+			<Home/>
+		</START>
+		<Home>
+			<I0 prob="0.5" />
+			<I1 prob="0.5" />
+		</Home>
+		<I0>
+			<I1 prob="0.8" />
+			<Home prob="0.2" />
+		</I0>
+		<I1>
+			<I2 prob="0.8" />
+			<Home prob="0.2" />
+		</I1>
+		<I2>
+			<I3 prob="0.8" />
+			<Home prob="0.2" />
+		</I2>
+		<I3>
+			<END prob="1" />
+		</I3>
+	</transitions>
+
+	<params>
+		<param name="k1" value="v1" />
+		<param name="k2" value="v2" />
+		<param name="k3" value="v3" />
+	</params>
+</Session>

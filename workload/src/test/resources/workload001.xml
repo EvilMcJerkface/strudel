@@ -1,0 +1,41 @@
+<Workload>
+	<type>session</type>
+	<numOfThreads>100</numOfThreads>
+	<measure>
+		<rampup>120</rampup>
+		<duration>1200</duration>
+	</measure>
+	<session maxTime="120" minTime="60">
+	    <factory>com.nec.strudel.workload.session.test.tool.Factory</factory>
+		<transitions>
+			<transition name="START">
+				<Next name="Home" prob="1.0"/>
+			</transition>
+			<transition name="Home">
+				<Next name="I0" prob="0.5" />
+				<Next name="I1" prob="0.5" />
+			</transition>
+			<transition name="I0">
+				<Next name="I1" prob="0.8"/>
+				<Next name="Home" prob="0.2"/>
+			</transition>
+			<transition name="I1">
+				<Next name="I2" prob="0.8"/>
+				<Next name="Home" prob="0.2"/>
+			</transition>
+			<transition name="I2">
+				<Next name="I3" prob="0.8" />
+				<Next name="Home" prob="0.2"/>
+			</transition>
+			<transition name="I3">
+				<Next name="END" prob="1"/>
+			</transition>
+		</transitions>
+		
+		<params>
+			<param name="k1" value="v1"/>
+			<param name="k2" value="v2"/>
+			<param name="k3" value="v3"/>
+		</params>
+	</session>
+</Workload>

@@ -1,0 +1,9 @@
+<JmxServices>
+  <port>7777</port>
+  <urls>
+    <u>service:jmx:rmi:///jndi/rmi://localhost:9988/jmxrmi</u>
+    <u>service:jmx:rmi:///jndi/rmi://localhost:9987/jmxrmi</u>
+	<u>service:jmx:rmi:///jndi/rmi://yoda1:9988/jmxrmi</u>
+	<u>service:jmx:rmi:///jndi/rmi://yoda1:9987/jmxrmi</u>
+  </urls>
+</JmxServices>

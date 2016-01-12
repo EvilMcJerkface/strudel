@@ -1,0 +1,18 @@
+<JmxResource>
+  <cluster>
+    <hosts>localhost:9987 localhost:9988</hosts>
+  </cluster>
+  <name>monitor</name>
+  <values>
+    <value name="throughput">
+      <aggr>sum</aggr>
+      <object>com.nec.workload:type=Test</object>
+      <attr>TransactionsPerSec</attr>
+    </value>
+    <value name="response">
+      <aggr>avg</aggr>
+      <object>com.nec.workload:type=Test</object>
+      <attr>ResponseTimeMsec</attr>
+    </value>
+  </values>
+</JmxResource>

@@ -1,0 +1,6 @@
+<params>
+	<param name="n1" value="v1"/>
+	<param name="n2" value="v2"/>
+	<param name="n3"><random type="int" min="0" max="3"/></param>
+	<param name="n4"><random type="double" min="0" max="2"/></param>
+</params>

@@ -1,0 +1,8 @@
+<system>
+  <command>ls</command>
+  <args><arg>-l</arg><arg>/tmp</arg></args>
+  <env>
+    <property name="test.dir">/tmp</property>
+    <property name="test.num">100</property>
+  </env>
+</system>

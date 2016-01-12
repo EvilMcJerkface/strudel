@@ -1,0 +1,10 @@
+<Database>
+  <className>com.nec.strudel.jpa.PersistenceService</className>
+  <name>test_auction</name>
+  <params>
+    <property name="javax.persistence.jdbc.url"
+  			value="jdbc:derby:/tmp/entitydb-test;create=true"/>
+    <property name="javax.persistence.schema-generation.database.action"
+  			value="drop-and-create"/>
+  </params>
+</Database>

@@ -100,9 +100,27 @@
 		</dependency>
 	<!-- REST server -->
 		<dependency>
+			<groupId>com.nec.strudel</groupId>
+			<artifactId>strudel-tkvs</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.nec.strudel</groupId>
+			<artifactId>strudel-jpa</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-grizzly2-http</artifactId>
 			<version>2.5.1</version>
+		</dependency>
+
+	<!-- Dependencies for testing -->
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.11.1.1</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

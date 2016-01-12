@@ -1,0 +1,17 @@
+<Populate>
+	<numOfThreads>4</numOfThreads>
+	<factory>com.nec.strudel.workload.test.kvmap.PopulateFactory</factory>
+	<process>
+		<Populate name="PopulateX" min="50" max="150">
+			<params>
+				<VALUE>100</VALUE>
+			</params>
+		</Populate>
+		<Populate name="PopulateY" size="100">
+			<params>
+				<VALUE><Random type="int" min="10" max="100"/></VALUE>
+			</params>
+		</Populate>
+	</process>
+
+</Populate>

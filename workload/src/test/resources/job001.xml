@@ -1,0 +1,162 @@
+<Job>
+	<database factory="com.nec.workload.db.TransactionalDBCreator">
+	    <type>test</type>
+		<className>com.nec.strudel.tkvs.store.impl.inmemory.InMemoryStore</className>
+		<name>test</name>
+	</database>
+	<tasks>
+	<populate>
+		<numOfThreads>5</numOfThreads>
+		<factory>com.nec.tkvs.bench.auction.populate.Factory</factory>
+		<process>
+			<Populate name="User" size="100">
+			</Populate>
+			<Populate name="SaleItem" size="100">
+				<params>
+					<Param name="itemsPerUser" value="5"/>
+					<Param name="price" value="100"/>
+					<Param name="qnty" value="100"/>
+					<Param name="buynowRatio" value="80"/>
+					<Param name="buynowPerItem" value="5"/>
+					<Param name="bnsDateAdjuster" value="5"/>
+					<Param name="userNum" value="2"/>
+				</params>
+			</Populate>
+			<Populate name="AuctionItem" size="100">
+				<params>
+					<Param name="itemsPerUser" value="2"/>
+					<Param name="initialBid" value="100.0"/>
+					<Param name="buyNowAdjuster" value="5"/>
+					<Param name="endDateAdjuster" value="5"/>
+					<Param name="bidsPerItem" value="2"/>
+					<Param name="userNum" value="2"/>
+					<Param name="bidDateAdjuster" value="3"/>
+					<Param name="buynowRatio" value="20"/>
+					<Param name="bnaDateAdjuster" value="1"/>
+				</params>
+			</Populate>
+		</process>
+	</populate>
+	<workload>
+	  <type>session</type>
+	  <numOfThreads>2</numOfThreads>
+	  <measure>
+		<rampup>1</rampup>
+		<duration>2</duration>
+	  </measure>
+	  <session>
+	    <factory>com.nec.tkvs.bench.auction.interactions.Factory</factory>
+		<interactions>
+		  <interaction name="REGISTER"/>
+		  <interaction name="SELL_AUCTION_ITEM"/>
+		  <interaction name="SELL_SALE_ITEM" />
+		  <interaction name="VIEW_AUCTION_ITEMS_BY_SELLER" />
+		  <interaction name="VIEW_SALE_ITEMS_BY_SELLER" />
+		  <interaction name="VIEW_AUCTION_ITEMS_BY_BUYER" />
+		  <interaction name="VIEW_SALE_ITEMS_BY_BUYER" />
+		  <interaction name="VIEW_BIDS_BY_BIDDER" />
+		  <interaction name="VIEW_WINNING_BIDS_BY_BIDDER" />
+		  <interaction name="VIEW_AUCTION_ITEM" />
+		  <interaction name="VIEW_SALE_ITEM" />
+		  <interaction name="VIEW_AUCTION_BID_HISTORY" />
+		  <interaction name="VIEW_SALE_BUY_NOW_HISTORY"/>
+		  <interaction name="STORE_BID" />
+		  <interaction name="STORE_AUCTION_BUY_NOW" />
+		  <interaction name="STORE_SALE_BUY_NOW" />
+		</interactions>
+		<transitions>
+			<transition name="START">
+				<Next name="HOME" prob="1.0"/>
+			</transition>
+			<transition name="HOME">
+				<Next name="SELL_AUCTION_ITEM" prob="0.2"/>
+				<Next name="SELL_SALE_ITEM" prob="0.1"/>
+				<Next name="VIEW_AUCTION_ITEMS_BY_SELLER" prob="0.1"/>
+				<Next name="VIEW_SALE_ITEMS_BY_SELLER" prob="0.1"/>
+				<Next name="VIEW_AUCTION_ITEMS_BY_BUYER" prob="0.1"/>
+				<Next name="VIEW_SALE_ITEMS_BY_BUYER" prob="0.1"/>
+				<Next name="VIEW_BIDS_BY_BIDDER" prob="0.1"/>
+				<Next name="VIEW_WINNING_BIDS_BY_BIDDER" prob="0.1"/>
+				<Next name="END" prob="0.1"/>
+			</transition>
+			<transition name="SELL_AUCTION_ITEM">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+			<transition name="SELL_SALE_ITEM">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+			<transition name="VIEW_AUCTION_ITEMS_BY_SELLER">
+				<Next name="VIEW_AUCTION_ITEM" prob="0.7" />
+				<Next name="HOME" prob="0.3" />
+			</transition>
+			<transition name="VIEW_SALE_ITEMS_BY_SELLER">
+				<Next name="VIEW_SALE_ITEM" prob="0.7" />
+				<Next name="HOME" prob="0.3" />
+			</transition>
+			<transition name="VIEW_AUCTION_ITEMS_BY_BUYER">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+			<transition name="VIEW_SALE_ITEMS_BY_BUYER">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+			<transition name="VIEW_BIDS_BY_BIDDER">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+			<transition name="VIEW_WINNING_BIDS_BY_BIDDER">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+			<transition name="VIEW_AUCTION_ITEM">
+				<Next name="VIEW_AUCTION_BID_HISTORY" prob="0.3" />
+				<Next name="STORE_BID" prob="0.3" />
+				<Next name="STORE_AUCTION_BUY_NOW" prob="0.3" />
+				<Next name="HOME" prob="0.1" />
+			</transition>
+			<transition name="VIEW_SALE_ITEM">
+				<Next name="VIEW_SALE_BUY_NOW_HISTORY" prob="0.4" />
+				<Next name="STORE_SALE_BUY_NOW" prob="0.4" />
+				<Next name="HOME" prob="0.2" />
+			</transition>
+			<transition name="VIEW_AUCTION_BID_HISTORY">
+				<Next name="STORE_BID" prob="0.4" />
+				<Next name="STORE_AUCTION_BUY_NOW" prob="0.4" />
+				<Next name="HOME" prob="0.2" />
+			</transition>
+			<transition name="VIEW_SALE_BUY_NOW_HISTORY">
+				<Next name="STORE_SALE_BUY_NOW" prob="0.7" />
+				<Next name="HOME" prob="0.3" />
+			</transition>
+			<transition name="STORE_BID">
+				<Next name="VIEW_AUCTION_ITEM" prob="0.3" />
+				<Next name="HOME" prob="0.7" />
+			</transition>
+			<transition name="STORE_AUCTION_BUY_NOW">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+			<transition name="STORE_SALE_BUY_NOW">
+				<Next name="HOME" prob="1.0" />
+			</transition>
+		</transitions>
+		<params>
+			<param name="AUCTION_INIT_BID_MIN" 			value="50"	/>
+			<param name="AUCTION_INIT_BID_MAX" 			value="500"	/>
+			<param name="AUCTION_BUY_NOW_ADJUSTER_MIN"  value="2"	/>
+			<param name="AUCTION_BUY_NOW_ADJUSTER_MAX"  value="4"  	/>
+			<param name="AUCTION_END_DATE_ADJUSTER_MIN" value="2"  	/>
+			<param name="AUCTION_END_DATE_ADJUSTER_MAX" value="10" 	/>
+			<param name="BID_AMOUNT_ADJUSTER" value= "2"	/>
+			<param name="SALE_PRICE_MIN" value="50" 	/>
+			<param name="SALE_PRICE_MAX" value="1000" 	/>
+			<param name="SALE_QNTY_MIN" value="10" 		/>
+			<param name="SALE_QNTY_MAX" value="500" 	/>
+			<param name="QNTY_ADJUSTER" value="5"		/>
+		</params>
+	  </session>
+	</workload>
+	</tasks>
+	<reporter>
+	  <include>
+	    <a type="number">10</a>
+	    <b type="object"><c>ccc</c><d type="number">2</d></b>
+	  </include>
+	</reporter>
+</Job>

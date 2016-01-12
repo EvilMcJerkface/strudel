@@ -1,0 +1,10 @@
+<Database>
+    <type>tkvs</type>
+	<className>com.nec.strudel.tkvs.store.impl.InMemoryStore</className>
+	<name>auction</name>
+	<params>
+	  <property name="k1">v1</property>
+	  <property name="k2">v2</property>
+	  <property name="k3" value="v3"/>
+	</params>
+</Database>

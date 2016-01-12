@@ -1,0 +1,4 @@
+<Database>
+	<className>com.nec.strudel.workload.test.kvmap.KVMap</className>
+	<name>test</name>
+</Database>

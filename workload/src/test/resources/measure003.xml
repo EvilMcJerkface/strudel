@@ -1,0 +1,9 @@
+<Measure>
+  <rampup>120</rampup>
+  <duration>1200</duration>
+  <poll>5</poll>
+  <process>
+    <sleep>10</sleep>
+    <info>testing</info>
+  </process>
+</Measure>

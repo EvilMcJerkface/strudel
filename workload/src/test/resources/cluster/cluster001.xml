@@ -1,0 +1,13 @@
+<Cluster>
+  <size>20</size>
+  <urls>
+    <u>http://localhost:8080</u>
+    <u>http://localhost:8081</u>
+    <u>http://localhost:8082</u>
+    <u>http://localhost:8083</u>
+    <u>http://localhost:8084</u>
+    <u>http://localhost:8085</u>
+    <u>http://localhost:8086</u>
+    <u>http://localhost:8087</u>
+  </urls>
+</Cluster>
