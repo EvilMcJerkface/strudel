@@ -27,6 +27,12 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
+/**
+ * Data object that encapsulates metric values (JsonObject)
+ * and warning messages (a list of String values).
+ * @author tatemura
+ *
+ */
 public class Report {
 	public static final String VALUE_COUNTERS = "Values";
 	public static final String VALUE_WARNS = "Warnings";
@@ -118,7 +124,9 @@ public class Report {
     public static Report report(JsonObject value, List<String> messages) {
 		return new Report(value, messages);
     }
-
+    public static Report warn(List<String> messages) {
+    	return new Report(EMPTY_VALUE, messages);
+    }
 
     private static final JsonObject EMPTY_VALUE = Json.createObjectBuilder().build();
     private static final List<String> EMPTY_WARNS = Collections.emptyList();

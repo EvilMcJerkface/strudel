@@ -19,19 +19,21 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.nec.strudel.instrument.OperationListener;
+
 @NotThreadSafe
 public class PopulateProfiler {
-	private final PopulateStat stat;
+	private final OperationListener listener;
 	private long startNano;
 
-	public PopulateProfiler(PopulateStat stat) {
-		this.stat = stat;
+	public PopulateProfiler(OperationListener listener) {
+		this.listener = listener;
 	}
 	public void start() {
 		startNano = System.nanoTime();
 	}
-	public void done() {
+	public void end() {
 		long timeMicro = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - startNano);
-		stat.taskDone(timeMicro);
+		listener.operation(timeMicro);
 	}
 }

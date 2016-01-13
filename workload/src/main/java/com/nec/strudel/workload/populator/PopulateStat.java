@@ -56,9 +56,6 @@ public class PopulateStat {
 		return mon.getAverageOperationTime();
 	}
 	public PopulateProfiler profiler() {
-		return new PopulateProfiler(this);
-	}
-	public void taskDone(long microSec) {
-		mon.operation(microSec);
+		return new PopulateProfiler(mon);
 	}
 }

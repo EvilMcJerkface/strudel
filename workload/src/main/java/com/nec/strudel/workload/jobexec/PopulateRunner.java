@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.nec.strudel.exceptions.WorkloadException;
+import com.nec.strudel.metrics.Report;
 import com.nec.strudel.target.DatabaseCreator;
 import com.nec.strudel.target.TargetConfig;
 import com.nec.strudel.target.TargetLifecycle;
@@ -197,6 +198,10 @@ public class PopulateRunner implements Runnable {
 				"Populator execution failed at "
 					+ failed + " for task "
 					+ item.getName());
+			}
+			Report rep = wg.getReport();
+			for (String message : rep.getWarns()) {
+				LOGGER.warn(message);
 			}
 		}
 		int doneSize(List<String> states) {

@@ -40,6 +40,7 @@ import org.glassfish.jersey.jsonp.JsonProcessingFeature;
 
 import com.nec.strudel.exceptions.WorkloadException;
 import com.nec.strudel.workload.job.WorkRequest;
+import com.nec.strudel.workload.job.WorkRequestParser;
 import com.nec.strudel.workload.server.WorkStatus;
 import com.nec.strudel.workload.server.WorkerService;
 import com.nec.strudel.workload.server.rest.resources.WorkResource;
@@ -122,7 +123,8 @@ public class RestWorkerService implements WorkerService {
 				 */
 				Invocation inv = target.request()
 				.buildPost(
-				Entity.xml(work.toXMLString()));
+				Entity.xml(WorkRequestParser.toString(work)));
+
 				Response res = invoke(inv);
 				JsonObject json =
 				res.readEntity(JsonObject.class);

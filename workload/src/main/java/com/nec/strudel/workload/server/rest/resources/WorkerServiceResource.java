@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 
 import com.nec.strudel.workload.job.WorkRequest;
+import com.nec.strudel.workload.job.WorkRequestParser;
 import com.nec.strudel.workload.server.WorkStatus;
 import com.nec.strudel.workload.server.WorkerService;
 import com.nec.strudel.workload.server.rest.WorkerServiceRepository;
@@ -53,7 +54,7 @@ public class WorkerServiceResource {
 	@POST
 	public JsonObject create(String input) {
 		try {
-			WorkRequest work = WorkRequest.parse(input);
+			WorkRequest work = WorkRequestParser.parse(input);
 			LOGGER.info("creating work for node="
 					+ work.getNodeId());
 			WorkStatus stat = service.init(work);

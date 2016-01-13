@@ -46,7 +46,7 @@ import com.nec.strudel.workload.util.TimeValue;
 public class PopulateWorkItem implements WorkItem {
 	private static final Random RAND = new Random(System.nanoTime());
 	public static final String TYPE = "populate";
-	public static final String TAG_NAME = "Populate";
+	public static final String TAG_NAME = "populate";
 	private Random rand = newRandom();
 
 	private String name = "";
@@ -95,7 +95,17 @@ public class PopulateWorkItem implements WorkItem {
 	}
 
 	public Range<Integer> getIdRange() {
-		return createRange();
+	    if (size > 0) {
+	        if (min != -1) {
+	            return Range.range(min, min + size);
+	        }
+	        return Range.range(0, size);
+	    }
+        if (min == -1 || max == -1) {
+            throw new ConfigException(
+            "size or range not specified");
+        }
+        return Range.range(min, max);
 	}
 
 	public boolean isValidate() {
@@ -195,20 +205,4 @@ public class PopulateWorkItem implements WorkItem {
 	public void setClassPath(String classPath) {
 		this.classPath = classPath;
 	}
-
-	Range<Integer> createRange() {
-	    if (size > 0) {
-	        if (min != -1) {
-	            return Range.range(min, min + size);
-	        }
-	        return Range.range(0, size);
-	    }
-        if (min == -1 || max == -1) {
-            throw new ConfigException(
-            "size or range not specified");
-        }
-        return Range.range(min, max);
-		
-	}
-
 }

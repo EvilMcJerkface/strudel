@@ -26,7 +26,6 @@ import com.nec.strudel.metrics.Report;
 import com.nec.strudel.target.Target;
 import com.nec.strudel.workload.api.PopulateParam;
 import com.nec.strudel.workload.api.Populator;
-import com.nec.strudel.workload.api.ValidateReporter;
 import com.nec.strudel.workload.exec.batch.WorkThread;
 import com.nec.strudel.workload.populator.PopulateProfiler;
 
@@ -34,6 +33,7 @@ public class PopulateWorkThread<T, P> implements WorkThread {
 	private static final Logger LOGGER =
 		    Logger.getLogger(PopulateWorkThread.class);
 	public static final int DELAYED_VALIDATION_SIZE = 2000;
+	public static final int MAX_WARNS_PER_THREAD = 10;
 	private final int id;
 	private final PopulatePool<T, P> pool;
 	private final Random rand;
@@ -66,15 +66,13 @@ public class PopulateWorkThread<T, P> implements WorkThread {
 		this.con = con;
 		this.target = target;
 		this.prof = prof;
-		this.reporter = new LoggingValidateReporter(logger);
+		this.reporter = new LoggingValidateReporter(MAX_WARNS_PER_THREAD, logger);
 		this.buffSize = DELAYED_VALIDATION_SIZE;
 		this.validate = validate;
 		if (validate) {
-			paramBuffer = new ArrayList<P>(
-					buffSize);
+			paramBuffer = new ArrayList<P>(buffSize);
 		} else {
-			paramBuffer = new ArrayList<P>(
-					0);
+			paramBuffer = new ArrayList<P>(0);
 		}
 	}
 
@@ -89,7 +87,7 @@ public class PopulateWorkThread<T, P> implements WorkThread {
 				target.beginUse(con);
 				prof.start();
 				pop.process(con, p);
-				prof.done();
+				prof.end();
 				target.endUse(con);
 				if (validate) {
 					pop.validate(con, p, reporter);
@@ -136,9 +134,13 @@ public class PopulateWorkThread<T, P> implements WorkThread {
 	@Override
 	public Report getReport() {
 		/**
-		 * TODO report warns
+		 * TODO report other metrics
 		 */
-		return Report.none();
+		if (reporter.hasWarn()) {
+			return Report.warn(reporter.getWarns());
+		} else {
+			return Report.none();
+		}
 	}
 
 	@Override
@@ -162,25 +164,5 @@ public class PopulateWorkThread<T, P> implements WorkThread {
 	@Override
 	public boolean isSuccessful() {
 		return success;
-	}
-	static class LoggingValidateReporter implements ValidateReporter {
-		private final Logger logger;
-		private boolean delayedCheck;
-		public LoggingValidateReporter(Logger logger) {
-			this.logger = logger;
-		}
-		public void setDelayedCheck(boolean doubleCheck) {
-			this.delayedCheck = doubleCheck;
-		}
-
-		@Override
-		public void error(String message) {
-			if (delayedCheck) {
-				logger.warn(
-					"delayed double check: " + message);
-			} else {
-				logger.warn(message);
-			}
-		}
 	}
 }
