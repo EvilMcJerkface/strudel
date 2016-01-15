@@ -25,7 +25,7 @@ package com.nec.strudel.workload.job;
 public class JobInfo {
 	private String outDir;
 	private String path;
-	private String savedPath;
+	private String id;
 	private int jobId;
 	public JobInfo() {
 	}
@@ -44,11 +44,11 @@ public class JobInfo {
 	public void setOutDir(String outDir) {
 		this.outDir = outDir;
 	}
-	public String getSavedPath() {
-		return savedPath;
+	public String getId() {
+		return id;
 	}
-	public void setSavedPath(String savedPath) {
-		this.savedPath = savedPath;
+	public void setId(String id) {
+		this.id = id;
 	}
 	public void setJobId(int jobId) {
 		this.jobId = jobId;
@@ -58,9 +58,9 @@ public class JobInfo {
 	}
 	public JobInfo copy(int jobId) {
 		JobInfo info = new JobInfo(path);
-		info.setSavedPath(savedPath);
 		info.setJobId(jobId);
 		info.setOutDir(getOutDir());
+		info.setId(getId());
 		return info;
 	}
 

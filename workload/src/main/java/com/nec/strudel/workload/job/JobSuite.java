@@ -17,26 +17,27 @@ package com.nec.strudel.workload.job;
 
 import java.io.File;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
-
-import javax.annotation.Nullable;
 
 import com.nec.congenio.ConfigDescription;
 import com.nec.congenio.ConfigValue;
-import com.nec.strudel.exceptions.ConfigException;
 
 /**
  * JobSuite is a set of Jobs, which are
  * executed sequentially. The jobs must be independent
- * of each other.
+ * of each other (i.e., one job should not use the result
+ * of another job).
  * <pre>
- * &lt;JobSuite&gt;
+ * &lt;jobSuite&gt;
+ *   &lt;output&gt;...&lt;/output&gt;
+ *   &lt;id&gt;...&lt;/id&gt;
  *   &lt;foreach&gt;...&lt;/foreach&gt;
  *   &lt;foreach&gt;...&lt;/foreach&gt;
  *   ...
- *   &lt;Output&gt;...&lt;/Output&gt;
- *   &lt;Job&gt;...&lt;/Job&gt;
- * &lt;/JobSuite>
+ *   &lt;job&gt;...&lt;/job&gt;
+ * &lt;/jobSuite>
  * </pre>
  * @author tatemura
  *
@@ -44,8 +45,12 @@ import com.nec.strudel.exceptions.ConfigException;
 public class JobSuite implements Iterable<Job> {
 	public static final String TAG_NAME = "jobSuite";
 	public static final String ELEM_OUTPUT = "output";
+	public static final String ID = "id";
+	public static final String DEFAULT_OUTPUT = "out";
 	private final JobInfo info;
 	private final ConfigDescription cdl;
+	private String id;
+	private String output;
 
 	public static JobSuite create(File file) {
 		String path = file.getAbsolutePath();
@@ -58,13 +63,24 @@ public class JobSuite implements Iterable<Job> {
 	public JobSuite(JobInfo info, ConfigDescription cdl) {
 		this.info = info;
 		this.cdl = cdl;
+		this.id = cdl.get(ID);
+		if (id == null) {
+	    	SimpleDateFormat df =
+	    			new SimpleDateFormat("yyyy-MM-dd'T'HHmmss");
+	    	id = df.format(new Date());
+		}
+		output = cdl.get(ELEM_OUTPUT);
+		if (output == null) {
+			output = DEFAULT_OUTPUT;
+		}
+		info.setId(id);
+		info.setOutDir(output);
 	}
 	public JobInfo info() {
 		return info;
 	}
 	@Override
 	public Iterator<Job> iterator() {
-		info.setOutDir(getOutput());
 		return new JobIterator(info,
 				cdl.evaluate().iterator());
 	}
@@ -77,16 +93,11 @@ public class JobSuite implements Iterable<Job> {
 		cdl.write(writer);
 	}
 
-	@Nullable
-	public String get(String name) {
-		return cdl.get(name);
-	}
 	public String getOutput() {
-		String output = get(ELEM_OUTPUT);
-		if (output == null) {
-			throw new ConfigException("not found: " + ELEM_OUTPUT);
-		}
 		return output;
+	}
+	public String getId() {
+		return id;
 	}
 
 	static class JobIterator implements Iterator<Job> {

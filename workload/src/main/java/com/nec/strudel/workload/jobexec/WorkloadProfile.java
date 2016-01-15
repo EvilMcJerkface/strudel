@@ -32,24 +32,24 @@ public class WorkloadProfile {
 	private static final String START_DATE = "start_date";
 	private static final String END_DATE = "end_date";
 	private static final String JOB_FILE = "job_file";
-	private static final String JOB_SAVED = "job_saved";
+	private static final String JOB_SUITE_ID = "jobsuite_id";
 	private static final String JOB_ID = "job_id";
 	private String startDate;
 	private String endDate;
 	private String name;
 	private String jobFile;
-	private String jobSaved;
+	private String jobsuiteId;
 	private int jobId;
 	private DateFormat dateFormat =
 			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
+
 	public String getStartDate() {
 		return startDate;
 	}
-
-
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
+
 	public void setStartDateNow() {
 		this.startDate = dateFormat.format(new Date());
 	}
@@ -76,7 +76,7 @@ public class WorkloadProfile {
 
 	public void setJobInfo(JobInfo info) {
 		setJobFile(info.getPath());
-		setJobSaved(info.getSavedPath());
+		setJobsuiteId(info.getId());
 		setJobId(info.getJobId());
 	}
 
@@ -90,21 +90,18 @@ public class WorkloadProfile {
 	}
 
 
-	@Nullable
-	public String getJobSaved() {
-		return jobSaved;
-	}
-
-
-	public void setJobSaved(@Nullable String jobSaved) {
-		this.jobSaved = jobSaved;
-	}
-
 	public int getJobId() {
 		return jobId;
 	}
 	public void setJobId(int jobId) {
 		this.jobId = jobId;
+	}
+	@Nullable
+	public String getJobsuiteId() {
+		return jobsuiteId;
+	}
+	public void setJobsuiteId(@Nullable String jobsuiteId) {
+		this.jobsuiteId = jobsuiteId;
 	}
 
 	public JsonObject toJson() {
@@ -114,8 +111,8 @@ public class WorkloadProfile {
 		.add(END_DATE, getEndDate())
 		.add(JOB_FILE, getJobFile())
 		.add(JOB_ID, getJobId());
-		if (jobSaved != null) {
-			builder.add(JOB_SAVED, jobSaved);
+		if (jobsuiteId != null) {
+			builder.add(JOB_SUITE_ID, jobsuiteId);
 		}
 
 		return builder.build();
@@ -123,7 +120,7 @@ public class WorkloadProfile {
 	public Output toOutput() {
 		return Output.names(
 				NAME, START_DATE, END_DATE,
-				JOB_FILE, JOB_SAVED, JOB_ID);
+				JOB_FILE, JOB_SUITE_ID, JOB_ID);
 	}
 
 }

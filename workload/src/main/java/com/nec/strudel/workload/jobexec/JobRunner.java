@@ -18,9 +18,7 @@ package com.nec.strudel.workload.jobexec;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.FileAppender;
@@ -37,6 +35,17 @@ import com.nec.strudel.workload.job.JobSuite;
 import com.nec.strudel.workload.job.Task;
 import com.nec.strudel.workload.util.TimeUtil;
 
+/**
+ * A runnable class that runs a job or job suite. It will generate the following
+ * data when it executes a job suite:
+ * <ul>
+ *  <li> ${output}/jobsuite-${id}.xml - a configuration file after resolving inheritance
+ *  <li> ${output}/joblog-${id}.log - a Log4j log file during job execution
+ *  <li> ${output}/data/*.json - results of individual jobs in the job suite.
+ * </ul>
+ * @author tatemura
+ *
+ */
 public abstract class JobRunner implements Runnable {
 	private static final Logger LOGGER = Logger.getLogger(JobRunner.class);
 	private static final long SLEEP_BETWEEN_JOBS = 1000;
@@ -74,40 +83,32 @@ public abstract class JobRunner implements Runnable {
 			return jobSuite;
 		}
 		protected void prepare() {
-			String date = dateString();
+			String id = jobSuite.getId();
 			try {
 				File outDir = prepareOutDir();
-				recordJobSuiteInfo(outDir, date);
-				addLog4jAppender(outDir, date);
+				recordJobSuiteInfo(outDir, id);
+				addLog4jAppender(outDir, id);
 			} catch (IOException e) {
 				throw new WorkloadException(
 					"failed to save job suite info", e);
 			}
-		}
-		private String dateString() {
-	    	SimpleDateFormat df =
-	    			new SimpleDateFormat("yyyy-MM-dd'T'HHmmss");
-	    	return df.format(new Date());
 		}
 		private File prepareOutDir() {
 			File outDir = new File(jobSuite.getOutput());
 			outDir.mkdirs();
 			return outDir;
 		}
-		private void recordJobSuiteInfo(File outDir, String date)
+		private void recordJobSuiteInfo(File outDir, String id)
 				throws IOException {
-	    	File file = new File(outDir, "jobsuite-"
-	    				+ date + ".xml");
-	    	jobSuite.info().setSavedPath(file.getAbsolutePath());
+	    	File file = new File(outDir, "jobsuite-" + id + ".xml");
 	    	FileWriter w = new FileWriter(file);
 	    	jobSuite.write(w);
 	    	w.close();
 
 		}
-		private void addLog4jAppender(File outDir, String date)
+		private void addLog4jAppender(File outDir, String id)
 				throws IOException {
-	    	File file = new File(outDir, "joblog-"
-					+ date + ".log");
+	    	File file = new File(outDir, "joblog-" + id + ".log");
 			BasicConfigurator.configure(new FileAppender(
 				new PatternLayout("[%d %c{3}] %p %m %n"),
 					file.getAbsolutePath()));
@@ -122,30 +123,49 @@ public abstract class JobRunner implements Runnable {
 	public void run() {
 		prepare();
 		int num = 0;
-		for (Job job : jobs()) {
-			if (num > 0) {
-				try {
-					Thread.sleep(SLEEP_BETWEEN_JOBS);
-				} catch (InterruptedException e) {
-					LOGGER.error("interrupted", e);
-					Thread.currentThread().interrupt();
+		EnvironmentConfig lastConf = null;
+		try {
+			for (Job job : jobs()) {
+			    EnvironmentConfig envConf = job.createEnv();
+				if (num == 0) {
+					startJobSuite(envConf);
+				} else {
+					try {
+						Thread.sleep(SLEEP_BETWEEN_JOBS);
+					} catch (InterruptedException e) {
+						LOGGER.error("interrupted", e);
+						Thread.currentThread().interrupt();
+						break;
+					}
+				}
+				lastConf = envConf;
+				num++;
+				boolean success = runJob(job, envConf);
+				if (!success) {
+					LOGGER.error("job #" + num
+							+ " failed.");
 					break;
 				}
 			}
-			num++;
-			boolean success = runJob(job);
-			if (!success) {
-				LOGGER.error("job #" + num
-						+ " failed.");
-				break;
+		} finally {
+			if (lastConf != null) {
+				stopJobSuite(lastConf);
 			}
 		}
 	}
 	protected abstract void prepare();
 	protected abstract Iterable<Job> jobs();
 
-	protected boolean runJob(Job job) {
-	    EnvironmentConfig envConf = job.createEnv();
+	protected void startJobSuite(EnvironmentConfig envConf) {
+	    Environment env = envConf.create();
+	    env.startSuite(envConf.getStartSuite());
+	}
+	protected void stopJobSuite(EnvironmentConfig envConf) {
+	    Environment env = envConf.create();
+		env.stopSuite(envConf.getStopSuite());
+	}
+
+	protected boolean runJob(Job job, EnvironmentConfig envConf) {
 	    Environment env = envConf.create();
 	    env.start(envConf.getStart());
 	    try {

@@ -18,6 +18,8 @@ package com.nec.strudel.workload.job.test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,7 +39,15 @@ public class JobSuiteTest {
 		int[] as = {1,2};
 		int[] bs = {10, 20};
 	    File file = Resources.getFile(ResourceNames.JOB_SUITE1);
+    	SimpleDateFormat df =
+    			new SimpleDateFormat("yyyy-MM-dd'T'HHmmss");
+    	String begin = df.format(new Date());
 	    JobSuite js = JobSuite.create(file);
+	    String end = df.format(new Date());
+
+	    assertTrue(begin.compareTo(js.getId()) <= 0);
+	    assertTrue(end.compareTo(js.getId()) >= 0);
+
 	    Set<Integer> wSet = new HashSet<Integer>();
 	    int count = 0;
 	    for (Job job : js) {
@@ -65,8 +75,7 @@ public class JobSuiteTest {
 	    for (int w : ws) {
 	    	assertTrue(wSet.contains(w));
 	    }
-	    String dir = js.get("dir");
-	    assertEquals(dir, js.getOutput());
+	    assertEquals("dir", js.getOutput());
 
 	}
 }
