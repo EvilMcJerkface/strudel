@@ -63,19 +63,19 @@ public class TransactionStat {
 	public String getName() {
 		return name;
 	}
-	@Getter
+	@Getter(description = "average response time of a commit operation (ms)")
 	public double getAvgCommitTime() {
 		return commitMon.getAverageOperationTime();
 	}
-	@Getter
+	@Getter(description = "number of commit operations per second")
 	public double getCommitPerSec() {
 		return commitMon.getOperationsPerSec();
 	}
-	@Getter
+	@Getter(description = "average response time of a get operation (ms)")
 	public double getAvgGetTime() {
 		return getMon.getAverageOperationTime();
 	}
-	@Getter
+	@Getter(description = "number of get operations per second")
 	public double getGetPerSec() {
 		return getMon.getOperationsPerSec();
 	}

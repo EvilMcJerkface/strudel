@@ -42,16 +42,16 @@ public class PopulateStat {
 		return name;
 	}
 
-	@Getter
+	@Getter(description = "number of threads per worker")
 	public int getThreadNum() {
 		return threadNum;
 	}
 
-	@Getter
+	@Getter(description = "number of populator execution units per second")
 	public double getTasksPerSec() {
 		return mon.getOperationsPerSec();
 	}
-	@Getter
+	@Getter(description = "average time (ms) for one populator execution unit")
 	public double getAvgTaskTime() {
 		return mon.getAverageOperationTime();
 	}

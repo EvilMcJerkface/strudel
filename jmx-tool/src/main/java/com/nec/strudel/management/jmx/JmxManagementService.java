@@ -214,7 +214,8 @@ public class JmxManagementService implements ManagementService {
 				ResourceAttribute a = attrs[i];
 				mbais[i] =
 						new ModelMBeanAttributeInfo(
-								a.getName(), "",
+								a.getName(),
+								a.getDescription(),
 								a.getGetter(),
 								a.getSetter());
 				Descriptor desc = mbais[i].getDescriptor();

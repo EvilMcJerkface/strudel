@@ -79,31 +79,31 @@ public class BackoffPolicy {
 		return new LinearBackoff(this);
 	}
 
-	@Getter
+	@Getter(description = "type of backoff (linear, exponential)")
 	public String getType() {
 		return type.name();
 	}
-	@Getter
+	@Getter(description = "max number of retry")
 	public int getMaxTrial() {
 		return maxTrial;
 	}
-	@Getter
+	@Getter(description = "max sum of backoff times (ms)")
 	public long getMaxTotalWaitMS() {
 		return totalWait;
 	}
-	@Getter
+	@Getter(description = "initial backoff time (ms)")
 	public long getInitWaitMS() {
 		return initWait;
 	}
-	@Getter
+	@Getter(description = "max backoff time (ms)")
 	public long getMaxWaitMS() {
 		return maxWait;
 	}
-	@Getter
+	@Getter(description = "max number of backoff waits")
 	public long getWaitStepMS() {
 		return waitStep;
 	}
-	@Getter
+	@Getter(description = "number of retry when backoff starts")
 	public int getStartBackoff() {
 		return startBackoff;
 	}

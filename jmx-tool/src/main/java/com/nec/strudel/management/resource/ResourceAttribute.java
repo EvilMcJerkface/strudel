@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 public class ResourceAttribute {
 	private final String name;
+	private String description = "";
 	private Method getter;
 	private Method setter;
 	public ResourceAttribute(String name) {
@@ -30,6 +31,13 @@ public class ResourceAttribute {
 	public String getName() {
 		return name;
 	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	/**
 	 * Gets the getter of this attribute
 	 * @return null if no getter

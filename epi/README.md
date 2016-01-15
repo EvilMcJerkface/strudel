@@ -69,6 +69,9 @@ specifying a secondary key.
 - Group transactions: multi-statement transactions on a single
 entity group.
 
+The following methods are part of EntityDB interface for
+the CRUD operations and secondary key access:
+
 	<T> T get(Class<T> entityClass, Object key);
 	void create(Object entity);
 	void update(Object entity);

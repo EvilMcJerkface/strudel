@@ -110,22 +110,22 @@ public class LocalWorker implements Worker {
 		}
 	}
 
-	@Getter
+	@Getter(description = "current state of workload")
 	@Override
 	public String getState() {
 		return wexec.getState();
 	}
 
-	@Getter
+	@Getter(description = "slack time at start up (ms)")
 	public long getStartSlackMS() {
 		return slack.toMillis();
 	}
 
-	@Getter
+	@Getter(description = "number of threads per worker")
 	public int getThreadNum() {
 		return wexec.numOfThreads();
 	}
-	@Getter
+	@Getter(description = "type of workload")
 	public String getWorkloadType() {
 		return type;
 	}

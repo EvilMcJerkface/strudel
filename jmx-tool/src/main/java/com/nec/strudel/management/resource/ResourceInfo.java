@@ -189,6 +189,7 @@ public class ResourceInfo {
 					a = new ResourceAttribute(name);
 					attrs.put(name, a);
 				}
+				a.setDescription(g.description());
 				a.setGetter(m);
 			} else {
 				Setter s = m.getAnnotation(Setter.class);

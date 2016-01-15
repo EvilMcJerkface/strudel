@@ -58,6 +58,16 @@ It decouples data access logic from others:
 Once a benchmark is developed on this framework, a developer can extend it
 to use a custom data access API to exploit advanced features of SQL/NoSQL systems.
 
+Submodules
+----------
+The following submodules are the main part of Strudel:
+- epi: Entity DB (Entity Persistence Interface)
+- epi-jpa: JPA implementation of Entity DB
+- epi-tkvs: Entity DB implemented with a generic KVS interface
+- session: Session Workload framework
+- workload: workload execution engine
+- bench: benchmark submodules
+- store: data store submodules (for HBase, MongoDB, etc.)
 
 Requirements
 ------------

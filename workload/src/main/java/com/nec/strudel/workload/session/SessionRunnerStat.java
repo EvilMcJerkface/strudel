@@ -41,33 +41,32 @@ public class SessionRunnerStat {
 		this.numOfThreads = numOfThreads;
 		this.mon = mon;
 	}
-	@Getter
+	@Getter(description = "number of threads per worker")
 	public int getNumOfThreads() {
 		return numOfThreads;
 	}
 
-	@Getter
+	@Getter(description = "session concurrency per worker")
 	public double getAvgSessionConcurrency() {
-		int len = stat.getSessionConcurrency();
-		return ((double) len) / numOfThreads;
+		return stat.getSessionConcurrency();
 	}
 
-	@Getter
+	@Getter(description = "ratio that an interaction finishes successfully")
 	public double getSuccessRatio() {
 		return mon.getSuccessRatio();
 	}
 
-	@Getter
+	@Getter(description = "average execution time (ms) for an interaction")
 	public double getAvgInteractionTime() {
 		return mon.getAverageInteractionTime();
 	}
 
-	@Getter
+	@Getter(description = "number of executed interactions per second")
 	public double getInteractionsPerSec() {
 		return mon.getInteractionsPerSec();
 	}
 
-	@Getter
+	@Getter(description = "number of new sessions started per second")
 	public double getNewSessionsPerSec() {
 		return mon.getNewSessionsPerSec();
 	}
