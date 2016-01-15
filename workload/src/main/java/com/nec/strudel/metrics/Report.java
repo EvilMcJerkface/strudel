@@ -82,6 +82,9 @@ public class Report {
     			new ArrayList<String>();
 
 		JsonObject c = json.getJsonObject(VALUE_COUNTERS);
+		if (c == null) {
+			c = EMPTY_VALUE;
+		}
 		JsonArray ws = json.getJsonArray(VALUE_WARNS);
 		if (ws != null) {
 			for (JsonValue w : ws) {
