@@ -38,7 +38,7 @@
      <dependency>
        <groupId>com.nec.strudel</groupId>
        <artifactId>strudel-bench-test</artifactId>
-       <version>0.0.1-SNAPSHOT</version>
+       <version>${strudel.version}</version>
      </dependency>
    </dependencies>
  </dependencyManagement> 

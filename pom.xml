@@ -9,8 +9,16 @@
 
   <name>Strudel Entity Transaction Workload Framework</name>
   <url>https://github.com/tatemura/strudel</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
  <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <strudel.version>0.0.1-SNAPSHOT</strudel.version>
   </properties>
  <modules>
   <module>common</module>
@@ -56,37 +64,37 @@
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-common</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-epi</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-workload-api</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-session-api</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-tkvs</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-jmx</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-jpa</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
   </dependencies>
  </dependencyManagement> 

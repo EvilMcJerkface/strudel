@@ -41,20 +41,20 @@
 		</plugins>
 	</build>
   <dependencies>
-		<dependency>
+	<dependency>
 			<groupId>com.nec.strudel</groupId>
 			<artifactId>strudel-tkvs</artifactId>
-		</dependency>
-		<dependency>
+	</dependency>
+	<dependency>
 			<groupId>com.nec.strudel</groupId>
 			<artifactId>strudel-tkvs-test</artifactId>
-                        <version>0.0.1-SNAPSHOT</version>
-                        <scope>test</scope>
-		</dependency>
+            <version>${strudel.version}</version>
+            <scope>test</scope>
+	</dependency>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-tkvs-hbase</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${strudel.version}</version>
     </dependency>
 
     <dependency>

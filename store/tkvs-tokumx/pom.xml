@@ -48,8 +48,8 @@
 		<dependency>
 			<groupId>com.nec.strudel</groupId>
 			<artifactId>strudel-tkvs-test</artifactId>
-                        <version>0.0.1-SNAPSHOT</version>
-                        <scope>test</scope>
+            <version>${strudel.version}</version>
+            <scope>test</scope>
 		</dependency>
           <dependency>
 		<groupId>org.mongodb</groupId>

@@ -30,7 +30,7 @@
      <dependency>
        <groupId>com.nec.strudel</groupId>
        <artifactId>strudel-tkv-test</artifactId>
-       <version>0.0.1-SNAPSHOT</version>
+       <version>${strudel.version}</version>
        <scope>test</scope>
      </dependency>
    </dependencies>
