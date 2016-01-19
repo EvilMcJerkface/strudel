@@ -1,6 +1,6 @@
 <JmxResource>
   <cluster>
-    <hosts>localhost:9987 localhost:9988</hosts>
+    <hosts>localhost:9987,localhost:9988</hosts>
   </cluster>
   <name>monitor</name>
   <values>

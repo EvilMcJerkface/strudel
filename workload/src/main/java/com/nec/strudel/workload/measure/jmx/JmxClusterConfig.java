@@ -30,6 +30,7 @@ import java.util.List;
  *
  */
 public class JmxClusterConfig {
+	public static final String HOST_SEPARATOR = ",";
 	private int port = -1;
 	private String[] urls = new String[0];
 	private String hosts = "";
@@ -79,7 +80,7 @@ public class JmxClusterConfig {
 	List<String> findHosts() {
 		List<String> hosts = new ArrayList<String>();
 		String hostlist = getHosts();
-		for (String h : hostlist.split("\\s+")) {
+		for (String h : hostlist.split(HOST_SEPARATOR)) {
 			h = h.trim();
 			if (!h.isEmpty()) {
 				hosts.add(h);

@@ -38,9 +38,9 @@ import com.yahoo.omid.transaction.OmidInstantiationException;
 /**
  * Omid-based implementation of TransactionalDB
  * <ul>
- * <li> tso.host (localhost)
+ * <li> tso.host (localhost) - a CSV of Omid hosts
  * <li> tso.port  (1234)
- * <li> hbase.zookeeper.quorum (localhost)
+ * <li> hbase.zookeeper.quorum (localhost) - a CSV of zookeeper hosts
  * <li> hbase.zookeeper.property.clientPort (2181)
  * </ul>
  * @author tatemura, Zheng Li (initial version)
@@ -71,7 +71,7 @@ public class OmidStore extends AbstractTransactionalStore implements Transaction
 		for (Map.Entry<Object, Object> e : props.entrySet()) {
             conf.set(e.getKey().toString(), e.getValue().toString());
 			if (e.getKey().toString().equals("tso.host")) {
-				tsoHosts = e.getValue().toString().split(" ");
+				tsoHosts = e.getValue().toString().split(",");
 			}
 		}
 		try {

@@ -1,7 +1,7 @@
 <JmxServices>
   <port>9988</port>
   <hosts>
-    localhost localhost:9987
-    yoda1 yoda1:9987
+    localhost, localhost:9987,
+    yoda1, yoda1:9987
   </hosts>
 </JmxServices>

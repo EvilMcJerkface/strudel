@@ -5,25 +5,20 @@
   <artifactId>strudel-bench</artifactId>
   <packaging>pom</packaging>
 
-      <parent>
-                <groupId>com.nec.strudel</groupId>
-                <artifactId>strudel</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-        </parent>
-
-
+  <parent>
+    <groupId>com.nec.strudel</groupId>
+    <artifactId>strudel</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
 
   <name>Benchmarks on Strudel</name>
-  <url>http://www.nec-labs.com</url>
- <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
- <modules>
-  <module>test</module>
-  <module>micro</module>
-  <module>auction</module>
- </modules>
- <dependencies>
+
+  <modules>
+    <module>test</module>
+    <module>micro</module>
+    <module>auction</module>
+  </modules>
+  <dependencies>
     <dependency>
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-workload-api</artifactId>
@@ -32,15 +27,15 @@
       <groupId>com.nec.strudel</groupId>
       <artifactId>strudel-session-api</artifactId>
     </dependency>
- </dependencies>
- <dependencyManagement>
-   <dependencies>
-     <dependency>
-       <groupId>com.nec.strudel</groupId>
-       <artifactId>strudel-bench-test</artifactId>
-       <version>${strudel.version}</version>
-     </dependency>
-   </dependencies>
- </dependencyManagement> 
+  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.nec.strudel</groupId>
+        <artifactId>strudel-bench-test</artifactId>
+        <version>${strudel.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement> 
 
 </project>

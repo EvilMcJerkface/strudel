@@ -5,35 +5,29 @@
   <artifactId>strudel-store</artifactId>
   <packaging>pom</packaging>
 
-      <parent>
-                <groupId>com.nec.strudel</groupId>
-                <artifactId>strudel</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-        </parent>
-
-
+  <parent>
+    <groupId>com.nec.strudel</groupId>
+    <artifactId>strudel</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
 
   <name>Stores on Strudel</name>
-  <url>http://www.nec-labs.com</url>
- <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
- <modules>
-  <module>tkvs-test</module>
-  <module>tkvs-hbase</module>
-  <module>tkvs-mongodb</module>
-  <module>tkvs-tokumx</module>
-  <module>tkvs-omid</module>
- </modules>
- <dependencyManagement>
-   <dependencies>
-     <dependency>
-       <groupId>com.nec.strudel</groupId>
-       <artifactId>strudel-tkv-test</artifactId>
-       <version>${strudel.version}</version>
-       <scope>test</scope>
-     </dependency>
-   </dependencies>
- </dependencyManagement> 
+  <modules>
+    <module>tkvs-test</module>
+    <module>tkvs-hbase</module>
+    <module>tkvs-mongodb</module>
+    <module>tkvs-tokumx</module>
+    <module>tkvs-omid</module>
+   </modules>
+   <dependencyManagement>
+     <dependencies>
+      <dependency>
+        <groupId>com.nec.strudel</groupId>
+        <artifactId>strudel-tkv-test</artifactId>
+        <version>${strudel.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement> 
 
 </project>
