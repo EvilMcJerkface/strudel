@@ -15,8 +15,8 @@
  -->
 <job extends="job">
   <userNum>4000</userNum>
-  <itemsPerUser>50</itemsPerUser>
-  <numUpdateItems>1</numUpdateItems>
+  <itemsPerUser type="number">50</itemsPerUser>
+  <numUpdateItems type="number">1</numUpdateItems>
   <minUid>1</minUid>
   <populateThreads>10</populateThreads>
   <threadPerNode>16</threadPerNode>

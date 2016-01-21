@@ -17,12 +17,11 @@ package com.nec.strudel.workload.job;
 
 import java.io.File;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 
 import com.nec.congenio.ConfigDescription;
 import com.nec.congenio.ConfigValue;
+import com.nec.strudel.exceptions.ConfigException;
 
 /**
  * JobSuite is a set of Jobs, which are
@@ -43,21 +42,37 @@ import com.nec.congenio.ConfigValue;
  *
  */
 public class JobSuite implements Iterable<Job> {
+	public static final String SUPER_SUITE = "superJobSuite.xml";
 	public static final String TAG_NAME = "jobSuite";
 	public static final String ELEM_OUTPUT = "output";
 	public static final String ID = "id";
-	public static final String DEFAULT_OUTPUT = "out";
 	private final JobInfo info;
 	private final ConfigDescription cdl;
 	private String id;
 	private String output;
 
-	public static JobSuite create(File file) {
+	public static JobSuite createWithoutBase(File file) {
 		String path = file.getAbsolutePath();
 		ConfigDescription cdl = ConfigDescription.create(file);
 		JobInfo info = new JobInfo(path);
 		JobSuite js = new JobSuite(info, cdl);
 		return js;
+	}
+	public static JobSuite create(File file) {
+		ConfigDescription base = baseDescription();
+		String path = file.getAbsolutePath();
+		ConfigDescription cdl = ConfigDescription.create(file, base);
+		JobInfo info = new JobInfo(path);
+		JobSuite js = new JobSuite(info, cdl);
+		return js;
+	}
+
+	/**
+	 * Gets a super JobSuite document that provides
+	 * default values (id, output)
+	 */
+	public static ConfigDescription baseDescription() {
+		return ConfigDescription.create(JobSuite.class, SUPER_SUITE);
 	}
 
 	public JobSuite(JobInfo info, ConfigDescription cdl) {
@@ -65,13 +80,11 @@ public class JobSuite implements Iterable<Job> {
 		this.cdl = cdl;
 		this.id = cdl.get(ID);
 		if (id == null) {
-	    	SimpleDateFormat df =
-	    			new SimpleDateFormat("yyyy-MM-dd'T'HHmmss");
-	    	id = df.format(new Date());
+			throw new ConfigException("mssing value: id");
 		}
 		output = cdl.get(ELEM_OUTPUT);
 		if (output == null) {
-			output = DEFAULT_OUTPUT;
+			throw new ConfigException("mssing value: output");
 		}
 		info.setId(id);
 		info.setOutDir(output);

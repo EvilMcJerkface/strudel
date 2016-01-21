@@ -14,16 +14,16 @@
     limitations under the License.
  -->
 <Populate>
-	<numOfThreads/>
-	<minUid/>
-	<userNum/>
-	<postsPerUser/>
-	<packageName>com.nec.bench.micro.populate.entity</packageName>
+	<numOfThreads type="number"/>
+	<minUid type="number"/>
+	<userNum type="number"/>
+	<postsPerUser type="number"/>
+	<packageName>com.nec.strudel.bench.micro.populate.entity</packageName>
 	<process>
-			<Populate extends="post">
-				<minUid ref="minUid"/>
-				<userNum ref="userNum"/>
-				<postsPerUser ref="postsPerUser"/>
-			</Populate>
+		<populate extends="post">
+			<minUid ref="minUid"/>
+			<userNum ref="userNum"/>
+			<postsPerUser ref="postsPerUser"/>
+		</populate>
 	</process>
 </Populate>

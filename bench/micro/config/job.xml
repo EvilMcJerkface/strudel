@@ -14,17 +14,17 @@
     limitations under the License.
  -->
 <job>
-  <userNum>4000</userNum>
-  <minUid>1</minUid>
-  <populateThreads>10</populateThreads>
-  <threadPerNode>16</threadPerNode>
-  <rampupTime>30</rampupTime>
-  <measureTime>60</measureTime>
-  <beforeThinkTime>0</beforeThinkTime>
-  <afterThinkTime>0</afterThinkTime>
-  <maxTimePerSession>0</maxTimePerSession>
-  <minTimePerSession>0</minTimePerSession>
-  <maxCountPerSession>0</maxCountPerSession>
+  <userNum type="number">4000</userNum>
+  <minUid type="number">1</minUid>
+  <populateThreads type="number">10</populateThreads>
+  <threadPerNode type="number">16</threadPerNode>
+  <rampupTime type="number">30</rampupTime>
+  <measureTime type="number">60</measureTime>
+  <beforeThinkTime type="number">0</beforeThinkTime>
+  <afterThinkTime type="number">0</afterThinkTime>
+  <maxTimePerSession type="number">0</maxTimePerSession>
+  <minTimePerSession type="number">0</minTimePerSession>
+  <maxCountPerSession type="number">0</maxCountPerSession>
   <environment>
     <!-- extend this for an environment for the experiments -->
   </environment>
@@ -61,7 +61,8 @@
 		<packageName>com.nec.bench.micro.interactions.entity</packageName>
 		<transitions><!-- EXTEND THIS --></transitions>
 		<params extends="session/params">
-			<USER_ID>
+			<!-- NOTE: type must be changed from number to object -->
+			<USER_ID type="object">
 				<random partition="true">
 					<type>int</type>
 					<min ref="minUid"/><max ref="userNum"/></random>

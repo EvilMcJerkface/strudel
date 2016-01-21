@@ -53,7 +53,8 @@ public abstract class JobRunner implements Runnable {
 	public static JobRunner create(File file) {
 		String path = file.getAbsolutePath();
 		JobInfo info = new JobInfo(path);
-		ConfigDescription cxml = ConfigDescription.create(file);
+		ConfigDescription cxml = ConfigDescription.create(file,
+				JobSuite.baseDescription());
 		if (JobSuite.TAG_NAME.equalsIgnoreCase(cxml.getName())) {
 			return new JobSuiteRunner(
 					new JobSuite(info, cxml));

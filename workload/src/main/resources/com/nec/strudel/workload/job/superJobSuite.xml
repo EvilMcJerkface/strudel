@@ -1,0 +1,4 @@
+<jobSuite>
+  <id extends="sys:time:dateTime/yyyy-MM-dd-HHmmss"/>
+  <output>out</output>
+</jobSuite>

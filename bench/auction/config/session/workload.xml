@@ -38,7 +38,7 @@
 			<after><time ref="afterThinkTime"/></after>
 		</thinkTime>
 		<params extends=".">
-			<USER_ID>
+			<USER_ID type="object">
 				<random partition="true">
 					<type>int</type>
 					<min ref="minUid"/><max ref="userNum"/></random>

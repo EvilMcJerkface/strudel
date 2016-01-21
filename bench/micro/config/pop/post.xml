@@ -20,7 +20,7 @@
 	<min ref="minUid"/>
 	<size ref="userNum"/>
 	<params>
-		<POSTS_PER_USER ref="postsPerUser"/>
-		<CONTENT_LENGTH>100</CONTENT_LENGTH>
+		<POSTS_PER_USER type="number" ref="postsPerUser"/>
+		<CONTENT_LENGTH type="number">100</CONTENT_LENGTH>
 	</params>
 </Populate>

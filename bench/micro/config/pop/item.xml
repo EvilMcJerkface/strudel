@@ -14,13 +14,13 @@
     limitations under the License.
  -->
 <Populate name="Item">
-	<userNum/>
+	<userNum type="number"/>
 	<minUid/>
 	<itemsPerUser>50</itemsPerUser>
 	<min ref="minUid"/>
 	<size ref="userNum"/>
 	<params>
-		<ITEMS_PER_USER ref="itemsPerUser"/>
-		<CONTENT_LENGTH>100</CONTENT_LENGTH>
+		<ITEMS_PER_USER type="number" ref="itemsPerUser"/>
+		<CONTENT_LENGTH type="number">100</CONTENT_LENGTH>
 	</params>
 </Populate>

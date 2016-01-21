@@ -40,7 +40,7 @@ public class JobSuiteTest {
 		int[] bs = {10, 20};
 	    File file = Resources.getFile(ResourceNames.JOB_SUITE1);
     	SimpleDateFormat df =
-    			new SimpleDateFormat("yyyy-MM-dd'T'HHmmss");
+    			new SimpleDateFormat("yyyy-MM-dd-HHmmss");
     	String begin = df.format(new Date());
 	    JobSuite js = JobSuite.create(file);
 	    String end = df.format(new Date());
@@ -78,4 +78,5 @@ public class JobSuiteTest {
 	    assertEquals("dir", js.getOutput());
 
 	}
+
 }
