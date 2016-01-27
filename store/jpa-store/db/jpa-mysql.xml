@@ -1,0 +1,16 @@
+<Database>
+  <className>com.nec.strudel.jpa.PersistenceService</className>
+  <url>jdbc:mysql://localhost:3306</url>
+  <user>root</user>
+  <password>password</password>
+  <schemaAction>drop-and-create</schemaAction>
+  <name>test</name>
+  <params>
+    <property name="javax.persistence.jdbc.url" ref="url"/>
+    <property name="javax.persistence.jdbc.user" ref="user"/>
+    <property name="javax.persistence.jdbc.password" ref="password"/>
+    <property name="javax.persistence.jdbc.driver">com.mysql.jdbc.Driver</property>
+    <property name="strudel.jpa.schema-generation.database.action"
+  			ref="schemaAction"/>
+  </params>
+</Database>

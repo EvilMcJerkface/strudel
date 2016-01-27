@@ -1,0 +1,15 @@
+<Database>
+  <className>com.nec.strudel.jpa.EntityPersistenceService</className>
+  <url>jdbc:derby:/tmp/test_derby_db;create=true</url>
+  <name>test</name>
+  <params>
+    <property name="javax.persistence.jdbc.url" ref="url"/>
+    <!-- 
+    NOTE this uses an embedded derby, so a worker should drop and
+    create schema by itself (lifecycle management at the manager
+    is not effective).
+   -->
+   <property name="javax.persistence.jpa.schema-generation.database.action"
+  			value="drop-and-create"/>
+  </params>
+</Database>

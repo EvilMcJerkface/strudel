@@ -26,7 +26,7 @@ import com.nec.strudel.target.TargetConfig;
 
 public class JPADatabaseCreator extends DatabaseCreator {
 	public static final String PROP_SCHEMA_ACTION =
-			"workload.jpa.schema-generation.database.action";
+			"strudel.jpa.schema-generation.database.action";
 	private final String name;
 	private final Properties props;
 
