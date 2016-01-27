@@ -1,0 +1,15 @@
+<mongodbCluster extends="workers">
+	<mongodb extends="lib:conf:hosts#mongodb" />
+	<serverNum/>
+	<shardServers exp="concat(',')">
+		<slice>
+			<of ref="mongodb/shardServers" />
+			<to ref="serverNum" />
+		</slice>
+	</shardServers>
+	<configServers exp="concat(',')" ref="mongodb/configServers" />
+	<mongos exp="concat(',')">
+		<split with="\s" ref="workerHosts" />
+	</mongos>
+
+</mongodbCluster>

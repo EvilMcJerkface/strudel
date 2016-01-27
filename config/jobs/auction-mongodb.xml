@@ -1,0 +1,11 @@
+<job extends="auction;use-mongodb">
+	<serverNum>3</serverNum>
+	<workerNum>8</workerNum>
+	<populateThreads>32</populateThreads>
+	<userNum>30000</userNum>
+    <maxCountPerSession>10</maxCountPerSession>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+</job>

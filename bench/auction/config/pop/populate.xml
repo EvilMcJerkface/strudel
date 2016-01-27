@@ -14,11 +14,11 @@
     limitations under the License.
  -->
 <Populate>
-	<classPath>bench-auction/target/classes</classPath>
+	<classPath>bench/auction/target/classes</classPath>
 	<numOfThreads/>
 	<minUid/>
 	<userNum/>
-	<packageName>com.nec.bench.auction.populate.entity</packageName>
+	<packageName>com.nec.strudel.bench.auction.populate.entity</packageName>
 	<process>
 			<Populate extends="user">
 				<minUid ref="minUid"/>

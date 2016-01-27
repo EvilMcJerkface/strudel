@@ -1,0 +1,11 @@
+<job extends="item-put;use-mysql-edb">
+	<workerNum>10</workerNum>
+
+	<populateThreads>32</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+	<dbName>micro</dbName>
+
+</job>

@@ -1,0 +1,9 @@
+ <environment extends="workers">
+   <!--
+   Environments to start/stop a system with MySQL. In the current
+   setting, MySQL is assumed to be kept available through experiments
+   (so only workers are managed).
+   Specify: workerHosts, which is a string of space-separated host
+   names
+    -->
+ </environment>

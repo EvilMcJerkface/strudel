@@ -18,7 +18,7 @@
 	<minTime>0</minTime>
 	<maxCount>0</maxCount>
 
-	<packageName>com.nec.bench.auction.interactions.entity</packageName>
+	<packageName>com.nec.strudel.bench.auction.interactions.entity</packageName>
 	<transitions>
 		<transition name="START">
 			<next name="HOME"/>

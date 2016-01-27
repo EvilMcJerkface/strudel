@@ -1,0 +1,15 @@
+<workerCluster>
+  <workerNum/>
+  <cluster extends="lib:conf:hosts#cluster">
+    <size ref="workerNum"/>
+  </cluster>
+  <workerHosts exp="concat(',')">
+		<slice>
+			<of>
+				<findAll pattern="http://(.*):" group="1" ref="cluster/urls"/>
+			</of>
+			<to ref="workerNum" />
+		</slice>
+  </workerHosts>
+
+</workerCluster>

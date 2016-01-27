@@ -1,0 +1,11 @@
+<job extends="auction;use-tokumx">
+	<serverNum>3</serverNum>
+	<workerNum>1</workerNum>
+	<populateThreads>1</populateThreads>
+	<userNum>30</userNum>
+    <maxCountPerSession>10</maxCountPerSession>
+	<threadPerNode>2</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+</job>

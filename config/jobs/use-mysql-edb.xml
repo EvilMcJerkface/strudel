@@ -1,0 +1,21 @@
+<job>
+	<servers extends="servers/mysql">
+	  <workerNum ref="workerNum"/>
+	</servers>
+
+	<dbName>workload</dbName>
+
+	<environment extends="env/mysql-single">
+		<workerHosts ref="servers/workerHosts" />
+	</environment>
+	<database extends="lib:store:jpa-store/db/entitydb-mysql">
+		<name ref="dbName" />
+		<user ref="servers/mysql/user"/>
+		<password ref="servers/mysql/password"/>
+		<url exp="concat('')"><h>jdbc:mysql://</h><host ref="servers/mysql/host"/><t>:3306/</t>
+		<db ref="dbName"/></url>
+		<params extends=".">
+		  <property name="eclipselink.connection-pool.default.max" value="14"/>
+		</params>
+	</database>
+</job>

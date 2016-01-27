@@ -1,0 +1,21 @@
+ <environment extends="hbase">
+   <!--
+   Environments to start/stop a system with Omid and HBase
+   data stores. Specify: hbaseMaster, hbaseHosts (region servers),
+   namenode, omidHosts,
+   and workerHosts, each of which is a string of space-separated host
+   names
+    -->
+   <omidHosts/>
+   <param extends=".">
+      <omid>
+        <hosts ref="omidHosts"/>
+        <jvm_opt>-server -Xmx10G -XX:+UseConcMarkSweepGC -XX:+UseParNewGC</jvm_opt>
+        <opt>
+          <maxItems type="number">100000000</maxItems>
+          <!-- network interface to use (specific to the cluster environment) -->
+          <networkIface>em1</networkIface>
+        </opt>
+      </omid>
+   </param>
+ </environment>

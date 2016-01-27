@@ -1,0 +1,31 @@
+<job>
+	<servers extends="servers/hbase">
+	  <serverNum ref="serverNum"/>
+	  <workerNum ref="workerNum"/>
+	</servers>
+
+	<dbName>test</dbName>
+
+	<environment extends="env/hbase">
+		<hbaseMaster ref="servers/hbase/master" />
+		<hbaseHosts ref="servers/hbaseHosts" />
+		<namenode ref="servers/hbase/namenode" />
+		<workerHosts ref="servers/workerHosts" />
+	</environment>
+	<database extends="lib:store:tkvs-hbase/db/db-hbase">
+		<name ref="dbName" />
+		<zookeepers ref="servers/zookeepers"/>
+		<clientPort>2181</clientPort>
+		<params extends=".">
+          <property name="tkvs.retry.backoff.start.count">10</property>
+          <property name="tkvs.retry.max.total.ms">300000</property>
+          <property name="tkvs.retry.max.count">200</property>
+          <property name="tkvs.retry.backoff.max.ms">1000</property>
+          <property name="tkvs.hbase.postpopulation.split" value="3"/>
+          <property name="tkvs.hbase.postpopulation.split.sleep.sec"
+        		value="10"/>
+          <property name="tkvs.hbase.postpopulation.balance" value="true"/>
+		</params>
+	</database>
+
+</job>

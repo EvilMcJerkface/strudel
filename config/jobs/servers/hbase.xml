@@ -1,0 +1,21 @@
+<hbaseCluster extends="workers">
+	<serverNum/>
+	<hbase extends="lib:conf:hosts#hbase" />
+	<hbaseHosts exp="concat(',')">
+	    <!-- choose the specified number of hosts
+	    from a pool for region servers -->
+		<slice>
+			<of ref="hbase/regionservers" />
+			<to ref="serverNum" />
+		</slice>
+	</hbaseHosts>
+	<zookeepers exp="concat(',')">
+	    <!-- 3 Zookeeper nodes co-locate with the master
+	      and two of region servers -->
+		<master ref="hbase/master" />
+		<slice>
+			<of ref="hbase/regionservers" />
+			<to>2</to>
+		</slice>
+	</zookeepers>
+</hbaseCluster>

@@ -34,15 +34,15 @@
   <tasks>
     <populate>
       <numOfThreads ref="populateThreads"/>
-      <classPath>bench-micro/target/classes</classPath>
-      <packageName>com.nec.bench.micro.populate.entity</packageName>
+      <classPath>bench/micro/target/classes</classPath>
+      <packageName>com.nec.strudel.bench.micro.populate.entity</packageName>
       <process>
         <!-- EXTEND THIS -->
 	   </process>
     </populate>
     <workload>
       <type>session</type>
-      <classPath>bench-micro/target/classes</classPath>
+      <classPath>bench/micro/target/classes</classPath>
       <numOfThreads ref="threadPerNode"/>
       <userNum ref="userNum"/>
       <minUid ref="minUid"/>
@@ -58,7 +58,7 @@
 			<before><time ref="beforeThinkTime"/></before>
 			<after><time ref="afterThinkTime"/></after>
 		</thinkTime>
-		<packageName>com.nec.bench.micro.interactions.entity</packageName>
+		<packageName>com.nec.strudel.bench.micro.interactions.entity</packageName>
 		<transitions><!-- EXTEND THIS --></transitions>
 		<params extends="session/params">
 			<!-- NOTE: type must be changed from number to object -->

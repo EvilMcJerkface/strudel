@@ -1,0 +1,39 @@
+<job>
+	<servers extends="servers/tokumx">
+	  <serverNum ref="serverNum"/>
+	  <workerNum ref="workerNum"/>
+	</servers>
+
+	<dbName>test</dbName>
+
+	<environment extends="env/tokumx">
+		<tokumxServers ref="servers/tokumxServers" />
+		<workerHosts ref="servers/workerHosts" />
+	</environment>
+	<database extends="lib:store:tkvs-tokumx/db/db-tokumx">
+		<name ref="dbName" />
+		<mongos ref="servers/mongos"/>
+		<!-- 
+		Tokumx employs pessimistic concurrency control.
+		Transaction retry needs when it failed to lock
+		(deadlock or overload) - in either case, it must
+		backoff immediately.
+		-->
+		<params extends=".">
+		  <property name="tkvs.retry.max.total.ms">30000</property>
+          <property name="tkvs.retry.max.count">100</property>
+          <property name="tkvs.retry.backoff.start.count">0</property>
+          <property name="tkvs.retry.backoff.init.ms">100</property>
+          <property name="tkvs.retry.backoff.max.ms">10000</property>
+		</params>
+	</database>
+	<tasks>
+		<populate extends=".">
+			<startSlack>30</startSlack>
+		</populate>
+		<workload extends=".">
+			<startSlack>15</startSlack>
+		</workload>
+	</tasks>
+
+</job>

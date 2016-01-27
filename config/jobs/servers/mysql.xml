@@ -1,0 +1,4 @@
+<mysql extends="workers">
+	<mysql extends="lib:conf:hosts#mysql" />
+
+</mysql>

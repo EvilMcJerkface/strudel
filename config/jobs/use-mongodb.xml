@@ -1,0 +1,32 @@
+<job>
+	<servers extends="servers/mongodb">
+	  <serverNum ref="serverNum"/>
+	  <workerNum ref="workerNum"/>
+	</servers>
+
+	<dbName>test</dbName>
+
+	<environment extends="env/mongodb">
+		<configServers ref="servers/configServers" />
+		<shardServers ref="servers/shardServers" />
+		<mongos ref="servers/workerHosts" />
+		<workerHosts ref="servers/workerHosts" />
+	</environment>
+	<database extends="lib:store:tkvs-mongodb/db/db-mongodb">
+		<name ref="dbName" />
+		<mongos ref="servers/mongos"/>
+		<params extends=".">
+		  <property name="tkvs.mongodb.init.chunk.num" value="64"/>
+		  <property name="tkvs.mongodb.postpopulate.sleep.sec" value="60"/>
+		</params>
+	</database>
+	<tasks>
+		<populate extends=".">
+			<startSlack>30</startSlack>
+		</populate>
+		<workload extends=".">
+			<startSlack>15</startSlack>
+		</workload>
+	</tasks>
+
+</job>

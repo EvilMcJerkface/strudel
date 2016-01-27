@@ -1,0 +1,45 @@
+<job extends="lib:bench:auction/config/job">
+	<serverNum>3</serverNum>
+	<workerNum>8</workerNum>
+	<populateThreads>32</populateThreads>
+	<userNum>30000</userNum>
+    <maxCountPerSession>10</maxCountPerSession>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+	<populateWorkerNum ref="workerNum" />
+	<servers>
+	  <workerHosts/>
+	  <cluster/>
+	</servers>
+	<cluster ref="servers/cluster"/>
+	<environment/>
+	<dbName>test</dbName>
+	<database/>
+	<tasks>
+		<populate extends=".">
+			<cluster ref="cluster">
+				<size ref="populateWorkerNum" />
+			</cluster>
+		</populate>
+		<workload extends=".">
+			<measure extends=".">
+				<poll>2</poll>
+				<monitors>
+					<worker extends="jmx/worker-session">
+						<hosts ref="servers/workerHosts" />
+						<out>avg</out>
+					</worker>
+				</monitors>
+			</measure>
+		</workload>
+	</tasks>
+
+	<reporter>
+		<include>
+			<workers type="number" ref="workerNum" />
+			<threads type="number" ref="threadPerNode" />
+		</include>
+	</reporter>
+
+</job>

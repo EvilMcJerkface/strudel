@@ -1,0 +1,38 @@
+{
+  "cluster" : {
+ 		"urls": [
+  		  "http://host21:8080",
+  		  "http://host22:8080",
+  		  "http://host23:8080",
+  		  "http://host24:8080",
+  		  "http://host25:8080",
+  		  "http://host26:8080",
+  		  "http://host27:8080",
+  		  "http://host28:8080",
+  		  "http://host29:8080",
+  		  "http://host30:8080",
+  		  "http://host31:8080",
+  		  "http://host32:8080",
+  		  "http://host33:8080",
+  		  "http://host34:8080",
+  		  "http://host35:8080",
+  		  "http://host36:8080"
+  		]
+  	},
+  "hbase" : {
+	"master": "host1",
+	"namenode": "host0",
+	"regionservers": [ "host2", "host3", "host4", "host5"]
+  },
+  "omid" : ["host6", "host7"],
+  "mongodb" : {
+	"configServers" : ["host1","host2", "host3"],
+	"shardServers" : ["host4", "host5", "host6", "host7"]
+  },
+  "tokumx" : ["host4", "host5", "host6", "host7"],
+  "mysql": {
+	"host" : "host1",
+	"user" : "root",
+	"password" : ""
+  }
+}

@@ -1,0 +1,12 @@
+<job extends="auction;use-mysql-edb">
+	<workerNum>1</workerNum>
+	<populateThreads>8</populateThreads>
+	<userNum>30000</userNum>
+    <maxCountPerSession>10</maxCountPerSession>
+	<threadPerNode>100</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+	<dbName>auction</dbName>
+
+</job>

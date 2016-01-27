@@ -1,0 +1,34 @@
+<job>
+	<omidNum>1</omidNum>
+	<servers extends="servers/omid">
+	  <serverNum ref="serverNum"/>
+	  <workerNum ref="workerNum"/>
+	  <omidNum ref="omidNum"/>
+	</servers>
+
+	<dbName>test</dbName>
+
+	<environment extends="env/omid">
+		<omidHosts ref="servers/omidHosts"/>
+		<hbaseMaster ref="servers/hbase/master" />
+		<hbaseHosts ref="servers/hbaseHosts" />
+		<namenode ref="servers/hbase/namenode" />
+		<workerHosts ref="servers/workerHosts" />
+	</environment>
+	<database extends="lib:store:tkvs-omid/db/db-omid">
+		<name ref="dbName" />
+		<zookeepers ref="servers/zookeepers"/>
+		<clientPort>2181</clientPort>
+		<tso-host ref="servers/omidHosts"/>
+		<tso-port>54758</tso-port>
+		<params extends=".">
+		  <property name="tkvs.retry.max.total.ms">100000</property>
+          <property name="tkvs.retry.max.count">1000</property>
+          <property name="tkvs.hbase.postpopulation.split" value="3"/>
+          <property name="tkvs.hbase.postpopulation.split.sleep.sec"
+                  value="10"/>
+          <property name="tkvs.hbase.postpopulation.balance" value="true"/>
+		</params>
+	</database>
+
+</job>

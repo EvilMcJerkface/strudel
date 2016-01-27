@@ -1,0 +1,12 @@
+<job extends="item-put;use-omid">
+	<serverNum>3</serverNum>
+	<workerNum>10</workerNum>
+	<omidNum>1</omidNum>
+
+	<populateThreads>100</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+</job>

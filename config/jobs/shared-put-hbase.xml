@@ -1,0 +1,20 @@
+<job extends="shared-put;use-hbase">
+	<serverNum>3</serverNum>
+	<workerNum>10</workerNum>
+	<numUpdateItems>1</numUpdateItems>
+	<itemsPerSet>50</itemsPerSet>
+	<setNum>1000</setNum>
+
+	<populateThreads>100</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+	<database>
+		<params extends=".">
+		  <property name="tkvs.retry.max.total.ms">100000</property>
+          <property name="tkvs.retry.max.count">1000</property>
+		</params>
+	</database>
+</job>

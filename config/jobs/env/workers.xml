@@ -1,0 +1,18 @@
+<environment extends="lib:env:env">
+   <workerHosts/>
+   <workerHeap>10G</workerHeap>
+   <param>
+      <worker>
+         <hosts ref="workerHosts"/>
+         <jvm_opt exp="concat(' ')">
+              <p exp="concat('')">
+                 <s>-Xms</s><s ref="workerHeap"/></p>
+              <p exp="concat('')">
+                 <s>-Xmx</s><s ref="workerHeap"/></p>
+              <p>-XX:+UseConcMarkSweepGC -XX:+UseParNewGC</p>
+              <!-- generates a dump file on OOM -->
+              <p>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/worker_dump.hprof</p>
+         </jvm_opt>
+      </worker>
+   </param>
+</environment>

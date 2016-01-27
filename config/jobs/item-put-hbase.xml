@@ -1,0 +1,20 @@
+<job extends="item-put;use-hbase">
+	<serverNum>3</serverNum>
+	<workerNum>10</workerNum>
+
+	<populateThreads>100</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+	<database>
+		<params extends=".">
+          <property name="tkvs.hbase.postpopulation.split" value="4"/>
+          <property name="tkvs.hbase.prepopulation.create.table.trial"
+        	value="5"/>
+          <property name="tkvs.hbase.prepopulation.create.table.retry.sleep.sec"
+        	value="30"/>
+		</params>
+	</database>
+</job>

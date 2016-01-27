@@ -15,7 +15,7 @@
  -->
 <workload>
 	<type>session</type>
-	  <classPath>bench-auction/target/classes</classPath>
+	  <classPath>bench/auction/target/classes</classPath>
 	  <numOfThreads/>
 	  <userNum/>
 	  <minUid>1</minUid>

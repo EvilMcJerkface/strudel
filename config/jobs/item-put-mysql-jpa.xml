@@ -1,0 +1,13 @@
+<job extends="item-put;use-mysql-jpa">
+	<workerNum>10</workerNum>
+
+	<populateThreads>32</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+	<dbName>micro</dbName>
+	<populatePackage>com.nec.strudel.bench.micro.populate.jpa</populatePackage>
+	<workloadPackage>com.nec.strudel.bench.micro.interactions.jpa</workloadPackage>
+
+</job>

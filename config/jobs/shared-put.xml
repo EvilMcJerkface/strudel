@@ -1,0 +1,48 @@
+<job extends="lib:bench:micro/config/job-shared-put">
+	<serverNum>3</serverNum>
+	<workerNum>10</workerNum>
+	<numUpdateItems>1</numUpdateItems>
+	<itemsPerSet>50</itemsPerSet>
+	<setNum>1000</setNum>
+	<servers>
+	  <workerHosts/>
+	  <cluster/>
+	</servers>
+	<populateWorkerNum ref="workerNum" />
+
+	<populateThreads>100</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+	<cluster ref="servers/cluster"/>
+	<environment/>
+	<database/>
+	<tasks>
+		<populate extends=".">
+			<cluster ref="cluster">
+				<size ref="populateWorkerNum" />
+			</cluster>
+		</populate>
+		<workload extends=".">
+			<measure extends=".">
+				<poll>2</poll>
+				<monitors>
+					<worker extends="jmx/worker-session">
+						<hosts ref="servers/workerHosts" />
+						<out>avg</out>
+					</worker>
+				</monitors>
+			</measure>
+		</workload>
+	</tasks>
+
+	<reporter>
+		<include>
+			<workers type="number" ref="workerNum" />
+			<threads type="number" ref="threadPerNode" />
+		</include>
+	</reporter>
+
+</job>

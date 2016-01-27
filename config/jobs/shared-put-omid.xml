@@ -1,0 +1,15 @@
+<job extends="shared-put;use-omid">
+	<serverNum>3</serverNum>
+	<workerNum>10</workerNum>
+	<omidNum>1</omidNum>
+	<numUpdateItems>1</numUpdateItems>
+	<itemsPerSet>50</itemsPerSet>
+	<setNum>1000</setNum>
+
+	<populateThreads>100</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>30</rampupTime>
+	<measureTime>60</measureTime>
+
+</job>

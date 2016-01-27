@@ -1,0 +1,16 @@
+<tokumxCluster extends="workers">
+	<serverNum/>
+	<tokumx extends="lib:conf:hosts#tokumx" />
+	<tokumxServers exp="concat(',')">
+		<slice>
+			<of ref="tokumx" />
+			<to ref="serverNum" />
+		</slice>
+	</tokumxServers>
+	<mongos exp="concat(',')">
+		<slice>
+			<of ref="tokumx" />
+			<to ref="serverNum" />
+		</slice>
+	</mongos>
+</tokumxCluster>

@@ -1,0 +1,10 @@
+<omidCluster extends="hbase">
+    <omidNum>1</omidNum>
+	<omid extends="lib:conf:hosts#omid" />
+	<omidHosts exp="concat(',')">
+		<slice>
+			<of ref="omid" />
+			<to ref="omidNum" />
+		</slice>
+	</omidHosts>
+</omidCluster>

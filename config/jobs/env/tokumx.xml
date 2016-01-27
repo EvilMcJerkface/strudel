@@ -1,0 +1,19 @@
+ <environment extends="workers">
+   <!--
+   Environments to start/stop a system with TokuMX (MongoDB)
+   data stores. Specify: tokumxServers,
+   and workerHosts, each of which is a string of space-separated host
+   names.
+   This cluster consists of a set of "stand alone" TokuMX servers:
+   mapping keys to servers is done explicitly by the client (instead
+   of using sharding of MongoDB). This is to test multi-statement
+   transactions of TokuMX, which is not available for a sharded
+   environment.
+    -->
+   <tokumxServers/>
+   <param extends=".">
+      <tokumx>
+        <hosts ref="tokumxServers"/>
+      </tokumx>
+   </param>
+ </environment>

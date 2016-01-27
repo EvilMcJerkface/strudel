@@ -1,0 +1,19 @@
+<job extends="shared-put;use-tokumx">
+	<serverNum>3</serverNum>
+	<workerNum>10</workerNum>
+	<numUpdateItems>1</numUpdateItems>
+	<itemsPerSet>50</itemsPerSet>
+	<setNum>1000</setNum>
+
+	<populateThreads>100</populateThreads>
+	<userNum>30000</userNum>
+	<threadPerNode>200</threadPerNode>
+	<rampupTime>45</rampupTime>
+	<measureTime>60</measureTime>
+	<tasks>
+		<workload extends=".">
+			<startSlack>20</startSlack>
+		</workload>
+	</tasks>
+
+</job>

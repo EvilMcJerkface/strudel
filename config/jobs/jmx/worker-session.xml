@@ -1,0 +1,28 @@
+
+<JmxResource>
+	<out>timed</out>
+	<hosts/>
+	<avgable>avg</avgable>
+	<summable>sum</summable>
+	<cluster>
+		<port>9099</port>
+		<hosts ref="hosts" />
+	</cluster>
+	<values>
+		<value name="interaction_response_msec">
+			<object>com.nec.strudel.workload.session:type=SessionRunnerStat</object>
+			<attr>AvgInteractionTime</attr>
+			<aggr ref="avgable"/>
+		</value>
+		<value name="interactions_per_sec">
+			<object>com.nec.strudel.workload.session:type=SessionRunnerStat</object>
+			<attr>InteractionsPerSec</attr>
+			<aggr ref="summable"/>
+		</value>
+		<value name="session_concurrency">
+			<object>com.nec.strudel.workload.session:type=SessionRunnerStat</object>
+			<attr>AvgSessionConcurrency</attr>
+			<aggr ref="avgable"/>
+		</value>
+	</values>
+</JmxResource>
