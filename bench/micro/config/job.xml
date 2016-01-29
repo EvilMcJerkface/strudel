@@ -34,7 +34,7 @@
   <tasks>
     <populate>
       <numOfThreads ref="populateThreads"/>
-      <classPath>bench/micro/target/classes</classPath>
+      <classPath>bench/micro/lib/*:bench/micro/target/classes:bench/micro/target/dependency/*</classPath>
       <packageName>com.nec.strudel.bench.micro.populate.entity</packageName>
       <process>
         <!-- EXTEND THIS -->
@@ -42,7 +42,7 @@
     </populate>
     <workload>
       <type>session</type>
-      <classPath>bench/micro/target/classes</classPath>
+      <classPath>bench/micro/lib/*:bench/micro/target/classes:bench/micro/target/dependency/*</classPath>
       <numOfThreads ref="threadPerNode"/>
       <userNum ref="userNum"/>
       <minUid ref="minUid"/>

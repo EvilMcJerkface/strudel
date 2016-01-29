@@ -25,8 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 
 public final class ClassUtil {
+	private static final Logger LOGGER = Logger.getLogger(ClassUtil.class);
+
 	public static final String PARAM_CLASSPATH_BASE = "strudel.classpath.base";
 	/**
 	 * Cache ClassLoader of the same path.
@@ -151,17 +155,17 @@ public final class ClassUtil {
 			if (path.endsWith("/*")) {
 				File libDir = toFile(path.substring(0, path.indexOf("/*")));
 				if (!libDir.isDirectory()) {
-					throw new ClassException(
-					"invalid class path: " + path
-					+ " - no directory: " + libDir.getAbsolutePath());
-				}
-				for (File f : libDir.listFiles(new FileFilter() {
-					@Override
-					public boolean accept(File pathname) {
-						return pathname.isFile();
+					LOGGER.warn("invalid class path: " + path
+							+ " - no directory: " + libDir.getAbsolutePath());
+				} else {
+					for (File f : libDir.listFiles(new FileFilter() {
+						@Override
+						public boolean accept(File pathname) {
+							return pathname.isFile();
+						}
+					})) {
+						addFile(f, urls);
 					}
-				})) {
-					addFile(f, urls);
 				}
 
 			} else if (!path.isEmpty()) {
