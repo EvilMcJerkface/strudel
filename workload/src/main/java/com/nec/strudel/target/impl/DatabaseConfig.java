@@ -17,6 +17,7 @@ package com.nec.strudel.target.impl;
 
 import java.util.Properties;
 
+import com.nec.strudel.exceptions.ConfigException;
 import com.nec.strudel.target.TargetConfig;
 import com.nec.strudel.util.ClassUtil;
 
@@ -102,4 +103,15 @@ public class DatabaseConfig implements TargetConfig {
 		return params;
 	}
 
+	/**
+	 * @throws ConfigException
+	 */
+	public void validate() {
+		if (className == null) {
+			throw new ConfigException("class name is null: database@name=" + name);
+		}
+		if (className.isEmpty()) {
+			throw new ConfigException("class name is empty: database@name=" + name);
+		}
+	}
 }

@@ -99,8 +99,10 @@ public class Job {
 				EnvironmentConfig.class, EnvironmentConfig.empty());
     }
 	public DatabaseConfig createDb() {
-		return conf.getObject(DatabaseConfig.TAG_NAME,
+		DatabaseConfig dbconf = conf.getObject(DatabaseConfig.TAG_NAME,
 				DatabaseConfig.class);
+		dbconf.validate();
+		return dbconf;
 	}
 	public Cluster createCluster() {
 		return conf.getObject(CLUSTER, Cluster.class, new Cluster());

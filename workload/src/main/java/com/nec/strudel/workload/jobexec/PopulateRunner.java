@@ -107,6 +107,10 @@ public class PopulateRunner implements Runnable {
 		this.exe = exec;
 	}
 
+	public TargetConfig getTargetConfig() {
+		return dbConf;
+	}
+
 	@Override
 	public void run() {
 		TargetLifecycle lcm = lifecycleManagement();

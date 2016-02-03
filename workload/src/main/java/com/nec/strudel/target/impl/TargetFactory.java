@@ -52,7 +52,12 @@ public final class TargetFactory {
 
 	@SuppressWarnings("unchecked")
 	private static <T> TargetCreator<T> creator(TargetConfig dbConfig) {
-		Class<?> c = ClassUtil.forName(dbConfig.getClassName(),
+		String targetClass = dbConfig.getClassName();
+		if (targetClass.isEmpty()) {
+			throw new ConfigException("target className not defined: name=\""
+						+ dbConfig.getName() + "\"");
+		}
+		Class<?> c = ClassUtil.forName(targetClass,
 				dbConfig.targetClassLoader());
 		if (ClassUtil.isSubclass(c, TargetCreator.class)) {
 			return (TargetCreator<T>) ClassUtil.create(

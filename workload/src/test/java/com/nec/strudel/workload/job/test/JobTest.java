@@ -25,10 +25,12 @@ import javax.json.JsonObject;
 
 import org.junit.Test;
 
+import com.nec.strudel.target.impl.DatabaseConfig;
 import com.nec.strudel.workload.job.Job;
 import com.nec.strudel.workload.job.PopulateTask;
 import com.nec.strudel.workload.job.Task;
 import com.nec.strudel.workload.job.WorkloadTask;
+import com.nec.strudel.workload.jobexec.PopulateRunner;
 import com.nec.strudel.workload.out.OutputConfig;
 import com.nec.strudel.workload.test.ResourceNames;
 import com.nec.strudel.workload.test.Resources;
@@ -50,5 +52,21 @@ public class JobTest {
 		OutputConfig rep = job.createOutput();
 		JsonObject value = rep.getInclude();
 		assertEquals(10, value.getInt("a"));
+	}
+
+	@Test
+	public void testJobPopulator() throws Exception {
+	    File file = Resources.file(ResourceNames.JOB1);
+		Job job = Job.create(file);
+		List<Task> tasks = job.createTasks();
+		Task t = tasks.get(0);
+		assertTrue(t instanceof PopulateTask);
+		PopulateTask pop = (PopulateTask) t;
+		assertNull(pop.findDb());
+
+		PopulateRunner prun = PopulateRunner.create(pop, job);
+		DatabaseConfig dbconf = (DatabaseConfig) prun.getTargetConfig();
+		assertNotNull(dbconf);
+		assertFalse(dbconf.getClassName().isEmpty());
 	}
 }
