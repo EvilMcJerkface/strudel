@@ -7,7 +7,9 @@
 #   master:
 #   namenode:
 #   regionservers:
-#   java_home:
+#   java_home?
+#   hbase_home?
+#   hadoop_home?
 # }
 import subprocess
 import os
@@ -23,12 +25,16 @@ class HBaseServer:
     def __init__(self, data, host, sys_dirs):
         self.data = data
         self.hconf = hb.HBaseConfig(data)
-        self.home = os.path.join(sys_dirs.home, 'hbase')
-        self.hadoop = os.path.join(sys_dirs.home, 'hadoop')
+	self.home = data.get('hbase_home')
+	if (self.home is None or self.home == ''):
+        	self.home = os.path.join(sys_dirs.home, 'hbase')
+	self.hadoop = data.get('hadoop_home')
+	if (self.hadoop is None or self.hadoop == ''):
+        	self.hadoop = os.path.join(sys_dirs.home, 'hadoop')
         self.data_dir = es.DataRoot(data).dir('hbase-' + es.getuser())
         self.host = host
         self.master = self.hconf.master
-        self.java_home = data['java_home']
+        self.java_home = data.get('java_home','')
     
     def install(self):
         es.cleandir(self.data_dir)

@@ -1,0 +1,39 @@
+<jobSuite>
+  <output exp="concat('')">
+        <e>out/</e>
+        <e extends="sys:time:dateTime/MMdd"/>
+        <e>/mysql-scaling</e></output>
+  <foreach name="w" sep=" ">16</foreach>
+  <foreach name="u" sep=" ">1000000</foreach>
+  <foreach name="t" sep=" ">100</foreach>
+  <foreach name="s" sep=" ">1</foreach>
+  <foreach name="item" sep=" ">40</foreach>
+  <job extends="lib:job:item-put-mysql-edb">
+    <workerNum ref="w"/>
+    <userNum ref="u"/>
+    <serverNum ref="s"/>
+    <itemsPerSet ref="item"/>
+    <threadPerNode ref="t"/>
+    <numUpdateItems>4</numUpdateItems>
+    <maxCountPerSession>1</maxCountPerSession>
+    <rampupTime>45</rampupTime>
+    <measureTime>90</measureTime>
+    <environment extends=".">
+        <command>../bin/system.py</command>
+    </environment>
+    <database>
+      <param extends=".">
+        <property name="eclipselink.connection-pool.default.max" value="8"/>
+      </param>
+    </database>
+    <reporter>
+      <include>
+	  <userNum type="number" ref="userNum"/>
+          <serverNum type="number" ref="serverNum"/>
+          <workerNum type="number" ref="w"/>
+	  <rampupTime type="number" ref="rampupTime"/>
+          <threadPerNode type="number" ref="threadPerNode"/>
+      </include>
+    </reporter>
+  </job>
+</jobSuite>

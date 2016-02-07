@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>exp-cluster-bench-micro</artifactId>
+  <packaging>pom</packaging>
+
+  <parent>
+    <groupId>com.nec.strudel</groupId>
+    <artifactId>strudel-exp-cluster-bench</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${outDir}</outputDirectory>
+              <includeScope>compile</includeScope>
+              <excludeArtifactIds>strudel-common,strudel-workload-api</excludeArtifactIds>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+      <dependency>
+        <groupId>com.nec.strudel</groupId>
+        <artifactId>strudel-bench-micro</artifactId>
+        <version>${strudel.version}</version>
+      </dependency>
+  </dependencies>
+</project>

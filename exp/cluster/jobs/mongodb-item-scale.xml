@@ -1,0 +1,41 @@
+<jobSuite>
+  <output exp="concat('')">
+        <e>out/</e>
+        <e extends="sys:time:dateTime/MMdd"/>
+        <e>/mongodb-scaling</e></output>
+
+  <foreach name="w" sep=" ">16</foreach>
+  <foreach name="u" sep=" ">1000000</foreach>
+  <foreach name="t" sep=" ">100</foreach>
+  <foreach name="s" sep=" ">4</foreach>
+  <foreach name="item" sep=" ">40</foreach>
+  <job extends="lib:job:item-put-mongodb">
+    <workerNum ref="w"/>
+    <userNum ref="u"/>
+    <threadPerNode ref="t"/>
+    <serverNum ref="s"/>
+    <itemsPerSet ref="item"/>
+    <numUpdateItems>4</numUpdateItems>
+    <maxCountPerSession>1</maxCountPerSession>
+    <rampupTime>240</rampupTime>
+    <measureTime>90</measureTime>
+    <environment extends=".">
+      <command>../bin/system.py</command>
+    </environment>
+    <database>
+      <params extends=".">
+        <property name="tkvs.mongodb.postpopulate.sleep.sec" value="300"/>
+        <property name="tkvs.mongodb.init.chunk.num" value="64"/>
+      </params>
+    </database>
+    <reporter>
+      <include>
+        <userNum type="number" ref="userNum"/>
+        <workerNum type="number" ref="w"/>
+        <serverNum type="number" ref="s"/>
+        <rampupTime type="number" ref="rampupTime"/>
+        <threadPerNode type="number" ref="threadPerNode"/>
+      </include>
+    </reporter>
+  </job>
+</jobSuite>

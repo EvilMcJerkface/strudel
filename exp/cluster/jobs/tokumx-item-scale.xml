@@ -1,0 +1,35 @@
+<jobSuite>
+  <output exp="concat('')">
+        <e>out/</e>
+        <e extends="sys:time:dateTime/MMdd"/>
+        <e>/tokumx-scaling</e></output>
+
+  <foreach name="w" sep=" ">1 2 4 8 16</foreach>
+  <foreach name="u" sep=" ">1000000</foreach>
+  <foreach name="t" sep=" ">100</foreach>
+  <foreach name="s" sep=" ">3 4</foreach>
+  <foreach name="item" sep=" ">40</foreach>
+  <job extends="lib:job:item-put-tokumx">
+    <workerNum ref="w"/>
+    <userNum ref="u"/>
+    <threadPerNode ref="t"/>
+    <serverNum ref="s"/>
+    <itemsPerSet ref="item"/>
+    <numUpdateItems>4</numUpdateItems>
+    <maxCountPerSession>1</maxCountPerSession>
+    <rampupTime>45</rampupTime>
+    <measureTime>90</measureTime>
+    <environment extends=".">
+      <command>../bin/system.py</command>
+    </environment>
+    <reporter>
+        <include>
+	  <userNum type="number" ref="userNum"/>
+          <workerNum type="number" ref="w"/>
+          <serverNum type="number" ref="s"/>
+	  <rampupTime type="number" ref="rampupTime"/>
+          <threadPerNode type="number" ref="threadPerNode"/>
+        </include>
+    </reporter>
+  </job>
+</jobSuite>

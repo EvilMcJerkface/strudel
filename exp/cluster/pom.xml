@@ -26,6 +26,10 @@
 		<version>0.0.1-SNAPSHOT</version>
                 <relativePath>../../pom.xml</relativePath>
 	</parent>
+	<modules>
+	  <module>bench</module>
+	  <module>store</module>
+	</modules>
 
 	<build>
 	  <plugins>
@@ -39,6 +43,7 @@
                   <configuration>
                     <descriptors>
                       <descriptor>assembly/bin.xml</descriptor>
+                      <descriptor>assembly/dist.xml</descriptor>
                     </descriptors>
                   </configuration>
                   <goals>
@@ -47,6 +52,56 @@
                 </execution>
               </executions>
             </plugin>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <version>2.10</version>
+      <executions>
+        <execution>
+          <id>copy-config</id>
+          <phase>generate-sources</phase>
+          <goals>
+            <goal>unpack</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>.</outputDirectory>
+            <artifactItems>
+              <artifactItem>
+                <groupId>com.nec.strudel</groupId>
+                <artifactId>strudel-config</artifactId>
+                <version>${strudel.version}</version>
+                <classifier>dist</classifier>
+                <type>zip</type>
+                <destFileName>config</destFileName>
+              </artifactItem>
+              <artifactItem>
+                <groupId>com.nec.strudel</groupId>
+                <artifactId>strudel-exec</artifactId>
+                <version>${strudel.version}</version>
+                <classifier>bin</classifier>
+                <type>zip</type>
+                <destFileName>strudel</destFileName>
+              </artifactItem>
+            </artifactItems>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    <plugin>
+      <artifactId>maven-clean-plugin</artifactId>
+      <version>3.0.0</version>
+      <configuration>
+        <filesets>
+          <fileset>
+            <directory>config</directory>
+          </fileset>
+          <fileset>
+            <directory>strudel</directory>
+          </fileset>
+        </filesets>
+      </configuration>
+    </plugin>
+
 	  </plugins>
 	</build>
 	<dependencies>

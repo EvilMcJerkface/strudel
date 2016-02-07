@@ -21,7 +21,9 @@ class ConfigServer:
         self.param = param
         self.host = host
         self.dir = es.DataRoot(param).dir('mongo-configdb-' + es.getuser())
-        self.mongobin = os.path.join(os.path.dirname(script_home),
+	self.mongobin = param.get('mongo_bin')
+	if (self.mongobin is None or self.mongobin == ''):
+        	self.mongobin = os.path.join(os.path.dirname(script_home),
                                    'mongodb', 'bin')
     def install(self):
         es.cleandir(self.dir)

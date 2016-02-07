@@ -16,7 +16,7 @@
 <database>
 	<type>tkve</type>
 	<className>com.nec.strudel.tkvs.store.mongodb.MongodbStore</className>
-	<classPath>tkvs-mongodb/target/dependency/*</classPath>
+	<classPath>store/tkvs-mongodb/lib/*</classPath>
 	<name>test</name>
 	<mongos/>
 	<params>

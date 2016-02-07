@@ -23,7 +23,9 @@ class TokumxServer:
         self.param = param
         self.host = host
         self.dir = es.DataRoot(param).dir('tokumx-' + es.getuser())
-        self.mongobin = os.path.join(os.path.dirname(script_home),
+	self.mongobin = param.get('tokumx_bin')
+	if (self.mongobin is None or self.mongobin == ''):
+        	self.mongobin = os.path.join(os.path.dirname(script_home),
                                      'tokumx', 'bin')
     def install(self):
         es.cleandir(self.dir)

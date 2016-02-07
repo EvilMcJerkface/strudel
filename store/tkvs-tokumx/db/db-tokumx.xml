@@ -1,7 +1,7 @@
 <Database>
 	<type>tkve</type>
 	<className>com.nec.strudel.tkvs.store.tokumx.TokumxStore</className>
-	<classPath>tkvs-tokumx/target/classes:tkvs-tokumx/target/dependency/*</classPath>
+	<classPath>store/tkvs-tokumx/lib/*</classPath>
 	<name>test</name>
 	<params>
 	  <property name="mongodb.mongos" ref="mongos"/>

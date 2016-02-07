@@ -1,0 +1,39 @@
+<jobSuite>
+  <output exp="concat('')">
+        <e>out/</e>
+        <e extends="sys:time:dateTime/MMdd"/>
+        <e>/mysql-scaling-auction</e></output>
+  <foreach name="scale">
+    <scale><w>1</w><u>10000</u></scale>
+    <scale><w>2</w><u>20000</u></scale>
+    <scale><w>4</w><u>40000</u></scale>
+    <scale><w>8</w><u>80000</u></scale>
+    <scale><w>16</w><u>160000</u></scale>
+  </foreach>
+  <foreach name="s" sep=" ">1</foreach>
+  <job extends="lib:job:auction-mysql-edb">
+    <workerNum ref="scale/w"/>
+    <userNum ref="scale/u"/>
+    <serverNum ref="s"/>
+    <threadPerNode>200</threadPerNode>
+    <rampupTime>45</rampupTime>
+    <measureTime>90</measureTime>
+    <environment extends=".">
+      <command>../bin/system.py</command>
+    </environment>
+    <database>
+      <params extends=".">
+        <property name="eclipselink.connection-pool.default.max" value="8"/>
+      </params>
+    </database>
+    <reporter>
+        <include>
+          <serverNum type="number" ref="serverNum"/>
+	  <userNum type="number" ref="userNum"/>
+          <workerNum type="number" ref="workerNum"/>
+	  <rampupTime type="number" ref="rampupTime"/>
+          <threadPerNode type="number" ref="threadPerNode"/>
+        </include>
+    </reporter>
+  </job>
+</jobSuite>

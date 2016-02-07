@@ -17,7 +17,9 @@ class OmidServer:
     def __init__(self, param, host, script_home):
         self.param = param
         self.host = host
-        self.src = os.path.join(os.path.dirname(script_home),
+	self.src = param.get('omid_server')
+	if (src.src is None or src.src == ''):
+        	self.src = os.path.join(os.path.dirname(script_home),
                                 'omid', 'tso-server');
         self.dir = es.DataRoot(param).dir('omid-' + es.getuser())
         self.omid = os.path.join(self.dir,

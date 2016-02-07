@@ -1,0 +1,33 @@
+<jobSuite>
+  <output exp="concat('')">
+        <e>out/</e>
+        <e extends="sys:time:dateTime/MMdd"/>
+        <e>/mongodb-scaling-auction</e></output>
+
+  <foreach name="scale">
+    <scale><w>1</w><u>10000</u></scale>
+    <scale><w>2</w><u>20000</u></scale>
+    <scale><w>4</w><u>40000</u></scale>
+    <scale><w>8</w><u>80000</u></scale>
+  </foreach>
+  <foreach name="s" sep=" ">3 4</foreach>
+  <job extends="lib:job:auction-mongodb">
+    <workerNum ref="scale/w"/>
+    <serverNum ref="s"/>
+    <userNum ref="scale/u"/>
+    <rampupTime>45</rampupTime>
+    <measureTime>90</measureTime>
+    <environment extends=".">
+      <command>../bin/system.py</command>
+    </environment>
+    <reporter>
+      <include>
+	  <userNum type="number" ref="userNum"/>
+          <workerNum type="number" ref="workerNum"/>
+          <serverNum type="number" ref="s"/>
+	  <rampupTime type="number" ref="rampupTime"/>
+          <threadPerNode type="number" ref="threadPerNode"/>
+      </include>
+   </reporter>
+  </job>
+</jobSuite>

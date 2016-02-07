@@ -1,7 +1,7 @@
 <Database>
     <type>tkve</type>
 	<className>com.nec.strudel.tkvs.store.omid.OmidStore</className>
-	<classPath>tkvs-omid/target/classes:tkvs-omid/target/dependency/*</classPath>
+	<classPath>store/tkvs-omid/lib/*</classPath>
 	<name>test</name>
 	<zookeepers/>
 	<clientPort/>

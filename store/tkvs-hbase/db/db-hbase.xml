@@ -16,7 +16,7 @@
 <database>
   <type>tkve</type>
   <className>com.nec.strudel.tkvs.store.hbase.HBaseStore</className>
-  <classPath>tkvs-hbase/target/dependency/*</classPath>
+  <classPath>store/tkvs-hbase/lib/*</classPath>
   <name>test</name>
   <zookeepers/>
   <clientPort/>
