@@ -19,7 +19,7 @@
     <rampupTime>45</rampupTime>
     <measureTime>90</measureTime>
     <environment extends=".">
-      <command>../bin/system.py</command>
+      <command extends="sys:path:here/../bin/system.py"/>
     </environment>
     <database>
       <params extends=".">

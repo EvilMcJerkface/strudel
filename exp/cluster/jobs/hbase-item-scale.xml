@@ -19,7 +19,7 @@
     <rampupTime>120</rampupTime>
     <measureTime>90</measureTime>
     <environment extends=".">
-        <command>../bin/system.py</command>
+        <command extends="sys:path:here/../bin/system.py"/>
         <java_home extends="sys:env:getenv/JAVA_HOME"/>
         <param extends=".">
           <home_dir>strudel/exp/cluster</home_dir>

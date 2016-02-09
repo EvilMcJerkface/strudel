@@ -44,6 +44,7 @@
                     <descriptors>
                       <descriptor>assembly/bin.xml</descriptor>
                       <descriptor>assembly/dist.xml</descriptor>
+                      <descriptor>assembly/all.xml</descriptor>
                     </descriptors>
                   </configuration>
                   <goals>
