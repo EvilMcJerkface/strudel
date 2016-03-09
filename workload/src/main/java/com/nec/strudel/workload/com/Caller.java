@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.com;
 
 import java.util.List;
@@ -21,6 +22,6 @@ import java.util.concurrent.Future;
 
 public interface Caller {
 
-	<T> List<Future<T>> call(List<? extends Callable<T>> calls);
+    <T> List<Future<T>> call(List<? extends Callable<T>> calls);
 
 }

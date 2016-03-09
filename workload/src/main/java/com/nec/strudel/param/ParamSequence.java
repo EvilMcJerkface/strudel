@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.param;
 
 import java.util.Map;
@@ -20,8 +21,7 @@ import java.util.Random;
 
 import javax.annotation.concurrent.ThreadSafe;
 
-
 @ThreadSafe
 public interface ParamSequence {
-	Map<String, Object> nextParam(Random rand);
+    Map<String, Object> nextParam(Random rand);
 }

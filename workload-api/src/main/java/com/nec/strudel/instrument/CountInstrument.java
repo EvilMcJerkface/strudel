@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument;
 
 public interface CountInstrument {
 
-	void increment(String name);
+    void increment(String name);
 
-	void add(String name, long value);
+    void add(String name, long value);
 
 }

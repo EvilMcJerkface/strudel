@@ -13,31 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.key;
 
-
 public class SelfKeyFinder extends KeyFinder {
-	private final Class<?> valueClass;
-	public SelfKeyFinder(Class<?> valueClass) {
-		if (valueClass.isPrimitive() || Number.class.isAssignableFrom(valueClass)) {
-			/**
-			 * TODO we need a special type check
-			 * to accept both int and Integer, for example.
-			 */
-			this.valueClass = Object.class;
-		} else {
-			this.valueClass = valueClass;
-		}
-	}
-	@Override
-	public Object getKey(Object pkey) {
-		if (!valueClass.isInstance(pkey)) {
-			throw new IllegalArgumentException(
-			"invalid class given ("
-			+ pkey.getClass().getName() + ")"
-			+ " expected:" + valueClass);
-		}
-		return pkey;
-	}
-	
+    private final Class<?> valueClass;
+
+    public SelfKeyFinder(Class<?> valueClass) {
+        if (valueClass.isPrimitive()
+                || Number.class.isAssignableFrom(valueClass)) {
+            /**
+             * TODO we need a special type check to accept both int and Integer,
+             * for example.
+             */
+            this.valueClass = Object.class;
+        } else {
+            this.valueClass = valueClass;
+        }
+    }
+
+    @Override
+    public Object getKey(Object pkey) {
+        if (!valueClass.isInstance(pkey)) {
+            throw new IllegalArgumentException(
+                    "invalid class given ("
+                            + pkey.getClass().getName() + ")"
+                            + " expected:" + valueClass);
+        }
+        return pkey;
+    }
+
 }

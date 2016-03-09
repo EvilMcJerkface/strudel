@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner;
 
 import java.util.ArrayList;
@@ -36,49 +37,47 @@ import com.nec.strudel.workload.session.StateFactory;
 import com.nec.strudel.workload.state.WorkState;
 
 public class SimpleClosedSessionExecFactory<T> implements
-		SessionExecFactory<T> {
-	public static final String TYPE = "simple_closed";
+        SessionExecFactory<T> {
+    public static final String TYPE = "simple_closed";
 
+    @Override
+    public void initialize(SessionConfig<T> conf) {
+    }
 
-	@Override
-	public void initialize(SessionConfig<T> conf) {
-	}
+    @Override
+    public WorkExec create(WorkNodeInfo node,
+            Target<T> target,
+            SessionFactory<T> sfactory, WorkState state, ProfilerService profs,
+            ParamConfig pconf, Random rand) {
+        ThreadIds ids = new ThreadIds(node.getNodeId());
+        SessionProfilerServerImpl rep = new SessionProfilerServerImpl(profs);
+        List<RunnerStat> runners = new ArrayList<RunnerStat>();
+        ParamSequence[] seqs = pconf
+                .createParamSeqVector(node.getNodeId(), node.getNodeNum(),
+                        node.numOfThreads());
+        WorkThread[] ws = new WorkThread[seqs.length];
+        for (int i = 0; i < ws.length; i++) {
+            StateFactory stateFactory = new StateFactory(seqs[i],
+                    new Random(rand.nextLong()));
+            SimpleClosedSessionRunner<T> runner = new SimpleClosedSessionRunner<T>(
+                    ids.idOf(i),
+                    sfactory, target.open(profs),
+                    target, stateFactory,
+                    rep.profiler());
+            runners.add(runner);
+            ws[i] = runner;
+        }
+        rep.registerStat(runners);
+        return BatchExec.create(state, ws, target);
+    }
 
-	@Override
-	public WorkExec create(WorkNodeInfo node,
-			Target<T> target,
-			SessionFactory<T> sfactory, WorkState state, ProfilerService profs,
-			ParamConfig pconf, Random rand) {
-		ThreadIds ids = new ThreadIds(node.getNodeId());
-		SessionProfilerServerImpl rep = new SessionProfilerServerImpl(profs);
-		List<RunnerStat> runners =
-				new ArrayList<RunnerStat>();
-		ParamSequence[] seqs = pconf
-				.createParamSeqVector(node.getNodeId(), node.getNodeNum(), node.numOfThreads());
-		WorkThread[] ws = new WorkThread[seqs.length];
-		for (int i = 0; i < ws.length; i++) {
-			StateFactory stateFactory =
-					new StateFactory(seqs[i],
-							new Random(rand.nextLong()));
-			SimpleClosedSessionRunner<T> runner =
-					new SimpleClosedSessionRunner<T>(ids.idOf(i),
-							sfactory, target.open(profs),
-							target, stateFactory,
-							rep.profiler());
-			runners.add(runner);
-			ws[i] = runner;
-		}
-		rep.registerStat(runners);
-		return BatchExec.create(state, ws, target);
-	}
+    @Override
+    public Output output(SessionConfig<T> conf) {
+        return SessionProfilerImpl.output();
+    }
 
-	@Override
-	public Output output(SessionConfig<T> conf) {
-		return SessionProfilerImpl.output();
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
-	}
+    @Override
+    public String getType() {
+        return TYPE;
+    }
 }

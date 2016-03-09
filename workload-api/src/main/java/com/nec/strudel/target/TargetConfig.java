@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.target;
 
 import java.util.Properties;
 
-
 public interface TargetConfig {
-	String getName();
-	String getType();
-	String getClassName();
+    String getName();
 
-	ClassLoader targetClassLoader();
+    String getType();
 
-	Properties getProperties();
+    String getClassName();
+
+    ClassLoader targetClassLoader();
+
+    Properties getProperties();
 
 }

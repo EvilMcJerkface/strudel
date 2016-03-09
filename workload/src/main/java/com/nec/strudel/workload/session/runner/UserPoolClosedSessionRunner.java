@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner;
 
 import java.util.ArrayList;
@@ -33,85 +34,90 @@ import com.nec.strudel.workload.session.SessionProfiler;
 import com.nec.strudel.workload.session.StateFactory;
 
 public class UserPoolClosedSessionRunner<T>
-extends AbstractSessionRunner<T> {
-	public static final String TAG_NEW_USER_RATIO = "NewUserRatio";
-	public static final String SESSION_CONCURRENCY = "SessionConcurrency";
-	private static final Logger LOGGER =
-            Logger.getLogger(UserPoolClosedSessionRunner.class);
-	private final List<SessionContainer<T>> pool =
-			new ArrayList<SessionContainer<T>>();
-	private final int size;
-	private final RandomSelector<Boolean> useNew;
-	private final Random rand;
+        extends AbstractSessionRunner<T> {
+    public static final String TAG_NEW_USER_RATIO = "NewUserRatio";
+    public static final String SESSION_CONCURRENCY = "SessionConcurrency";
+    private static final Logger LOGGER = Logger
+            .getLogger(UserPoolClosedSessionRunner.class);
+    private final List<SessionContainer<T>> pool = new ArrayList<SessionContainer<T>>();
+    private final int size;
+    private final RandomSelector<Boolean> useNew;
+    private final Random rand;
 
-	public UserPoolClosedSessionRunner(int id,
-			SessionFactory<T> sfactory,
-			Instrumented<T> con,
-			Target<T> target, StateFactory states,
-			Instrumented<? extends SessionProfiler> prof, ConfigParam param) {
-		super(id, sfactory, con, target, states, prof);
-		this.rand = states.getRandom();
-		double ratio = param.getDouble(TAG_NEW_USER_RATIO, 0);
-		this.useNew = RandomSelector.createBoolean(ratio);
-		this.size = param.getInt(SESSION_CONCURRENCY, 1);
-	}
+    public UserPoolClosedSessionRunner(int id,
+            SessionFactory<T> sfactory,
+            Instrumented<T> con,
+            Target<T> target, StateFactory states,
+            Instrumented<? extends SessionProfiler> prof, ConfigParam param) {
+        super(id, sfactory, con, target, states, prof);
+        this.rand = states.getRandom();
+        double ratio = param.getDouble(TAG_NEW_USER_RATIO, 0);
+        this.useNew = RandomSelector.createBoolean(ratio);
+        this.size = param.getInt(SESSION_CONCURRENCY, 1);
+    }
 
-	@Override
-	public void runSessions() {
-        for (SessionContainer<T> sc = nextSession();
-                isRunning() && sc != null; sc = nextSession()) {
+    @Override
+    public void runSessions() {
+        for (SessionContainer<T> sc = nextSession(); isRunning()
+                && sc != null; sc = nextSession()) {
             runAction(sc);
         }
-	}
-	@Override
-	public int getSessionConcurrency() {
-		return size;
-	}
+    }
+
+    @Override
+    public int getSessionConcurrency() {
+        return size;
+    }
 
     private void runAction(SessionContainer<T> sc) {
         String name = sc.nextName();
         try {
-            Result r = doAction(sc);
-            inspectResult(name, r);
+            Result result = doAction(sc);
+            inspectResult(name, result);
             actionDone(sc);
-        } catch (WorkloadException e) {
+        } catch (WorkloadException ex) {
             int id = getId();
             LOGGER.debug("one session failed @" + id);
-        	LOGGER.error("session failed due to exception", e);
+            LOGGER.error("session failed due to exception", ex);
         }
 
     }
+
     private void actionDone(SessionContainer<T> sc) {
-    	if (!sc.isActive()) {
-    		pool.remove(sc);
-    	}
+        if (!sc.isActive()) {
+            pool.remove(sc);
+        }
     }
+
     private void created(SessionContainer<T> sc) {
-    	if (pool.size() < size) {
-        	pool.add(sc);
-    	} else {
-        	int idx = rand.nextInt(pool.size());
-    		pool.set(idx, sc);
-    	}
+        if (pool.size() < size) {
+            pool.add(sc);
+        } else {
+            int idx = rand.nextInt(pool.size());
+            pool.set(idx, sc);
+        }
     }
+
     private boolean useNewSession() {
-    	return pool.size() < size || useNew.next(rand);
+        return pool.size() < size || useNew.next(rand);
     }
+
     private SessionContainer<T> chooseExisting() {
-    	if (pool.isEmpty()) {
-    		return null;
-    	}
-    	int idx = rand.nextInt(pool.size());
-    	return pool.get(idx);
+        if (pool.isEmpty()) {
+            return null;
+        }
+        int idx = rand.nextInt(pool.size());
+        return pool.get(idx);
     }
+
     private SessionContainer<T> nextSession() {
-    	if (useNewSession()) {
+        if (useNewSession()) {
             SessionContainer<T> next = newSession();
-    		created(next);
-    		return next;
-    	} else {
-    		return chooseExisting();
-    	}
+            created(next);
+            return next;
+        } else {
+            return chooseExisting();
+        }
     }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.measure.jmx;
 
 import javax.annotation.Nullable;
@@ -39,47 +40,49 @@ import com.nec.strudel.workload.measure.ResultAggregationFactory;
  */
 public class JmxMonitorConfig {
 
-	private String name;
-	private JmxClusterConfig cluster = new JmxClusterConfig();
-	private MonitorValue[] values = new MonitorValue[0];
-	private String out = ResultAggregationFactory.TYPE_AVG;
+    private String name;
+    private JmxClusterConfig cluster = new JmxClusterConfig();
+    private MonitorValue[] values = new MonitorValue[0];
+    private String out = ResultAggregationFactory.TYPE_AVG;
 
-	public JmxMonitorConfig() {
-	}
+    public JmxMonitorConfig() {
+    }
 
-	@Nullable
-	public String getName() {
-		return name;
-	}
+    @Nullable
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public JmxClusterConfig getCluster() {
-		return cluster;
-	}
+    public JmxClusterConfig getCluster() {
+        return cluster;
+    }
 
-	public void setCluster(JmxClusterConfig cluster) {
-		this.cluster = cluster;
-	}
+    public void setCluster(JmxClusterConfig cluster) {
+        this.cluster = cluster;
+    }
 
-	public String getOut() {
-		return out;
-	}
-	public void setOut(String out) {
-		this.out = out;
-	}
+    public String getOut() {
+        return out;
+    }
 
-	public MonitorValue[] getValues() {
-		return values;
-	}
-	public void setValues(MonitorValue[] values) {
-		this.values = values;
-	}
+    public void setOut(String out) {
+        this.out = out;
+    }
 
-	public ResultAggregation createAggr() {
-		return new ResultAggregationFactory(out).create();
-	}
+    public MonitorValue[] getValues() {
+        return values;
+    }
+
+    public void setValues(MonitorValue[] values) {
+        this.values = values;
+    }
+
+    public ResultAggregation createAggr() {
+        return new ResultAggregationFactory(out).create();
+    }
 
 }

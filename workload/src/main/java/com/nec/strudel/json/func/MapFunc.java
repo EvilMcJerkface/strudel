@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.json.func;
 
 import java.util.Map;
@@ -26,47 +27,52 @@ import javax.json.JsonValue;
 import javax.json.JsonValue.ValueType;
 
 public class MapFunc implements Func {
-	public static MapFunc of(Func func) {
-		return new MapFunc(func);
-	}
-	public static Func of(Func func, Func argFunc) {
-		return new Apply(new MapFunc(func), argFunc);
-	}
-	private final Func func;
-	public MapFunc(Func func) {
-		this.func = func;
-	}
+    public static MapFunc of(Func func) {
+        return new MapFunc(func);
+    }
 
-	@Override
-	public JsonValue get(JsonValue... input) {
-		JsonValue value =  input[0];
-		if (ValueType.OBJECT == value.getValueType()) {
-			return applyMap((JsonObject) value);
-		} else if (ValueType.ARRAY == value.getValueType()) {
-			return applyMap((JsonArray) value);
-		} else {
-			return func.get(value);
-		}
-	}
-	JsonObject applyMap(JsonObject input) {
-		JsonObjectBuilder b = Json.createObjectBuilder();
-		for (Map.Entry<String, JsonValue> e : input.entrySet()) {
-			b.add(e.getKey(), func.get(e.getValue()));
-		}
-		return b.build();
-	}
-	JsonArray applyMap(JsonArray input) {
-		JsonArrayBuilder b = Json.createArrayBuilder();
-		for (JsonValue v : input) {
-			b.add(func.get(v));
-		}
-		return b.build();
-	}
+    public static Func of(Func func, Func argFunc) {
+        return new Apply(new MapFunc(func), argFunc);
+    }
 
-	@Override
-	public void output(JsonObjectBuilder out,
-			String name, JsonValue... input) {
-		out.add(name, get(input));
-	}
+    private final Func func;
+
+    public MapFunc(Func func) {
+        this.func = func;
+    }
+
+    @Override
+    public JsonValue get(JsonValue... input) {
+        JsonValue value = input[0];
+        if (ValueType.OBJECT == value.getValueType()) {
+            return applyMap((JsonObject) value);
+        } else if (ValueType.ARRAY == value.getValueType()) {
+            return applyMap((JsonArray) value);
+        } else {
+            return func.get(value);
+        }
+    }
+
+    JsonObject applyMap(JsonObject input) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        for (Map.Entry<String, JsonValue> e : input.entrySet()) {
+            builder.add(e.getKey(), func.get(e.getValue()));
+        }
+        return builder.build();
+    }
+
+    JsonArray applyMap(JsonArray input) {
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        for (JsonValue v : input) {
+            builder.add(func.get(v));
+        }
+        return builder.build();
+    }
+
+    @Override
+    public void output(JsonObjectBuilder out,
+            String name, JsonValue... input) {
+        out.add(name, get(input));
+    }
 
 }

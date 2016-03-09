@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument;
 
 public interface TimeInstrument {
 
-	void start(String name);
+    void start(String name);
 
-	long end();
+    long end();
 
 }

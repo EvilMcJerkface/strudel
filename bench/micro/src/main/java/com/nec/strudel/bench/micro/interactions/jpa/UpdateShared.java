@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.jpa;
 
 import java.util.List;
@@ -30,34 +31,34 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class UpdateShared extends AbstractUpdateShared<EntityManager>
-implements Interaction<EntityManager> {
+        implements Interaction<EntityManager> {
 
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		List<SharedId> ids = param.getObjectList(
-				InParam.SHARED_IDS);
-		if (ids.isEmpty()) {
-			return res.warn("SHARED_ID is not set")
-			.failure(ResultMode.MISSING_PARAM);
-		}
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        List<SharedId> ids = param.getObjectList(
+                InParam.SHARED_IDS);
+        if (ids.isEmpty()) {
+            return res.warn("SHARED_ID is not set")
+                    .failure(ResultMode.MISSING_PARAM);
+        }
 
-		String content = param.get(InParam.CONTENT);
-		boolean updated = false;
-		em.getTransaction().begin();
-		for (SharedId id : ids) {
-			Shared shared = em.find(Shared.class, id,
-					LockModeType.PESSIMISTIC_WRITE);
-			if (shared != null) {
-				updated = true;
-				shared.setContent(content);
-			}
-		}
-		em.getTransaction().commit();
-		if (updated) {
-			return res.success();
-		} else {
-			return res.success(ResultMode.EMPTY_RESULT);
-		}
-	}
+        String content = param.get(InParam.CONTENT);
+        boolean updated = false;
+        em.getTransaction().begin();
+        for (SharedId id : ids) {
+            Shared shared = em.find(Shared.class, id,
+                    LockModeType.PESSIMISTIC_WRITE);
+            if (shared != null) {
+                updated = true;
+                shared.setContent(content);
+            }
+        }
+        em.getTransaction().commit();
+        if (updated) {
+            return res.success();
+        } else {
+            return res.success(ResultMode.EMPTY_RESULT);
+        }
+    }
 
 }

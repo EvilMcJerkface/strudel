@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument.impl;
 
 public interface MeasurementState {
 
-	boolean isMeasuring();
+    boolean isMeasuring();
 
-	MeasurementState ALWAYS = new MeasurementState() {
-		public boolean isMeasuring() {
-			return true;
-		}
-	};
+    MeasurementState ALWAYS = new MeasurementState() {
+        public boolean isMeasuring() {
+            return true;
+        }
+    };
 
-	MeasurementState NEVER = new MeasurementState() {
-		public boolean isMeasuring() {
-			return false;
-		}
-	};
+    MeasurementState NEVER = new MeasurementState() {
+        public boolean isMeasuring() {
+            return false;
+        }
+    };
 }

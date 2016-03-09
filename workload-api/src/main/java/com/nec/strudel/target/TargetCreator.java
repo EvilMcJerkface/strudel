@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.target;
 
 import javax.annotation.Nullable;
 
-
 public interface TargetCreator<T> {
-	Target<T> create(TargetConfig config);
+    Target<T> create(TargetConfig config);
 
-	TargetLifecycle createLifecycle(TargetConfig config);
+    TargetLifecycle createLifecycle(TargetConfig config);
 
-	@Nullable
-	Class<?> instrumentedClass(TargetConfig config);
+    @Nullable
+    Class<?> instrumentedClass(TargetConfig config);
 }

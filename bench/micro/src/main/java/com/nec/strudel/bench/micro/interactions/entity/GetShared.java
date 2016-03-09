@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import com.nec.strudel.bench.micro.entity.Shared;
@@ -27,21 +28,21 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class GetShared extends AbstractGetShared<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		SharedId id = param.getObject(InParam.SHARED_ID);
-		if (id == null) {
-			return res.warn("SHARED_ID is not set")
-			.failure(ResultMode.MISSING_PARAM);
-		}
-		Shared shared = db.get(Shared.class, id);
-		if (shared != null) {
-			res.set(TransitionParam.SHARED, shared);
-			return res.success();
-		} else {
-			return res.success(ResultMode.EMPTY_RESULT);
-		}
-	}
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        SharedId id = param.getObject(InParam.SHARED_ID);
+        if (id == null) {
+            return res.warn("SHARED_ID is not set")
+                    .failure(ResultMode.MISSING_PARAM);
+        }
+        Shared shared = db.get(Shared.class, id);
+        if (shared != null) {
+            res.set(TransitionParam.SHARED, shared);
+            return res.success();
+        } else {
+            return res.success(ResultMode.EMPTY_RESULT);
+        }
+    }
 
 }

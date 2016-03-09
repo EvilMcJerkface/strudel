@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.key;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,40 +23,42 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 
 public class CompoundKeyFinder extends KeyFinder {
-	private final Map<String, Method> getters;
-	private final Class<?> idClass;
-	private final Class<?> valueClass;
-	public CompoundKeyFinder(Class<?> idClass,
-			Map<String, Method> getters) {
-		this.idClass = idClass;
-		this.getters = getters;
-		this.valueClass = getters.values()
-				.iterator().next().getDeclaringClass();
-	}
-	@Override
-	public Object getKey(Object entity) {
-		if (!valueClass.isInstance(entity)) {
-			throw new IllegalArgumentException(
-			"invalid class given ("
-			+ entity.getClass().getName() + ")"
-			+ " expected:" + valueClass);
-		}
-		try {
-			Object id = idClass.newInstance();
-			for (Map.Entry<String, Method> en : getters.entrySet()) {
-				Object value = en.getValue().invoke(entity);
-				BeanUtils.setProperty(id, en.getKey(), value);
-			}
-			return id;
-		} catch (InstantiationException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
+    private final Map<String, Method> getters;
+    private final Class<?> idClass;
+    private final Class<?> valueClass;
+
+    public CompoundKeyFinder(Class<?> idClass,
+            Map<String, Method> getters) {
+        this.idClass = idClass;
+        this.getters = getters;
+        this.valueClass = getters.values()
+                .iterator().next().getDeclaringClass();
+    }
+
+    @Override
+    public Object getKey(Object entity) {
+        if (!valueClass.isInstance(entity)) {
+            throw new IllegalArgumentException(
+                    "invalid class given ("
+                            + entity.getClass().getName() + ")"
+                            + " expected:" + valueClass);
+        }
+        try {
+            Object id = idClass.newInstance();
+            for (Map.Entry<String, Method> en : getters.entrySet()) {
+                Object value = en.getValue().invoke(entity);
+                BeanUtils.setProperty(id, en.getKey(), value);
+            }
+            return id;
+        } catch (InstantiationException ex) {
+            throw new RuntimeException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 }

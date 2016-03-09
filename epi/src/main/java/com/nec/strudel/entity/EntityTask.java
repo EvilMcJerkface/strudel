@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity;
 
-
 public interface EntityTask<T> {
-	T run(EntityTransaction tx);
+    T run(EntityTransaction tx);
 }

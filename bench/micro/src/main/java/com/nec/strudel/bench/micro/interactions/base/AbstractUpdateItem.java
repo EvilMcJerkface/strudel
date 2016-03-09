@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.base;
 
 import java.util.ArrayList;
@@ -33,48 +34,45 @@ import com.nec.strudel.session.StateModifier;
 
 public abstract class AbstractUpdateItem<T> implements Interaction<T> {
 
-	public enum InParam implements LocalParam {
-		ITEM_IDS,
-		CONTENT,
-	}
-	/**
-	 * For each item specified with ItemId in ITEM_IDS,
-	 * update its content with CONTENT. If there is no item
-	 * found, return EMPTY_RESULT
-	 */
-	@Override
-	public abstract Result execute(Param param, T db, ResultBuilder res);
+    public enum InParam implements LocalParam {
+        ITEM_IDS, CONTENT,
+    }
 
-	@Override
-	public void prepare(ParamBuilder paramBuilder) {
-		List<Item> items = paramBuilder.getList(TransitionParam.ITEM);
-		if (!items.isEmpty()) {
-			List<ItemId> itemIds =
-					new ArrayList<ItemId>(items.size());
-			for (Item item : items) {
-				itemIds.add(item.getItemId());
-			}
-			paramBuilder.set(InParam.ITEM_IDS, itemIds);
-		} else {
-			int userId = paramBuilder.getInt(SessionParam.USER_ID);
-			Set<Integer> ids = paramBuilder.getRandomIntIdSet(
-					SessionParam.NUM_UPDATE_ITEMS,
-					SessionParam.MIN_SEQ_NO,
-					SessionParam.ITEMS_PER_USER);
-			List<ItemId> itemIds =
-					new ArrayList<ItemId>(ids.size());
-			for (Integer itemNo : ids) {
-				itemIds.add(new ItemId(userId, itemNo));
-			}
-			paramBuilder.set(InParam.ITEM_IDS, itemIds);
-		}
-		paramBuilder.randomAlphaString(InParam.CONTENT,
-				SessionParam.CONTENT_LENGTH);
-	}
+    /**
+     * For each item specified with ItemId in ITEM_IDS, update its content with
+     * CONTENT. If there is no item found, return EMPTY_RESULT
+     */
+    @Override
+    public abstract Result execute(Param param, T db, ResultBuilder res);
 
-	@Override
-	public void complete(StateModifier modifier) {
-		// nothing to set
-	}
+    @Override
+    public void prepare(ParamBuilder paramBuilder) {
+        List<Item> items = paramBuilder.getList(TransitionParam.ITEM);
+        if (!items.isEmpty()) {
+            List<ItemId> itemIds = new ArrayList<ItemId>(items.size());
+            for (Item item : items) {
+                itemIds.add(item.getItemId());
+            }
+            paramBuilder.set(InParam.ITEM_IDS, itemIds);
+        } else {
+            int userId = paramBuilder.getInt(SessionParam.USER_ID);
+            Set<Integer> ids = paramBuilder.getRandomIntIdSet(
+                    SessionParam.NUM_UPDATE_ITEMS,
+                    SessionParam.MIN_SEQ_NO,
+                    SessionParam.ITEMS_PER_USER);
+            List<ItemId> itemIds = new ArrayList<ItemId>(ids.size());
+            for (Integer itemNo : ids) {
+                itemIds.add(new ItemId(userId, itemNo));
+            }
+            paramBuilder.set(InParam.ITEM_IDS, itemIds);
+        }
+        paramBuilder.randomAlphaString(InParam.CONTENT,
+                SessionParam.CONTENT_LENGTH);
+    }
+
+    @Override
+    public void complete(StateModifier modifier) {
+        // nothing to set
+    }
 
 }

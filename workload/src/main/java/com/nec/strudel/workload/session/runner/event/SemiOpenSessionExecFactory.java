@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner.event;
 
 import java.util.Random;
@@ -38,87 +39,88 @@ import com.nec.strudel.workload.session.runner.SessionStatMonitor;
 import com.nec.strudel.workload.state.WorkState;
 
 /**
- * The workload model is "semi-open" in a sense that arrival of new users
- * is not supported: i.e., a new user session starts when one of the session
- * ends -- thus the total number of active sessions is kept constant. We call
- * this number "session concurrency." Notice that some of the active sessions might
- * be at their "think" time. The number of sessions that are running interactions
- * can be smaller than the session concurrency.
+ * The workload model is "semi-open" in a sense that arrival of new users is not
+ * supported: i.e., a new user session starts when one of the session ends --
+ * thus the total number of active sessions is kept constant. We call this
+ * number "session concurrency." Notice that some of the active sessions might
+ * be at their "think" time. The number of sessions that are running
+ * interactions can be smaller than the session concurrency.
+ * 
  * @author tatemura
  *
  * @param <T>
  */
 public class SemiOpenSessionExecFactory<T> implements SessionExecFactory<T> {
-	public static final String TYPE = "semi_open";
-	private int sessionConcurrency;
+    public static final String TYPE = "semi_open";
+    private int sessionConcurrency;
 
+    @Override
+    public void initialize(SessionConfig<T> conf) {
+        this.sessionConcurrency = conf.getSessionConcurrency();
+    }
 
-	@Override
-	public void initialize(SessionConfig<T> conf) {
-		this.sessionConcurrency = conf.getSessionConcurrency();
-	}
+    @Override
+    public WorkExec create(WorkNodeInfo node, Target<T> target,
+            SessionFactory<T> sfactory, WorkState state, ProfilerService profs,
+            ParamConfig pconf, Random rand) {
 
-	@Override
-	public WorkExec create(WorkNodeInfo node, Target<T> target,
-			SessionFactory<T> sfactory, WorkState state, ProfilerService profs,
-			ParamConfig pconf, Random rand) {
+        int sessionConcurrency = sessionConcurrency(node);
+        SessionProfilerManager sps = new SessionProfilerManager(profs,
+                sessionConcurrency, node.numOfThreads());
 
-		int sessionConcurrency = sessionConcurrency(node);
-		SessionProfilerManager sps =
-				new SessionProfilerManager(profs,
-						sessionConcurrency, node.numOfThreads());
+        SessionEventSeq<T> eventSeq = new SessionEventSeq<T>(sfactory,
+                createStateFactory(pconf, node, rand),
+                sessionConcurrency,
+                target, sps, profs, rand);
 
-		SessionEventSeq<T> eventSeq = new SessionEventSeq<T>(sfactory,
-				createStateFactory(pconf, node, rand),
-				sessionConcurrency,
-				target, sps, profs, rand);
-		
-		return EventExec.create(eventSeq, eventSeq,
-				node.numOfThreads(), state, target);
-	}
+        return EventExec.create(eventSeq, eventSeq,
+                node.numOfThreads(), state, target);
+    }
 
-	private StateFactory createStateFactory(ParamConfig pconf,
-			WorkNodeInfo node, Random rand) {
-		ParamSequence seq = pconf.createParamSeq(node.getNodeId(), node.getNodeNum());
-		return new StateFactory(seq, new Random(rand.nextLong()));
-	}
+    private StateFactory createStateFactory(ParamConfig pconf,
+            WorkNodeInfo node, Random rand) {
+        ParamSequence seq = pconf.createParamSeq(node.getNodeId(),
+                node.getNodeNum());
+        return new StateFactory(seq, new Random(rand.nextLong()));
+    }
 
-	private int sessionConcurrency(WorkNodeInfo node) {
-		if (sessionConcurrency > 0) {
-			return sessionConcurrency;
-		} else {
-			return node.numOfThreads();
-		}
-	}
+    private int sessionConcurrency(WorkNodeInfo node) {
+        if (sessionConcurrency > 0) {
+            return sessionConcurrency;
+        } else {
+            return node.numOfThreads();
+        }
+    }
 
-	@Override
-	public Output output(SessionConfig<T> xml) {
-		return SessionProfilerImpl.output();
-	}
-	@Override
-	public String getType() {
-		return TYPE;
-	}
+    @Override
+    public Output output(SessionConfig<T> xml) {
+        return SessionProfilerImpl.output();
+    }
 
-	static class SessionProfilerManager implements SessionProfilerServer {
-		private final ProfilerService profs;
-		private final SessionStatMonitor mon;
+    @Override
+    public String getType() {
+        return TYPE;
+    }
 
-		public SessionProfilerManager(ProfilerService profs,
-				int sessionConcurrency, int numOfThreads) {
-			this.profs = profs;
-			this.mon = new SessionStatMonitor();
-			profs.register(
-			new SessionRunnerStat(sessionConcurrency, numOfThreads, mon));
-		}
+    static class SessionProfilerManager implements SessionProfilerServer {
+        private final ProfilerService profs;
+        private final SessionStatMonitor mon;
 
-		@Override
-		public Instrumented<? extends SessionProfiler> profiler() {
-			Instrumented<SessionProfilerImpl> instr =
-					profs.createProfiler(
-							SessionProfilerImpl.class);
-			instr.getObject().setMon(mon);
-			return instr;
-		}
-	}
+        public SessionProfilerManager(ProfilerService profs,
+                int sessionConcurrency, int numOfThreads) {
+            this.profs = profs;
+            this.mon = new SessionStatMonitor();
+            profs.register(
+                    new SessionRunnerStat(sessionConcurrency, numOfThreads,
+                            mon));
+        }
+
+        @Override
+        public Instrumented<? extends SessionProfiler> profiler() {
+            Instrumented<SessionProfilerImpl> instr = profs.createProfiler(
+                    SessionProfilerImpl.class);
+            instr.getObject().setMon(mon);
+            return instr;
+        }
+    }
 }

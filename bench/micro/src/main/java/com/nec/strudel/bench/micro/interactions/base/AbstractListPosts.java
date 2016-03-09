@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.base;
 
 import com.nec.strudel.bench.micro.params.SessionParam;
@@ -26,31 +27,31 @@ import com.nec.strudel.session.StateModifier;
 
 public abstract class AbstractListPosts<T> implements Interaction<T> {
 
-	public enum InParam implements LocalParam {
-		POSTER_ID,
-	}
+    public enum InParam implements LocalParam {
+        POSTER_ID,
+    }
 
-	public enum OutParam implements LocalParam {
-		POST_LIST
-	}
+    public enum OutParam implements LocalParam {
+        POST_LIST
+    }
 
-	public AbstractListPosts() {
-		super();
-	}
+    public AbstractListPosts() {
+        super();
+    }
 
-	@Override
-	public void prepare(ParamBuilder paramBuilder) {
-		paramBuilder.randomIntId(InParam.POSTER_ID,
-				SessionParam.MIN_USER_ID,
-				SessionParam.USER_NUM, SessionParam.USER_ID);
-	}
+    @Override
+    public void prepare(ParamBuilder paramBuilder) {
+        paramBuilder.randomIntId(InParam.POSTER_ID,
+                SessionParam.MIN_USER_ID,
+                SessionParam.USER_NUM, SessionParam.USER_ID);
+    }
 
-	@Override
-	public abstract Result execute(Param param, T db, ResultBuilder res);
+    @Override
+    public abstract Result execute(Param param, T db, ResultBuilder res);
 
-	@Override
-	public void complete(StateModifier modifier) {
-		// nothing to do
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        // nothing to do
+    }
 
 }

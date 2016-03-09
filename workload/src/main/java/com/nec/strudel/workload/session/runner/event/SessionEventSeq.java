@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner.event;
 
 import java.util.ArrayList;
@@ -40,126 +41,129 @@ import com.nec.strudel.workload.session.StateFactory;
 import com.nec.strudel.workload.session.runner.SessionProfilerServer;
 import com.nec.strudel.workload.util.TimeValue;
 
-public class SessionEventSeq<T> implements EventSeq<ActionResult<T>>, EventController {
+public class SessionEventSeq<T>
+        implements EventSeq<ActionResult<T>>, EventController {
     private final SessionFactory<T> sfactory;
     private final StateFactory states;
     private final SessionProfilerServer sps;
     private int sessionSize;
     private final Target<T> target;
     private final ProfilerService profs;
-    private final List<SessionContext<T>> contexts =
-    		new ArrayList<SessionContext<T>>();
-    private long startSlackMS;
+    private final List<SessionContext<T>> contexts = new ArrayList<SessionContext<T>>();
+    private long startSlackMs;
     private final Random rand;
 
-	public SessionEventSeq(SessionFactory<T> sfactory,
-			StateFactory states, int sessionSize,
-			Target<T> target, SessionProfilerServer sps,
-			ProfilerService profs, Random rand) {
-		this.sfactory = sfactory;
-		this.states = states;
-		this.target = target;
-		this.profs = profs;
-		this.sessionSize = sessionSize;
-		this.sps = sps;
-		this.rand = new Random(rand.nextLong());
-	}
+    public SessionEventSeq(SessionFactory<T> sfactory,
+            StateFactory states, int sessionSize,
+            Target<T> target, SessionProfilerServer sps,
+            ProfilerService profs, Random rand) {
+        this.sfactory = sfactory;
+        this.states = states;
+        this.target = target;
+        this.profs = profs;
+        this.sessionSize = sessionSize;
+        this.sps = sps;
+        this.rand = new Random(rand.nextLong());
+    }
 
-	@Override
-	public Collection<TimedEvent<ActionResult<T>>> next(ActionResult<T> res) {
-		Result r = res.getResult();
-		inspect(r);
+    @Override
+    public Collection<TimedEvent<ActionResult<T>>> next(ActionResult<T> res) {
+        Result result = res.getResult();
+        inspect(result);
 
-		SessionEvent<T> next = res.nextAction();
-		if (next != null) {
-			return Arrays.asList((TimedEvent<ActionResult<T>>) next);
-		}
-		SessionContainer<T> sc = newSession();
-		if (sc != null) {
-			SessionEvent<T> newSession = res.newSession(sc);
-			return Arrays.asList((TimedEvent<ActionResult<T>>) newSession);
-		}
-		return Collections.emptyList();
-	}
-	void inspect(Result r) {
-		/**
-		 * TODO do something
-		 */
-	}
-	@Override
-	public boolean operate(String name, JsonObject data) {
-		/**
-		 * TODO support control of the session concurrency
-		 */
-		return false; // no operation supported
-	}
+        SessionEvent<T> next = res.nextAction();
+        if (next != null) {
+            return Arrays.asList((TimedEvent<ActionResult<T>>) next);
+        }
+        SessionContainer<T> sc = newSession();
+        if (sc != null) {
+            SessionEvent<T> newSession = res.newSession(sc);
+            return Arrays.asList((TimedEvent<ActionResult<T>>) newSession);
+        }
+        return Collections.emptyList();
+    }
 
-	@Override
-	public void setStartSlack(TimeValue slackTime) {
-		startSlackMS = slackTime.toMillis();
-	}
-	private long slackDelay() {
-		if (startSlackMS > 0) {
-			return rand.nextInt((int) startSlackMS);
-		} else {
-			return 0;
-		}
-	}
+    void inspect(Result result) {
+        /**
+         * TODO do something
+         */
+    }
 
-	@Override
-	public Collection<TimedEvent<ActionResult<T>>> start() {
-		List<TimedEvent<ActionResult<T>>> list =
-				new ArrayList<TimedEvent<ActionResult<T>>>(sessionSize);
-		for (int i = 0; i < sessionSize; i++) {
-			SessionContainer<T> sc = newSession();
-			if (sc == null) {
-				break;
-			}
-			long delay = slackDelay();
-			if (delay > 0) {
-				sc.delay(delay);
-			}
-			list.add(newSessionEvent(sc));
-		}
-		return list;
-	}
+    @Override
+    public boolean operate(String name, JsonObject data) {
+        /**
+         * TODO support control of the session concurrency
+         */
+        return false; // no operation supported
+    }
 
-	SessionEvent<T> newSessionEvent(SessionContainer<T> sc) {
-		return new SessionEvent<T>(sc, createCtxt());
-	}
+    @Override
+    public void setStartSlack(TimeValue slackTime) {
+        startSlackMs = slackTime.toMillis();
+    }
 
-	public Report getReport() {
-		Report[] reports;
-		synchronized (contexts) {
-			reports = new Report[this.contexts.size()];
-			for (int i = 0; i < reports.length; i++) {
-				reports[i] = contexts.get(i).getReport();
-			}
-		}
-		return Report.aggregate(reports);
-	}
+    private long slackDelay() {
+        if (startSlackMs > 0) {
+            return rand.nextInt((int) startSlackMs);
+        } else {
+            return 0;
+        }
+    }
 
-	private SessionContext<T> createCtxt() {
-		Instrumented<T> con = target.open(profs);
-		Instrumented<? extends SessionProfiler> p = sps.profiler();
-		SessionProfiler prof = p.getObject();
-		prof.newSession();
-		SessionContext<T> ctxt =
-			new SessionContext<T>(target, con, p);
-		synchronized (contexts) {
-			contexts.add(ctxt);
-		}
-		return ctxt;
-	}
+    @Override
+    public Collection<TimedEvent<ActionResult<T>>> start() {
+        List<TimedEvent<ActionResult<T>>> list = new ArrayList<TimedEvent<ActionResult<T>>>(
+                sessionSize);
+        for (int i = 0; i < sessionSize; i++) {
+            SessionContainer<T> sc = newSession();
+            if (sc == null) {
+                break;
+            }
+            long delay = slackDelay();
+            if (delay > 0) {
+                sc.delay(delay);
+            }
+            list.add(newSessionEvent(sc));
+        }
+        return list;
+    }
 
-	@Override
-	public Collection<TimedEvent<ActionResult<T>>> poll() {
-		/**
-		 * TODO give a set of new sessions when
-		 * the session concurrency increases.
-		 */
-		return Collections.emptyList();
-	}
+    SessionEvent<T> newSessionEvent(SessionContainer<T> sc) {
+        return new SessionEvent<T>(sc, createCtxt());
+    }
+
+    public Report getReport() {
+        Report[] reports;
+        synchronized (contexts) {
+            reports = new Report[this.contexts.size()];
+            for (int i = 0; i < reports.length; i++) {
+                reports[i] = contexts.get(i).getReport();
+            }
+        }
+        return Report.aggregate(reports);
+    }
+
+    private SessionContext<T> createCtxt() {
+        Instrumented<T> con = target.open(profs);
+        Instrumented<? extends SessionProfiler> profInstr = sps.profiler();
+        SessionProfiler prof = profInstr.getObject();
+        prof.newSession();
+        SessionContext<T> ctxt = new SessionContext<T>(target, con, profInstr);
+        synchronized (contexts) {
+            contexts.add(ctxt);
+        }
+        return ctxt;
+    }
+
+    @Override
+    public Collection<TimedEvent<ActionResult<T>>> poll() {
+        /**
+         * TODO give a set of new sessions when the session concurrency
+         * increases.
+         */
+        return Collections.emptyList();
+    }
+
     protected SessionContainer<T> newSession() {
         State state = states.next();
         if (state != null) {

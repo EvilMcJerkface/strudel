@@ -27,11 +27,11 @@ import java.util.List;
 
 import com.nec.strudel.entity.EntityDB;
 import com.nec.strudel.entity.IndexType;
-import com.nec.strudel.tkvs.EntityDBImpl;
-import com.nec.strudel.tkvs.impl.inmemory.InMemoryDB;
+import com.nec.strudel.tkvs.EntityDbImpl;
+import com.nec.strudel.tkvs.impl.inmemory.InMemoryDb;
 
 public abstract class AbstractEntityTestBase {
-	private final EntityDB db = new EntityDBImpl(new InMemoryDB("test"));
+	private final EntityDB db = new EntityDbImpl(new InMemoryDb("test"));
 
 	protected EntityDB getDb() {
 		return db;

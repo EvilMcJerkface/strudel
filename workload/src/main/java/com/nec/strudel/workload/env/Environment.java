@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.env;
 
 public interface Environment {
     void start(ExecConfig conf);
+
     void stop(ExecConfig conf);
+
     void startSuite(ExecConfig conf);
+
     void stopSuite(ExecConfig conf);
 }

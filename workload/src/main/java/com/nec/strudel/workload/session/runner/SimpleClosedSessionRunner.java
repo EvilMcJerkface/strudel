@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner;
 
 import org.apache.log4j.Logger;
@@ -27,58 +28,60 @@ import com.nec.strudel.workload.session.SessionProfiler;
 import com.nec.strudel.workload.session.StateFactory;
 
 /**
- * A session runner that runs sessions one by one: a new session is
- * created when the current session ends. The runner sleeps during the
- * current session's think time.
+ * A session runner that runs sessions one by one: a new session is created when
+ * the current session ends. The runner sleeps during the current session's
+ * think time.
+ * 
  * @author tatemura
  *
  * @param <T>
  */
 public class SimpleClosedSessionRunner<T> extends AbstractSessionRunner<T>
-implements RunnerStat {
-    private static final Logger LOGGER =
-    		Logger.getLogger(SimpleClosedSessionRunner.class);
-	public SimpleClosedSessionRunner(
+        implements RunnerStat {
+    private static final Logger LOGGER = Logger
+            .getLogger(SimpleClosedSessionRunner.class);
+
+    public SimpleClosedSessionRunner(
             int id,
             SessionFactory<T> sfactory,
             Instrumented<T> con,
             Target<T> target,
             StateFactory states, Instrumented<? extends SessionProfiler> prof) {
-	    super(id, sfactory, con, target, states, prof);
+        super(id, sfactory, con, target, states, prof);
     }
 
+    @Override
+    public void runSessions() {
+        for (SessionContainer<T> sc = newSession(); isRunning()
+                && sc != null; sc = newSession()) {
+            try {
+                runSession(sc);
+            } catch (WorkloadException ex) {
+                int id = getId();
+                LOGGER.debug("END SESSION (FAIL) @" + id);
+                LOGGER.error(
+                        "session failed due to exception", ex);
+            }
+        }
+    }
 
-	@Override
-	public void runSessions() {
-		for (SessionContainer<T> sc = newSession();
-				isRunning() && sc != null; sc = newSession()) {
-			try {
-				runSession(sc);
-			} catch (WorkloadException e) {
-			    int id = getId();
-				LOGGER.debug("END SESSION (FAIL) @" + id);
-				LOGGER.error(
-				"session failed due to exception", e);
-			}
-		}
-	}
-	@Override
-	public int getSessionConcurrency() {
-		return 1;
-	}
+    @Override
+    public int getSessionConcurrency() {
+        return 1;
+    }
 
-	private void runSession(SessionContainer<T> sc) {
-	    int id = getId();
-		LOGGER.debug("START SESSION @" + id);
-		while (sc.isActive() && isRunning()) {
-		    waitTime(sc.waitTime());
-		    String name = sc.nextName();
+    private void runSession(SessionContainer<T> sc) {
+        int id = getId();
+        LOGGER.debug("START SESSION @" + id);
+        while (sc.isActive() && isRunning()) {
+            waitTime(sc.waitTime());
+            String name = sc.nextName();
             LOGGER.debug("start: " + name + "@" + id);
-		    Result r = doAction(sc);
+            Result result = doAction(sc);
             LOGGER.debug("end: " + name
-            		+ "@" + id);
-            inspectResult(name, r);
-		}
+                    + "@" + id);
+            inspectResult(name, result);
+        }
         LOGGER.debug("END SESSION @" + id);
-	}
+    }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity;
 
 import java.lang.annotation.ElementType;
@@ -21,18 +22,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to indicate the class that encapsulates
- * a group key. It must be placed at an entity class
- * if
+ * Annotation to indicate the class that encapsulates a group key. It must be
+ * placed at an entity class if
  * <ul>
- * <li> a group key is compound, and
- * <li> a group key is different from the
- * primary key (which is specified with IdClass).
+ * <li>a group key is compound, and
+ * <li>a group key is different from the primary key (which is specified with
+ * IdClass).
  * </ul>
  *
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GroupIdClass {
-	Class<?> value();
+    Class<?> value();
 }

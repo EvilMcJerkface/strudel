@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.tkvs.impl;
 
 import java.util.Map;
@@ -29,9 +30,11 @@ public interface CollectionBuffer {
 
     /**
      * loads a key value pair
+     * 
      * @param key
-     * @param record the value of the key-value pair.
-     * null to indicate that the key-value has been deleted.
+     * @param record
+     *            the value of the key-value pair. null to indicate that the
+     *            key-value has been deleted.
      */
     void load(Key key, @Nullable Record record);
 
@@ -45,8 +48,8 @@ public interface CollectionBuffer {
     Set<Key> getReads();
 
     /**
-     * @return Record in the map is null if
-     * it indicates that the record is deleted
+     * @return Record in the map is null if it indicates that the record is
+     *         deleted
      */
     Map<Key, Record> getWrites();
 

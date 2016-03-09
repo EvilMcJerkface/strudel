@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.jpa;
 
 import javax.persistence.EntityExistsException;
@@ -30,52 +31,56 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class StoreAuctionBuyNow extends AbstractStoreAuctionBuyNow<EntityManager>
-implements Interaction<EntityManager> {
-	private static final Logger LOGGER = Logger.getLogger(StoreAuctionBuyNow.class);
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
+public class StoreAuctionBuyNow
+        extends AbstractStoreAuctionBuyNow<EntityManager>
+        implements Interaction<EntityManager> {
+    private static final Logger LOGGER = Logger
+            .getLogger(StoreAuctionBuyNow.class);
 
-		BuyNowAuction bna = createBna(param);
-		em.getTransaction().begin();
-		Result r = null;
-		try {
-			r = store(bna, em, res);
-			return r;
-		} finally {
-			if (em.getTransaction().isActive()) {
-				if (r != null && r.isSuccess()) {
-					em.getTransaction().commit();
-				} else {
-					em.getTransaction().rollback();
-				}
-			}
-		}
-	}
-	private Result store(BuyNowAuction bna, EntityManager em,  ResultBuilder res) {
-        AuctionItem item =
-        		em.find(AuctionItem.class, bna.getItemId(),
-        				LockModeType.PESSIMISTIC_WRITE);
-        Result r = check(bna, item, res);
-        if (r.isSuccess()) {
-        	AuctionItem.sell(item);
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+
+        BuyNowAuction bna = createBna(param);
+        em.getTransaction().begin();
+        Result execResult = null;
+        try {
+            execResult = store(bna, em, res);
+            return execResult;
+        } finally {
+            if (em.getTransaction().isActive()) {
+                if (execResult != null && execResult.isSuccess()) {
+                    em.getTransaction().commit();
+                } else {
+                    em.getTransaction().rollback();
+                }
+            }
+        }
+    }
+
+    private Result store(BuyNowAuction bna, EntityManager em,
+            ResultBuilder res) {
+        AuctionItem item = em.find(AuctionItem.class, bna.getItemId(),
+                LockModeType.PESSIMISTIC_WRITE);
+        Result checkResult = check(bna, item, res);
+        if (checkResult.isSuccess()) {
+            AuctionItem.sell(item);
             try {
-				em.persist(bna);
-				em.getTransaction().commit();
-			} catch (EntityExistsException e) {
+                em.persist(bna);
+                em.getTransaction().commit();
+            } catch (EntityExistsException ex) {
                 return res.warn("auction is not sold but BNA exists: "
                         + bna.getItemId())
-                   .failure(ResultMode.UNKNOWN_ERROR);
-			} catch (Exception e) {
-				LOGGER.error(
-						"unexpected error when inserting BNA", e);
+                        .failure(ResultMode.UNKNOWN_ERROR);
+            } catch (Exception ex) {
+                LOGGER.error(
+                        "unexpected error when inserting BNA", ex);
 
-                return res.warn("unexpected exception: " + e.getMessage())
-                   .failure(ResultMode.UNKNOWN_ERROR);
-				
-			}
+                return res.warn("unexpected exception: " + ex.getMessage())
+                        .failure(ResultMode.UNKNOWN_ERROR);
+
+            }
         }
-        return r;
-	}
+        return checkResult;
+    }
 
 }

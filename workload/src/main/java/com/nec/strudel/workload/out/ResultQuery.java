@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.out;
 
 import java.util.ArrayList;
@@ -27,27 +28,30 @@ import com.nec.strudel.json.func.Func;
 import com.nec.strudel.metrics.Output;
 
 public class ResultQuery {
-	public static ResultQuery query() {
-		return new ResultQuery();
-	}
-	private final List<Output> outputs =
-			new ArrayList<Output>();
-	public ResultQuery() {
-	}
-	public ResultQuery output(Output... outs) {
-		for (Output out : outs) {
-			outputs.add(out);
-		}
-		return this;
-	}
-	public JsonObject execute(JsonObject source) {
-		JsonObjectBuilder dst = Json.createObjectBuilder();
-		for (Output out : outputs) {
-			for (Map.Entry<String, Func> e : out.entries()) {
-				e.getValue().output(dst, e.getKey(), source);
-			}
-		}
-		return dst.build();
-	}
+    public static ResultQuery query() {
+        return new ResultQuery();
+    }
+
+    private final List<Output> outputs = new ArrayList<Output>();
+
+    public ResultQuery() {
+    }
+
+    public ResultQuery output(Output... outs) {
+        for (Output out : outs) {
+            outputs.add(out);
+        }
+        return this;
+    }
+
+    public JsonObject execute(JsonObject source) {
+        JsonObjectBuilder dst = Json.createObjectBuilder();
+        for (Output out : outputs) {
+            for (Map.Entry<String, Func> e : out.entries()) {
+                e.getValue().output(dst, e.getKey(), source);
+            }
+        }
+        return dst.build();
+    }
 
 }

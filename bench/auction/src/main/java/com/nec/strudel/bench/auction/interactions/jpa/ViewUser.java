@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.jpa;
 
 import javax.persistence.EntityManager;
@@ -24,13 +25,13 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ViewUser  extends AbstractViewUser<EntityManager>
-implements Interaction<EntityManager> {
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		int userId = getUserId(param);
-		User user = em.find(User.class, userId);
-		return resultOf(user, param, res);
-	}
+public class ViewUser extends AbstractViewUser<EntityManager>
+        implements Interaction<EntityManager> {
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        int userId = getUserId(param);
+        User user = em.find(User.class, userId);
+        return resultOf(user, param, res);
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.json.func;
 
 import java.text.DateFormat;
@@ -25,34 +26,34 @@ import javax.json.JsonValue;
 import com.nec.strudel.json.JsonValues;
 
 public class Now implements Func {
-	public static Func now() {
-		return new Now();
-	}
-	public static Func now(String format) {
-		return new Now(format);
-	}
-	public static final String DEFAULT_FORMAT =
-			"yyyy-MM-dd'T'HH:mm:ssz";
-	private DateFormat dateFormat;
+    public static Func now() {
+        return new Now();
+    }
 
-	public Now() {
-		dateFormat =
-				new SimpleDateFormat(DEFAULT_FORMAT);
-	}
-	public Now(String dateFormat) {
-		this.dateFormat =
-				new SimpleDateFormat(dateFormat);
-	}
+    public static Func now(String format) {
+        return new Now(format);
+    }
 
-	@Override
-	public JsonValue get(JsonValue... input) {
-		return JsonValues.toValue(dateFormat.format(new Date()));
-	}
+    public static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ssz";
+    private DateFormat dateFormat;
 
-	@Override
-	public void output(JsonObjectBuilder out,
-			String name, JsonValue... input) {
-		out.add(name, get(input));
-	}
+    public Now() {
+        dateFormat = new SimpleDateFormat(DEFAULT_FORMAT);
+    }
+
+    public Now(String dateFormat) {
+        this.dateFormat = new SimpleDateFormat(dateFormat);
+    }
+
+    @Override
+    public JsonValue get(JsonValue... input) {
+        return JsonValues.toValue(dateFormat.format(new Date()));
+    }
+
+    @Override
+    public void output(JsonObjectBuilder out,
+            String name, JsonValue... input) {
+        out.add(name, get(input));
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import com.nec.strudel.bench.micro.entity.Shared;
@@ -24,14 +25,14 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class CreateShared extends AbstractCreateShared<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int setId = param.getInt(InParam.SET_ID);
-		Shared shared = new Shared(setId);
-		shared.setContent(param.get(InParam.CONTENT));
-		db.create(shared);
-		return res.success();
-	}
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int setId = param.getInt(InParam.SET_ID);
+        Shared shared = new Shared(setId);
+        shared.setContent(param.get(InParam.CONTENT));
+        db.create(shared);
+        return res.success();
+    }
 
 }

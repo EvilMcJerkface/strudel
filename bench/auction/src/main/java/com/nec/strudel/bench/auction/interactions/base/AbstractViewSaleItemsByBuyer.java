@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.base;
 
 import java.util.List;
@@ -29,37 +30,37 @@ import com.nec.strudel.session.ResultBuilder;
 import com.nec.strudel.session.StateModifier;
 
 /**
- * Retrieves the purchase info on the sale items the current
- * user has bought.
+ * Retrieves the purchase info on the sale items the current user has bought.
  *
  */
-public abstract class AbstractViewSaleItemsByBuyer<T> implements Interaction<T> {
+public abstract class AbstractViewSaleItemsByBuyer<T>
+        implements Interaction<T> {
 
-	public enum OutParam implements LocalParam {
-		BNS_LIST,
-		SALE_ITEM_LIST
-	}
+    public enum OutParam implements LocalParam {
+        BNS_LIST, SALE_ITEM_LIST
+    }
 
-	@Override
-	public void prepare(ParamBuilder builder) {
-		builder
-		.use(SessionParam.USER_ID);
-	}
+    @Override
+    public void prepare(ParamBuilder builder) {
+        builder
+                .use(SessionParam.USER_ID);
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-	    // do nothing
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        // do nothing
+    }
 
-	public int getBuyerId(Param param) {
-		return param.getInt(SessionParam.USER_ID);
-	}
+    public int getBuyerId(Param param) {
+        return param.getInt(SessionParam.USER_ID);
+    }
 
-	public Result resultOf(List<SaleItem> itemList, List<BuyNowSale> bnsList, ResultBuilder res) {
-		return res
-				.set(OutParam.SALE_ITEM_LIST, itemList)
-				.set(OutParam.BNS_LIST, bnsList)
-				.success();
-	}
+    public Result resultOf(List<SaleItem> itemList, List<BuyNowSale> bnsList,
+            ResultBuilder res) {
+        return res
+                .set(OutParam.SALE_ITEM_LIST, itemList)
+                .set(OutParam.BNS_LIST, bnsList)
+                .success();
+    }
 
 }

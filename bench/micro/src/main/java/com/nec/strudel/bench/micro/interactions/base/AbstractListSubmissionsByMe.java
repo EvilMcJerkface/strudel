@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.base;
 
 import com.nec.strudel.bench.micro.entity.Submission;
@@ -25,23 +26,23 @@ import com.nec.strudel.session.StateModifier;
 
 public abstract class AbstractListSubmissionsByMe<T> implements Interaction<T> {
 
-	public enum OutParam implements LocalParam {
-		SUBMISSION_LIST
-	}
+    public enum OutParam implements LocalParam {
+        SUBMISSION_LIST
+    }
 
-	@Override
-	public void prepare(ParamBuilder paramBuilder) {
-		paramBuilder.use(SessionParam.USER_ID);
-	}
+    @Override
+    public void prepare(ParamBuilder paramBuilder) {
+        paramBuilder.use(SessionParam.USER_ID);
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-		Submission sub = modifier.getOne(OutParam.SUBMISSION_LIST);
-		if (sub != null) {
-			modifier.set(TransitionParam.SUBMISSION, sub)
-			.set(TransitionParam.PEER_USER_ID,
-					sub.getReceiverId());
-		}
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        Submission sub = modifier.getOne(OutParam.SUBMISSION_LIST);
+        if (sub != null) {
+            modifier.set(TransitionParam.SUBMISSION, sub)
+                    .set(TransitionParam.PEER_USER_ID,
+                            sub.getReceiverId());
+        }
+    }
 
 }

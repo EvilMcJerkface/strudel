@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.nec.strudel.instrument;
 
+package com.nec.strudel.instrument;
 
 public interface ProfilerService {
 
-	void register(Object managedObject);
+    void register(Object managedObject);
 
-	void forceRegister(Object managedObject);
+    void forceRegister(Object managedObject);
 
-	<T> T getOrRegister(String name, T obj);
+    <T> T getOrRegister(String name, T obj);
 
-	<T> T getOrRegister(T obj);
+    <T> T getOrRegister(T obj);
 
-	<T> Instrumented<T> createProfiler(Class<T> cls, Object stat);
-	<T> Instrumented<T> createProfiler(Class<T> cls);
-	OperationStat createOperationStat(int windowSize, long stepMs);
+    <T> Instrumented<T> createProfiler(Class<T> cls, Object stat);
 
-	BinaryEventStat createBinaryEventStat(int windowSize, long stepMs);
+    <T> Instrumented<T> createProfiler(Class<T> cls);
+
+    OperationStat createOperationStat(int windowSize, long stepMs);
+
+    BinaryEventStat createBinaryEventStat(int windowSize, long stepMs);
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.server;
 
 import java.util.Collections;
@@ -31,122 +32,123 @@ import com.nec.strudel.workload.worker.LocalWorker;
 import com.nec.strudel.workload.worker.Worker;
 
 public class WorkerManager implements WorkerService {
-	private static final Logger LOGGER =
-		    Logger.getLogger(WorkerManager.class);
-	private final AtomicLong idCounter = new AtomicLong();
-	private final ConcurrentMap<String, Worker> workers =
-			new ConcurrentHashMap<String, Worker>();
-	@Override
-	public WorkStatus init(WorkRequest work) {
-		String id = Long.toHexString(idCounter.getAndIncrement());
-		LOGGER.info("creating work: id=" + id);
-		try {
-			Worker w = LocalWorker.create(id, work);
-			workers.put(id, w);
-			return WorkStatus.stat(id, w.getState());
-		} catch (Throwable e) {
-			LOGGER.error("init failed (id=" + id + ")", e);
-			return WorkStatus.error(
-					"exception during init:" + e.getClass()
-					+ ":" + e.getMessage());
-		}
-	}
+    private static final Logger LOGGER = Logger.getLogger(WorkerManager.class);
+    private final AtomicLong idCounter = new AtomicLong();
+    private final ConcurrentMap<String, Worker> workers = new ConcurrentHashMap<String, Worker>();
 
-	@Override
-	public WorkStatus start(String workId) {
-		Worker w = workers.get(workId);
-		if (w != null) {
-			try {
-				w.start();
-				LOGGER.info("start: " + workId);
-				return WorkStatus.stat(workId, w.getState());
-			} catch (Throwable e) {
-				LOGGER.error("worker start failed:id="
-						+ w.getWorkId()
-						+ " state=" + w.getState(), e);
-				return WorkStatus.error(workId, e.getMessage());
-			}
-		} else {
-			LOGGER.warn("unknown work to start: " + workId);
-			return WorkStatus.unknown(workId);
-		}
-	}
+    @Override
+    public WorkStatus init(WorkRequest work) {
+        String id = Long.toHexString(idCounter.getAndIncrement());
+        LOGGER.info("creating work: id=" + id);
+        try {
+            Worker worker = LocalWorker.create(id, work);
+            workers.put(id, worker);
+            return WorkStatus.stat(id, worker.getState());
+        } catch (Throwable ex) {
+            LOGGER.error("init failed (id=" + id + ")", ex);
+            return WorkStatus.error(
+                    "exception during init:" + ex.getClass()
+                            + ":" + ex.getMessage());
+        }
+    }
 
-	@Override
-	public WorkStatus operate(String workId, String name,
-			JsonObject arg) {
-		Worker w = workers.get(workId);
-		if (w != null) {
-			try {
-				w.operate(name, arg);
-				return WorkStatus.stat(workId, w.getState());
-			} catch (Throwable e) {
-				LOGGER.error("worker operate failed:id="
-						+ w.getWorkId()
-						+ " state=" + w.getState()
-						+ " op=" + name, e);
-				return WorkStatus.error(workId, e.getMessage());
-			}
-		} else {
-			LOGGER.warn("unknown work to operate "
-					+ name + ": " + workId);
-			return WorkStatus.unknown(workId);
-		}
-	}
+    @Override
+    public WorkStatus start(String workId) {
+        Worker worker = workers.get(workId);
+        if (worker != null) {
+            try {
+                worker.start();
+                LOGGER.info("start: " + workId);
+                return WorkStatus.stat(workId, worker.getState());
+            } catch (Throwable ex) {
+                LOGGER.error("worker start failed:id="
+                        + worker.getWorkId()
+                        + " state=" + worker.getState(), ex);
+                return WorkStatus.error(workId, ex.getMessage());
+            }
+        } else {
+            LOGGER.warn("unknown work to start: " + workId);
+            return WorkStatus.unknown(workId);
+        }
+    }
 
-	@Override
-	public WorkStatus stop(String workId) {
-		Worker w = workers.get(workId);
-		if (w != null) {
-			w.stop();
-		} else {
-			LOGGER.warn("unknown work to stop: " + workId);
-		}
-		return WorkStatus.stat(workId, w.getState());
-	}
+    @Override
+    public WorkStatus operate(String workId, String name,
+            JsonObject arg) {
+        Worker worker = workers.get(workId);
+        if (worker != null) {
+            try {
+                worker.operate(name, arg);
+                return WorkStatus.stat(workId, worker.getState());
+            } catch (Throwable ex) {
+                LOGGER.error("worker operate failed:id="
+                        + worker.getWorkId()
+                        + " state=" + worker.getState()
+                        + " op=" + name, ex);
+                return WorkStatus.error(workId, ex.getMessage());
+            }
+        } else {
+            LOGGER.warn("unknown work to operate "
+                    + name + ": " + workId);
+            return WorkStatus.unknown(workId);
+        }
+    }
 
-	@Override
-	public WorkStatus getStatus(String workId) {
-		Worker w = workers.get(workId);
-		if (w != null) {
-			return WorkStatus.stat(workId, w.getState());
-		} else {
-			return WorkStatus.unknown(workId);
-		}
-	}
-	@Override
-	public JsonObject getReport(String workId) {
-		Worker w = workers.get(workId);
-		if (w != null) {
-			return w.getReport().toJson();
-		} else {
-			LOGGER.warn("unknown work to report: " + workId);
-			return Report.none().toJson();
-		}
-	}
+    @Override
+    public WorkStatus stop(String workId) {
+        Worker worker = workers.get(workId);
+        if (worker != null) {
+            worker.stop();
+        } else {
+            LOGGER.warn("unknown work to stop: " + workId);
+        }
+        return WorkStatus.stat(workId, worker.getState());
+    }
 
-	@Override
-	public WorkStatus terminate(String workId) throws InterruptedException {
-		Worker w = workers.get(workId);
-		if (w != null) {
-			try {
-				w.terminate();
-			} catch (Throwable e) {
-				LOGGER.error("worker terminate failed:id="
-						+ w.getWorkId()
-						+ " state=" + w.getState(), e);
-				return WorkStatus.error(workId, e.getMessage());
-			} finally {
-				workers.remove(workId);
-			}
-			
-		} else {
-			LOGGER.warn("unknown work to terminate: " + workId);
-		}
-		return WorkStatus.stat(workId, w.getState());
-	}
-	@Override
-	public Set<String> works() {
-		return Collections.unmodifiableSet(workers.keySet());
-	}
+    @Override
+    public WorkStatus getStatus(String workId) {
+        Worker worker = workers.get(workId);
+        if (worker != null) {
+            return WorkStatus.stat(workId, worker.getState());
+        } else {
+            return WorkStatus.unknown(workId);
+        }
+    }
+
+    @Override
+    public JsonObject getReport(String workId) {
+        Worker worker = workers.get(workId);
+        if (worker != null) {
+            return worker.getReport().toJson();
+        } else {
+            LOGGER.warn("unknown work to report: " + workId);
+            return Report.none().toJson();
+        }
+    }
+
+    @Override
+    public WorkStatus terminate(String workId) throws InterruptedException {
+        Worker worker = workers.get(workId);
+        if (worker != null) {
+            try {
+                worker.terminate();
+            } catch (Throwable ex) {
+                LOGGER.error("worker terminate failed:id="
+                        + worker.getWorkId()
+                        + " state=" + worker.getState(), ex);
+                return WorkStatus.error(workId, ex.getMessage());
+            } finally {
+                workers.remove(workId);
+            }
+
+        } else {
+            LOGGER.warn("unknown work to terminate: " + workId);
+        }
+        return WorkStatus.stat(workId, worker.getState());
+    }
+
+    @Override
+    public Set<String> works() {
+        return Collections.unmodifiableSet(workers.keySet());
+    }
 }

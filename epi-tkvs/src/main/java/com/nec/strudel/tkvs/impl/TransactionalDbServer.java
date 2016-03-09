@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.tkvs.impl;
 
 import com.nec.strudel.tkvs.TransactionalDB;
 
 public interface TransactionalDbServer<P> {
 
-	TransactionalDB open(P prof);
-	void close();
+    TransactionalDB open(P prof);
+
+    void close();
 }

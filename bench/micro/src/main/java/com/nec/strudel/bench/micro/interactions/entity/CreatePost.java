@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import com.nec.strudel.bench.micro.entity.Post;
@@ -25,14 +26,14 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class CreatePost extends AbstractCreatePost<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int userId = param.getInt(SessionParam.USER_ID);
-		Post post = new Post(userId);
-		post.setContent(param.get(InParam.CONTENT));
-		db.create(post);
-		return res.success();
-	}
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int userId = param.getInt(SessionParam.USER_ID);
+        Post post = new Post(userId);
+        post.setContent(param.get(InParam.CONTENT));
+        db.create(post);
+        return res.success();
+    }
 
 }

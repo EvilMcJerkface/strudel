@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.target.impl;
 
 import java.lang.annotation.Annotation;
@@ -30,59 +31,61 @@ import com.nec.strudel.target.TargetLifecycle;
 import com.nec.strudel.util.ClassUtil;
 
 public final class TargetFactory {
-	private TargetFactory() {
-		// not instantiated
-	}
+    private TargetFactory() {
+        // not instantiated
+    }
 
-	public static <T> Target<T> create(TargetConfig dbConfig) {
-		TargetCreator<T> dbc = creator(dbConfig);
-		return dbc.create(dbConfig);
-	}
-	public static TargetLifecycle lifecycleManager(TargetConfig config) {
-		return creator(config).createLifecycle(config);
-	}
-	public static List<NamedFunc> outputs(TargetConfig dbConfig) {
-		Class<?> instrumented = creator(dbConfig).instrumentedClass(dbConfig);
-		if (instrumented != null) {
-			return ProfilerOutput.on(instrumented);
-		} else {
-			return Collections.emptyList();
-		}
-	}
+    public static <T> Target<T> create(TargetConfig dbConfig) {
+        TargetCreator<T> dbc = creator(dbConfig);
+        return dbc.create(dbConfig);
+    }
 
-	@SuppressWarnings("unchecked")
-	private static <T> TargetCreator<T> creator(TargetConfig dbConfig) {
-		String targetClass = dbConfig.getClassName();
-		if (targetClass.isEmpty()) {
-			throw new ConfigException("target className not defined: name=\""
-						+ dbConfig.getName() + "\"");
-		}
-		Class<?> c = ClassUtil.forName(targetClass,
-				dbConfig.targetClassLoader());
-		if (ClassUtil.isSubclass(c, TargetCreator.class)) {
-			return (TargetCreator<T>) ClassUtil.create(
-					c.asSubclass(TargetCreator.class));
-		}
-		FactoryClass ca = findAnnotation(c, FactoryClass.class);
-		if (ca != null) {
-			return (TargetCreator<T>) ClassUtil.create(ca.value());
-		}
-		throw new ConfigException("creator not found for "
-		+ dbConfig.getClassName());
-	}
+    public static TargetLifecycle lifecycleManager(TargetConfig config) {
+        return creator(config).createLifecycle(config);
+    }
 
-	static <A extends Annotation> A findAnnotation(
-			Class<?> cls, Class<A> a) {
-		A ann = cls.getAnnotation(a);
-		if (ann != null) {
-			return ann;
-		}
-		for (Class<?> itf : cls.getInterfaces()) {
-			ann = itf.getAnnotation(a);
-			if (ann != null) {
-				return ann;
-			}
-		}
-		return null;
-	}
+    public static List<NamedFunc> outputs(TargetConfig dbConfig) {
+        Class<?> instrumented = creator(dbConfig).instrumentedClass(dbConfig);
+        if (instrumented != null) {
+            return ProfilerOutput.on(instrumented);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> TargetCreator<T> creator(TargetConfig dbConfig) {
+        String targetClass = dbConfig.getClassName();
+        if (targetClass.isEmpty()) {
+            throw new ConfigException("target className not defined: name=\""
+                    + dbConfig.getName() + "\"");
+        }
+        Class<?> cls = ClassUtil.forName(targetClass,
+                dbConfig.targetClassLoader());
+        if (ClassUtil.isSubclass(cls, TargetCreator.class)) {
+            return (TargetCreator<T>) ClassUtil.create(
+                    cls.asSubclass(TargetCreator.class));
+        }
+        FactoryClass ca = findAnnotation(cls, FactoryClass.class);
+        if (ca != null) {
+            return (TargetCreator<T>) ClassUtil.create(ca.value());
+        }
+        throw new ConfigException("creator not found for "
+                + dbConfig.getClassName());
+    }
+
+    static <A extends Annotation> A findAnnotation(
+            Class<?> cls, Class<A> annClass) {
+        A ann = cls.getAnnotation(annClass);
+        if (ann != null) {
+            return ann;
+        }
+        for (Class<?> itf : cls.getInterfaces()) {
+            ann = itf.getAnnotation(annClass);
+            if (ann != null) {
+                return ann;
+            }
+        }
+        return null;
+    }
 }

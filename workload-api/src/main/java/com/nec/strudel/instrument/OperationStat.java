@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument;
-
-
 
 public interface OperationStat extends OperationListener {
 
-	@Override
-	void operation(long microSec);
+    @Override
+    void operation(long microSec);
 
-	double getOperationsPerSec();
+    double getOperationsPerSec();
 
-	double getAverageOperationTime();
+    double getAverageOperationTime();
 
 }

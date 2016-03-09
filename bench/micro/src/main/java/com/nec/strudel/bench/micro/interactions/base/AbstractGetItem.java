@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.base;
 
 import com.nec.strudel.bench.micro.entity.ItemId;
@@ -28,32 +29,31 @@ import com.nec.strudel.session.StateModifier;
 
 public abstract class AbstractGetItem<T> implements Interaction<T> {
 
-	public enum InParam implements LocalParam {
-		ITEM_ID,
-	}
+    public enum InParam implements LocalParam {
+        ITEM_ID,
+    }
 
+    /**
+     * Gets an Item by ID which is specified as InParam.ITEM_ID. If the item is
+     * found, set it to TransitionParam.ITEM. If it is not found, return
+     * EMPTY_RESULT.
+     */
+    @Override
+    public abstract Result execute(Param param, T db, ResultBuilder res);
 
-	/**
-	 * Gets an Item by ID which is specified as InParam.ITEM_ID.
-	 * If the item is found, set it to TransitionParam.ITEM.
-	 * If it is not found, return EMPTY_RESULT.
-	 */
-	@Override
-	public abstract Result execute(Param param, T db, ResultBuilder res);
+    @Override
+    public void prepare(ParamBuilder paramBuilder) {
+        int userId = paramBuilder.getInt(SessionParam.USER_ID);
+        int itemNo = paramBuilder.getRandomIntId(
+                SessionParam.MIN_SEQ_NO,
+                SessionParam.ITEMS_PER_USER);
+        paramBuilder.set(InParam.ITEM_ID,
+                new ItemId(userId, itemNo));
+    }
 
-	@Override
-	public void prepare(ParamBuilder paramBuilder) {
-		int userId = paramBuilder.getInt(SessionParam.USER_ID);
-		int itemNo = paramBuilder.getRandomIntId(
-				SessionParam.MIN_SEQ_NO,
-				SessionParam.ITEMS_PER_USER);
-		paramBuilder.set(InParam.ITEM_ID,
-				new ItemId(userId, itemNo));
-	}
-
-	@Override
-	public void complete(StateModifier modifier) {
-		modifier.export(TransitionParam.ITEM);
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        modifier.export(TransitionParam.ITEM);
+    }
 
 }

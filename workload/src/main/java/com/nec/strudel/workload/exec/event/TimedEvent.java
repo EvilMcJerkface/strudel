@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.exec.event;
 
 import java.util.concurrent.Callable;
 
 public interface TimedEvent<R> extends Callable<R> {
-	/**
-	 * The time this event should be executed.
-	 * @return a long value that corresponds to System.currentTimeMillis().
-	 */
-	long getTime();
+    /**
+     * The time this event should be executed.
+     * 
+     * @return a long value that corresponds to System.currentTimeMillis().
+     */
+    long getTime();
 
 }

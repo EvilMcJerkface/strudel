@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.jobexec;
 
 import com.nec.strudel.workload.com.Command;
@@ -36,31 +37,31 @@ public final class TaskRunnerFactory {
         return null;
     }
 
-	public static Runnable createWorkloadRunner(WorkloadTask work, Job job) {
-		Command com = findCommand(work);
-		if (com != null) {
-			return new WorkloadRunner(work, job, com);
-		} else {
-			return new Runnable() {
-				@Override
-				public void run() {
-					WorkloadRunner.logger().info(
-					"nothing to run as a workload");
-				}
-			};
-		}
-	}
-	private static Command findCommand(WorkloadTask work) {
-		MeasurementConfig m =
-				work.getConfig().findObject(
-					MeasurementConfig.TAG_MEASURE, MeasurementConfig.class);
-		if (m != null) {
-			return MeasureWorkloadCommand.command(m);
-		}
-		Workflow flow = work.getConfig().findObject("process", Workflow.class);
-		if (flow != null) {
-			return WorkloadWorkflow.command(flow);
-		}
-		return null;
-	}
+    public static Runnable createWorkloadRunner(WorkloadTask work, Job job) {
+        Command com = findCommand(work);
+        if (com != null) {
+            return new WorkloadRunner(work, job, com);
+        } else {
+            return new Runnable() {
+                @Override
+                public void run() {
+                    WorkloadRunner.logger().info(
+                            "nothing to run as a workload");
+                }
+            };
+        }
+    }
+
+    private static Command findCommand(WorkloadTask work) {
+        MeasurementConfig mconf = work.getConfig().findObject(
+                MeasurementConfig.TAG_MEASURE, MeasurementConfig.class);
+        if (mconf != null) {
+            return MeasureWorkloadCommand.command(mconf);
+        }
+        Workflow flow = work.getConfig().findObject("process", Workflow.class);
+        if (flow != null) {
+            return WorkloadWorkflow.command(flow);
+        }
+        return null;
+    }
 }

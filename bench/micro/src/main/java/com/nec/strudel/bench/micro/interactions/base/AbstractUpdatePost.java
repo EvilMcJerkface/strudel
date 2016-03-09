@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.base;
 
 import com.nec.strudel.bench.micro.entity.ItemId;
@@ -26,35 +27,34 @@ import com.nec.strudel.session.StateModifier;
 
 public abstract class AbstractUpdatePost<T> implements Interaction<T> {
 
-	public enum InParam implements LocalParam {
-		ITEM_ID,
-		CONTENT,
-	}
+    public enum InParam implements LocalParam {
+        ITEM_ID, CONTENT,
+    }
 
-	public AbstractUpdatePost() {
-		super();
-	}
+    public AbstractUpdatePost() {
+        super();
+    }
 
-	@Override
-	public void prepare(ParamBuilder paramBuilder) {
-		Post post = paramBuilder.get(TransitionParam.POST);
-		if (post != null) {
-			paramBuilder.set(InParam.ITEM_ID, post.getItemId());
-		} else {
-			int userId = paramBuilder.getInt(SessionParam.USER_ID);
-			int itemNo = paramBuilder.getRandomIntId(
-					SessionParam.MIN_SEQ_NO,
-					SessionParam.POSTS_PER_USER);
-			paramBuilder.set(InParam.ITEM_ID,
-					new ItemId(userId, itemNo));
-		}
-		paramBuilder.randomAlphaString(InParam.CONTENT,
-				SessionParam.CONTENT_LENGTH);
-	}
+    @Override
+    public void prepare(ParamBuilder paramBuilder) {
+        Post post = paramBuilder.get(TransitionParam.POST);
+        if (post != null) {
+            paramBuilder.set(InParam.ITEM_ID, post.getItemId());
+        } else {
+            int userId = paramBuilder.getInt(SessionParam.USER_ID);
+            int itemNo = paramBuilder.getRandomIntId(
+                    SessionParam.MIN_SEQ_NO,
+                    SessionParam.POSTS_PER_USER);
+            paramBuilder.set(InParam.ITEM_ID,
+                    new ItemId(userId, itemNo));
+        }
+        paramBuilder.randomAlphaString(InParam.CONTENT,
+                SessionParam.CONTENT_LENGTH);
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-		// do nothing
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        // do nothing
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.entity;
 
 import javax.persistence.Entity;
@@ -29,74 +30,81 @@ import com.nec.strudel.entity.Indexes;
 @Group(parent = AuctionItem.class)
 @Entity
 @Indexes({
-	@On(property = "buyerId",
-			name = "buyer_auction_idx")
+        @On(property = "buyerId", name = "buyer_auction_idx")
 })
-@Table(indexes={@Index(columnList="BUYERID")})
+@Table(indexes = { @Index(columnList = "BUYERID") })
 @IdClass(ItemId.class)
 public class BuyNowAuction {
 
-	@Id private int sellerId;
-	@Id private int itemNo;
-	private long bnaDate;
-	private int buyerId;
+    @Id
+    private int sellerId;
+    @Id
+    private int itemNo;
+    private long bnaDate;
+    private int buyerId;
 
-	public BuyNowAuction(ItemId itemId) {
-		this.sellerId = itemId.getSellerId();
-		this.itemNo = itemId.getItemNo();
-	}
-	public BuyNowAuction(int sellerId, int itemNo) {
-		this.sellerId = sellerId;
-		this.itemNo = itemNo;
-	}
-	public BuyNowAuction() {
-	}
+    public BuyNowAuction(ItemId itemId) {
+        this.sellerId = itemId.getSellerId();
+        this.itemNo = itemId.getItemNo();
+    }
 
-	public int getBuyerId() {
-		return buyerId;
-	}
+    public BuyNowAuction(int sellerId, int itemNo) {
+        this.sellerId = sellerId;
+        this.itemNo = itemNo;
+    }
 
-	public void setBuyerId(int buyerId) {
-		this.buyerId = buyerId;
-	}
+    public BuyNowAuction() {
+    }
 
-	public int getSellerId() {
-		return sellerId;
-	}
+    public int getBuyerId() {
+        return buyerId;
+    }
 
-	public int getItemNo() {
-		return itemNo;
-	}
+    public void setBuyerId(int buyerId) {
+        this.buyerId = buyerId;
+    }
 
-	public ItemId getItemId() {
-		return new ItemId(sellerId, itemNo);
-	}
+    public int getSellerId() {
+        return sellerId;
+    }
 
-	public long getBnaDate() {
-		return bnaDate;
-	}
+    public int getItemNo() {
+        return itemNo;
+    }
 
-	public void setBnaDate(long bnaDate) {
-		this.bnaDate = bnaDate;
-	}
-	public void setSellerId(int sellerId) {
-		this.sellerId = sellerId;
-	}
-	public void setItemNo(int itemNo) {
-		this.itemNo = itemNo;
-	}
-	@Override
+    public ItemId getItemId() {
+        return new ItemId(sellerId, itemNo);
+    }
+
+    public long getBnaDate() {
+        return bnaDate;
+    }
+
+    public void setBnaDate(long bnaDate) {
+        this.bnaDate = bnaDate;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public void setItemNo(int itemNo) {
+        this.itemNo = itemNo;
+    }
+
+    @Override
     public int hashCode() {
-    	return EntityUtil.hashCode(this);
+        return EntityUtil.hashCode(this);
     }
 
     @Override
     public boolean equals(Object obj) {
-    	return EntityUtil.equals(this, obj);
+        return EntityUtil.equals(this, obj);
     }
+
     @Override
     public String toString() {
-    	return EntityUtil.toString(this);
+        return EntityUtil.toString(this);
     }
 
 }

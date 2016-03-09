@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.management.resource;
 
 import java.lang.annotation.ElementType;
@@ -21,8 +22,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation on the method that returns
- * the value of "name" property of the resource instance.
+ * An annotation on the method that returns the value of "name" property of the
+ * resource instance.
+ * 
  * @author tatemura
  *
  */

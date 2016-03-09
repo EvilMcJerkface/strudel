@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.exec.event;
 
 import javax.json.JsonObject;
@@ -21,23 +22,27 @@ import com.nec.strudel.metrics.Report;
 import com.nec.strudel.workload.util.TimeValue;
 
 public interface EventController {
-	/**
-	 * Gets the measured values
-	 * @return Report that contains metrics values.
-	 */
-	Report getReport();
-	/**
-	 * Sets the slack time of the beginning of events.
-	 * @param slack
-	 */
-	void setStartSlack(TimeValue slack);
+    /**
+     * Gets the measured values
+     * 
+     * @return Report that contains metrics values.
+     */
+    Report getReport();
 
-	/**
-	 * Handles an operation if it is known
-	 * @param name
-	 * @param data
-	 * @return false if the operation is unknown. true
-	 * if the operation is known (and handled).
-	 */
-	boolean operate(String name, JsonObject data);
+    /**
+     * Sets the slack time of the beginning of events.
+     * 
+     * @param slack
+     */
+    void setStartSlack(TimeValue slack);
+
+    /**
+     * Handles an operation if it is known
+     * 
+     * @param name
+     * @param data
+     * @return false if the operation is unknown. true if the operation is known
+     *         (and handled).
+     */
+    boolean operate(String name, JsonObject data);
 }

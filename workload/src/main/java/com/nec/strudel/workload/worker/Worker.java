@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.worker;
 
 import javax.json.JsonObject;
@@ -21,19 +22,19 @@ import com.nec.strudel.metrics.Report;
 
 public interface Worker {
 
-	String STATE_ERROR = "error";
+    String STATE_ERROR = "error";
 
-	String getWorkId();
+    String getWorkId();
 
-	void start();
+    void start();
 
-	void stop();
+    void stop();
 
-	void terminate() throws InterruptedException;
+    void terminate() throws InterruptedException;
 
-	void operate(String name, JsonObject data);
+    void operate(String name, JsonObject data);
 
-	String getState();
+    String getState();
 
     Report getReport();
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner.event;
 
 import com.nec.strudel.session.Result;
@@ -21,44 +22,44 @@ import com.nec.strudel.workload.exec.event.TimedEvent;
 import com.nec.strudel.workload.session.SessionContainer;
 
 public class SessionEvent<T> implements TimedEvent<ActionResult<T>> {
-	private final long time;
+    private final long time;
     private final Target<T> target;
-	private final SessionContainer<T> sc;
+    private final SessionContainer<T> sc;
     private final SessionContext<T> ctxt;
 
-	public SessionEvent(SessionContainer<T> sc,
-			SessionContext<T> ctxt) {
-		this.time = sc.nextTime();
-		this.sc = sc;
-		this.target = ctxt.target();
-		this.ctxt = ctxt;
-	}
+    public SessionEvent(SessionContainer<T> sc,
+            SessionContext<T> ctxt) {
+        this.time = sc.nextTime();
+        this.sc = sc;
+        this.target = ctxt.target();
+        this.ctxt = ctxt;
+    }
 
-	@Override
-	public ActionResult<T> call() {
-    	T c = ctxt.getConnection();
-    	target.beginUse(c);
-    	try {
-    		String name = sc.nextName();
-            Result res = sc.doAction(ctxt.profiler(), c);
+    @Override
+    public ActionResult<T> call() {
+        T con = ctxt.getConnection();
+        target.beginUse(con);
+        try {
+            String name = sc.nextName();
+            Result res = sc.doAction(ctxt.profiler(), con);
             ctxt.inspectResult(name, res);
-    		return new ActionResult<T>(sc, ctxt, res);
-    	} finally {
-    		target.endUse(c);
-    	}
-	}
+            return new ActionResult<T>(sc, ctxt, res);
+        } finally {
+            target.endUse(con);
+        }
+    }
 
-	@Override
-	public long getTime() {
-		return time;
-	}
+    @Override
+    public long getTime() {
+        return time;
+    }
 
-	public SessionContainer<T> getContainer() {
-		return sc;
-	}
-	public SessionContext<T> getContext() {
-		return ctxt;
-	}
+    public SessionContainer<T> getContainer() {
+        return sc;
+    }
 
+    public SessionContext<T> getContext() {
+        return ctxt;
+    }
 
 }

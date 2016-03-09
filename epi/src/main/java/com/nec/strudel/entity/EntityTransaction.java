@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity;
 
 import javax.annotation.Nullable;
 
 public interface EntityTransaction {
 
-	@Nullable
-	<T> T get(Class<T> c, Object key);
-	void create(Object entity);
-	void update(Object entity);
-	void delete(Object entity);
+    @Nullable
+    <T> T get(Class<T> cls, Object key);
+
+    void create(Object entity);
+
+    void update(Object entity);
+
+    void delete(Object entity);
 }

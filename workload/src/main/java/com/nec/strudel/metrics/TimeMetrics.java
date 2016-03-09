@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.metrics;
 
 import java.util.Arrays;
@@ -22,41 +23,47 @@ import com.nec.strudel.json.func.Div;
 import com.nec.strudel.json.func.Value;
 
 public class TimeMetrics {
-	public static List<NamedFunc> outputsOf(String name) {
-		return new TimeMetrics(name).outputs();
-	}
-	public static String countOf(String name) {
-		return name + "_count";
-	}
-	public static String timeOf(String name) {
-		return name + "_time";
-	}
+    public static List<NamedFunc> outputsOf(String name) {
+        return new TimeMetrics(name).outputs();
+    }
 
-	public static String avgOf(String name) {
-		return name + "_avg_time";
-	}
-	private String count;
-	private String time;
-	private String avg;
-	public TimeMetrics(String name) {
-		this.count = countOf(name);
-		this.time = timeOf(name);
-		this.avg = avgOf(name);
-	}
-	public TimeMetrics avg(String avg) {
-		this.avg = avg;
-		return this;
-	}
-	public TimeMetrics count(String count) {
-		this.count = count;
-		return this;
-	}
-	public List<NamedFunc> outputs() {
-		return Arrays.asList(
-				new NamedFunc(count, Value.of(count)),
-				new NamedFunc(avg, Div.of(
-					Value.of(time),
-					Value.of(count)))
-				);
-	}
+    public static String countOf(String name) {
+        return name + "_count";
+    }
+
+    public static String timeOf(String name) {
+        return name + "_time";
+    }
+
+    public static String avgOf(String name) {
+        return name + "_avg_time";
+    }
+
+    private String count;
+    private String time;
+    private String avg;
+
+    public TimeMetrics(String name) {
+        this.count = countOf(name);
+        this.time = timeOf(name);
+        this.avg = avgOf(name);
+    }
+
+    public TimeMetrics avg(String avg) {
+        this.avg = avg;
+        return this;
+    }
+
+    public TimeMetrics count(String count) {
+        this.count = count;
+        return this;
+    }
+
+    public List<NamedFunc> outputs() {
+        return Arrays.asList(
+                new NamedFunc(count, Value.of(count)),
+                new NamedFunc(avg, Div.of(
+                        Value.of(time),
+                        Value.of(count))));
+    }
 }

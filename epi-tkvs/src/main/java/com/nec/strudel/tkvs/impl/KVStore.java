@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.tkvs.impl;
 
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
 
 public interface KVStore {
-	Record get(String name, Key key);
+    Record get(String name, Key key);
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.jobexec;
 
 import java.io.File;
@@ -39,182 +40,200 @@ import com.nec.strudel.workload.util.TimeUtil;
  * A runnable class that runs a job or job suite. It will generate the following
  * data when it executes a job suite:
  * <ul>
- *  <li> ${output}/jobsuite-${id}.xml - a configuration file after resolving inheritance
- *  <li> ${output}/joblog-${id}.log - a Log4j log file during job execution
- *  <li> ${output}/data/*.json - results of individual jobs in the job suite.
+ * <li>${output}/jobsuite-${id}.xml - a configuration file after resolving
+ * inheritance
+ * <li>${output}/joblog-${id}.log - a Log4j log file during job execution
+ * <li>${output}/data/*.json - results of individual jobs in the job suite.
  * </ul>
+ * 
  * @author tatemura
  *
  */
 public abstract class JobRunner implements Runnable {
-	private static final Logger LOGGER = Logger.getLogger(JobRunner.class);
-	private static final long SLEEP_BETWEEN_JOBS = 1000;
-	private Exception exception;
-	public static JobRunner create(File file) {
-		String path = file.getAbsolutePath();
-		JobInfo info = new JobInfo(path);
-		ConfigDescription cxml = ConfigDescription.create(file,
-				JobSuite.baseDescription());
-		if (JobSuite.TAG_NAME.equalsIgnoreCase(cxml.getName())) {
-			return new JobSuiteRunner(
-					new JobSuite(info, cxml));
-		} else {
-			return new SingleJobRunner(
-					new Job(info, cxml.resolve()));
-		}
-	}
-	static class SingleJobRunner extends JobRunner {
-		private final Job job;
-		public SingleJobRunner(Job job) {
-			this.job = job;
-		}
-		protected Iterable<Job> jobs() {
-			return Arrays.asList(job);
-		}
-		protected void prepare() {
-			// do nothing
-		}
-	}
-	static class JobSuiteRunner extends JobRunner {
-		private final JobSuite jobSuite;
-		public JobSuiteRunner(JobSuite jobSuite) {
-			this.jobSuite = jobSuite;
-		}
-		protected Iterable<Job> jobs() {
-			return jobSuite;
-		}
-		protected void prepare() {
-			String id = jobSuite.getId();
-			try {
-				File outDir = prepareOutDir();
-				recordJobSuiteInfo(outDir, id);
-				addLog4jAppender(outDir, id);
-			} catch (IOException e) {
-				throw new WorkloadException(
-					"failed to save job suite info", e);
-			}
-		}
-		private File prepareOutDir() {
-			File outDir = new File(jobSuite.getOutput());
-			outDir.mkdirs();
-			return outDir;
-		}
-		private void recordJobSuiteInfo(File outDir, String id)
-				throws IOException {
-	    	File file = new File(outDir, "jobsuite-" + id + ".xml");
-	    	FileWriter w = new FileWriter(file);
-	    	jobSuite.write(w);
-	    	w.close();
+    private static final Logger LOGGER = Logger.getLogger(JobRunner.class);
+    private static final long SLEEP_BETWEEN_JOBS = 1000;
+    private Exception exception;
 
-		}
-		private void addLog4jAppender(File outDir, String id)
-				throws IOException {
-	    	File file = new File(outDir, "joblog-" + id + ".log");
-			BasicConfigurator.configure(new FileAppender(
-				new PatternLayout("[%d %c{3}] %p %m %n"),
-					file.getAbsolutePath()));
-		}
+    public static JobRunner create(File file) {
+        String path = file.getAbsolutePath();
+        JobInfo info = new JobInfo(path);
+        ConfigDescription cxml = ConfigDescription.create(file,
+                JobSuite.baseDescription());
+        if (JobSuite.TAG_NAME.equalsIgnoreCase(cxml.getName())) {
+            return new JobSuiteRunner(
+                    new JobSuite(info, cxml));
+        } else {
+            return new SingleJobRunner(
+                    new Job(info, cxml.resolve()));
+        }
+    }
 
-	}
-	public JobRunner() {
-	}
+    static class SingleJobRunner extends JobRunner {
+        private final Job job;
 
+        public SingleJobRunner(Job job) {
+            this.job = job;
+        }
 
-	@Override
-	public void run() {
-		prepare();
-		int num = 0;
-		EnvironmentConfig lastConf = null;
-		try {
-			for (Job job : jobs()) {
-			    EnvironmentConfig envConf = job.createEnv();
-				if (num == 0) {
-					startJobSuite(envConf);
-				} else {
-					try {
-						Thread.sleep(SLEEP_BETWEEN_JOBS);
-					} catch (InterruptedException e) {
-						LOGGER.error("interrupted", e);
-						Thread.currentThread().interrupt();
-						break;
-					}
-				}
-				lastConf = envConf;
-				num++;
-				boolean success = runJob(job, envConf);
-				if (!success) {
-					LOGGER.error("job #" + num
-							+ " failed.");
-					break;
-				}
-			}
-		} finally {
-			if (lastConf != null) {
-				stopJobSuite(lastConf);
-			}
-		}
-	}
-	protected abstract void prepare();
-	protected abstract Iterable<Job> jobs();
+        protected Iterable<Job> jobs() {
+            return Arrays.asList(job);
+        }
 
-	protected void startJobSuite(EnvironmentConfig envConf) {
-	    Environment env = envConf.create();
-	    env.startSuite(envConf.getStartSuite());
-	}
-	protected void stopJobSuite(EnvironmentConfig envConf) {
-	    Environment env = envConf.create();
-		env.stopSuite(envConf.getStopSuite());
-	}
+        protected void prepare() {
+            // do nothing
+        }
+    }
 
-	protected boolean runJob(Job job, EnvironmentConfig envConf) {
-	    Environment env = envConf.create();
-	    env.start(envConf.getStart());
-	    try {
-	        runTasks(job);
-	        return true;
-	    } catch (Exception e) {
-	    	exception = e;
-	    	LOGGER.error("exception during task execution. stopping...", e);
-	    	return false;
-	    } finally {
-	        env.stop(envConf.getStop());
-	    }
-	}
-	protected void runTasks(Job job) {
+    static class JobSuiteRunner extends JobRunner {
+        private final JobSuite jobSuite;
+
+        public JobSuiteRunner(JobSuite jobSuite) {
+            this.jobSuite = jobSuite;
+        }
+
+        protected Iterable<Job> jobs() {
+            return jobSuite;
+        }
+
+        protected void prepare() {
+            String id = jobSuite.getId();
+            try {
+                File outDir = prepareOutDir();
+                recordJobSuiteInfo(outDir, id);
+                addLog4jAppender(outDir, id);
+            } catch (IOException ex) {
+                throw new WorkloadException(
+                        "failed to save job suite info", ex);
+            }
+        }
+
+        private File prepareOutDir() {
+            File outDir = new File(jobSuite.getOutput());
+            outDir.mkdirs();
+            return outDir;
+        }
+
+        private void recordJobSuiteInfo(File outDir, String id)
+                throws IOException {
+            File file = new File(outDir, "jobsuite-" + id + ".xml");
+            FileWriter writer = new FileWriter(file);
+            jobSuite.write(writer);
+            writer.close();
+
+        }
+
+        private void addLog4jAppender(File outDir, String id)
+                throws IOException {
+            File file = new File(outDir, "joblog-" + id + ".log");
+            BasicConfigurator.configure(new FileAppender(
+                    new PatternLayout("[%d %c{3}] %p %m %n"),
+                    file.getAbsolutePath()));
+        }
+
+    }
+
+    public JobRunner() {
+    }
+
+    @Override
+    public void run() {
+        prepare();
+        int num = 0;
+        EnvironmentConfig lastConf = null;
+        try {
+            for (Job job : jobs()) {
+                EnvironmentConfig envConf = job.createEnv();
+                if (num == 0) {
+                    startJobSuite(envConf);
+                } else {
+                    try {
+                        Thread.sleep(SLEEP_BETWEEN_JOBS);
+                    } catch (InterruptedException ex) {
+                        LOGGER.error("interrupted", ex);
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+                lastConf = envConf;
+                num++;
+                boolean success = runJob(job, envConf);
+                if (!success) {
+                    LOGGER.error("job #" + num
+                            + " failed.");
+                    break;
+                }
+            }
+        } finally {
+            if (lastConf != null) {
+                stopJobSuite(lastConf);
+            }
+        }
+    }
+
+    protected abstract void prepare();
+
+    protected abstract Iterable<Job> jobs();
+
+    protected void startJobSuite(EnvironmentConfig envConf) {
+        Environment env = envConf.create();
+        env.startSuite(envConf.getStartSuite());
+    }
+
+    protected void stopJobSuite(EnvironmentConfig envConf) {
+        Environment env = envConf.create();
+        env.stopSuite(envConf.getStopSuite());
+    }
+
+    protected boolean runJob(Job job, EnvironmentConfig envConf) {
+        Environment env = envConf.create();
+        env.start(envConf.getStart());
+        try {
+            runTasks(job);
+            return true;
+        } catch (Exception ex) {
+            exception = ex;
+            LOGGER.error("exception during task execution. stopping...", ex);
+            return false;
+        } finally {
+            env.stop(envConf.getStop());
+        }
+    }
+
+    protected void runTasks(Job job) {
         long startTime = System.currentTimeMillis();
         for (Task t : job.createTasks()) {
-            Runnable r = TaskRunnerFactory.create(t, job);
+            Runnable runner = TaskRunnerFactory.create(t, job);
             long time = System.currentTimeMillis();
             LOGGER.info("start " + t.description());
-            r.run();
+            runner.run();
             LOGGER.info("done " + t.description()
                     + ": "
-                    + TimeUtil.formatTimeMS(
-                           System.currentTimeMillis() - time));
-       }
+                    + TimeUtil.formatTimeMs(
+                            System.currentTimeMillis() - time));
+        }
         long duration = System.currentTimeMillis() - startTime;
         LOGGER.info("job done: total "
-                + TimeUtil.formatTimeMS(duration));
-	}
+                + TimeUtil.formatTimeMs(duration));
+    }
 
-	public boolean hasError() {
-		return exception != null;
-	}
-	public Exception getException() {
-		return exception;
-	}
+    public boolean hasError() {
+        return exception != null;
+    }
 
-	public static void main(String[] args) {
-		if (args.length != 1) {
-			System.err.println("args: xmlfile");
-			return;
-		}
-		JobRunner jr =
-		JobRunner.create(new File(args[0]));
-		jr.run();
-		if (jr.hasError()) {
-			LOGGER.error("Job was not successful: "
-					+ jr.getException().getMessage());
-		}
-	}
+    public Exception getException() {
+        return exception;
+    }
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.err.println("args: xmlfile");
+            return;
+        }
+        JobRunner jr = JobRunner.create(new File(args[0]));
+        jr.run();
+        if (jr.hasError()) {
+            LOGGER.error("Job was not successful: "
+                    + jr.getException().getMessage());
+        }
+    }
 }

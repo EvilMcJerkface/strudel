@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.base;
 
 import com.nec.strudel.bench.micro.entity.ItemId;
@@ -24,34 +25,34 @@ import com.nec.strudel.session.StateModifier;
 
 public abstract class AbstractGetPost<T> implements Interaction<T> {
 
-	public enum InParam implements LocalParam {
-		ITEM_ID,
-	}
+    public enum InParam implements LocalParam {
+        ITEM_ID,
+    }
 
-	public enum OutParam implements LocalParam {
-		POST,
-	}
+    public enum OutParam implements LocalParam {
+        POST,
+    }
 
-	public AbstractGetPost() {
-		super();
-	}
+    public AbstractGetPost() {
+        super();
+    }
 
-	@Override
-	public void prepare(ParamBuilder paramBuilder) {
-		int userId = paramBuilder.getRandomIntId(
-				SessionParam.MIN_USER_ID,
-				SessionParam.USER_NUM,
-				SessionParam.USER_ID);
-		int itemNo = paramBuilder.getRandomIntId(
-				SessionParam.MIN_SEQ_NO,
-				SessionParam.POSTS_PER_USER);
-		paramBuilder.set(InParam.ITEM_ID,
-				new ItemId(userId, itemNo));
-	}
+    @Override
+    public void prepare(ParamBuilder paramBuilder) {
+        int userId = paramBuilder.getRandomIntId(
+                SessionParam.MIN_USER_ID,
+                SessionParam.USER_NUM,
+                SessionParam.USER_ID);
+        int itemNo = paramBuilder.getRandomIntId(
+                SessionParam.MIN_SEQ_NO,
+                SessionParam.POSTS_PER_USER);
+        paramBuilder.set(InParam.ITEM_ID,
+                new ItemId(userId, itemNo));
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-		// do nothing
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        // do nothing
+    }
 
 }

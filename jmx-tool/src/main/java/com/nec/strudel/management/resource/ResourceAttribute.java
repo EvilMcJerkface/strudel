@@ -13,55 +13,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.management.resource;
 
 import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-
 public class ResourceAttribute {
-	private final String name;
-	private String description = "";
-	private Method getter;
-	private Method setter;
-	public ResourceAttribute(String name) {
-		this.name = name;
-	}
-	public String getName() {
-		return name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    private final String name;
+    private String description = "";
+    private Method getter;
+    private Method setter;
 
-	/**
-	 * Gets the getter of this attribute
-	 * @return null if no getter
-	 * is available.
-	 */
-	@Nullable
-	public Method getGetter() {
-		return getter;
-	}
-	public void setGetter(Method getter) {
-		this.getter = getter;
-	}
-	/**
-	 * Gets the setter of this
-	 * attribute.
-	 * @return null if no setter
-	 * is available.
-	 */
-	@Nullable
-	public Method getSetter() {
-		return setter;
-	}
-	public void setSetter(Method setter) {
-		this.setter = setter;
-	}
+    public ResourceAttribute(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Gets the getter of this attribute
+     * 
+     * @return null if no getter is available.
+     */
+    @Nullable
+    public Method getGetter() {
+        return getter;
+    }
+
+    public void setGetter(Method getter) {
+        this.getter = getter;
+    }
+
+    /**
+     * Gets the setter of this attribute.
+     * 
+     * @return null if no setter is available.
+     */
+    @Nullable
+    public Method getSetter() {
+        return setter;
+    }
+
+    public void setSetter(Method setter) {
+        this.setter = setter;
+    }
 
 }

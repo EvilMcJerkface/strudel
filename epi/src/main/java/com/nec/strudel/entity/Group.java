@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity;
 
 import java.lang.annotation.ElementType;
@@ -23,21 +24,22 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Group {
-	/**
-	 * The name of the entity
-	 */
-	String name() default "";
-	/**
-	 * The name of the entity group if this
-	 * entity is the root.
-	 * @return "" if this entity is not
-	 * the root entity
-	 */
-	String group() default "";
-	/**
-	 * The class of the parent entity if this
-	 * entity is not the root.
-	 * @return Object.class if this class is the root.
-	 */
-	Class<?> parent() default Object.class;
+    /**
+     * The name of the entity
+     */
+    String name() default "";
+
+    /**
+     * The name of the entity group if this entity is the root.
+     * 
+     * @return "" if this entity is not the root entity
+     */
+    String group() default "";
+
+    /**
+     * The class of the parent entity if this entity is not the root.
+     * 
+     * @return Object.class if this class is the root.
+     */
+    Class<?> parent() default Object.class;
 }

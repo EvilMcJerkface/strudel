@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.job;
 
 import java.io.File;
@@ -24,10 +25,10 @@ import com.nec.congenio.ConfigValue;
 import com.nec.strudel.exceptions.ConfigException;
 
 /**
- * JobSuite is a set of Jobs, which are
- * executed sequentially. The jobs must be independent
- * of each other (i.e., one job should not use the result
- * of another job).
+ * JobSuite is a set of Jobs, which are executed sequentially. The jobs must be
+ * independent of each other (i.e., one job should not use the result of another
+ * job).
+ * 
  * <pre>
  * &lt;jobSuite&gt;
  *   &lt;output&gt;...&lt;/output&gt;
@@ -38,110 +39,116 @@ import com.nec.strudel.exceptions.ConfigException;
  *   &lt;job&gt;...&lt;/job&gt;
  * &lt;/jobSuite>
  * </pre>
+ * 
  * @author tatemura
  *
  */
 public class JobSuite implements Iterable<Job> {
-	public static final String SUPER_SUITE = "superJobSuite.xml";
-	public static final String TAG_NAME = "jobSuite";
-	public static final String ELEM_OUTPUT = "output";
-	public static final String ID = "id";
-	private final JobInfo info;
-	private final ConfigDescription cdl;
-	private String id;
-	private String output;
+    public static final String SUPER_SUITE = "superJobSuite.xml";
+    public static final String TAG_NAME = "jobSuite";
+    public static final String ELEM_OUTPUT = "output";
+    public static final String ID = "id";
+    private final JobInfo info;
+    private final ConfigDescription cdl;
+    private String id;
+    private String output;
 
-	public static JobSuite createWithoutBase(File file) {
-		String path = file.getAbsolutePath();
-		ConfigDescription cdl = ConfigDescription.create(file);
-		JobInfo info = new JobInfo(path);
-		JobSuite js = new JobSuite(info, cdl);
-		return js;
-	}
-	public static JobSuite create(File file) {
-		ConfigDescription base = baseDescription();
-		String path = file.getAbsolutePath();
-		ConfigDescription cdl = ConfigDescription.create(file, base);
-		JobInfo info = new JobInfo(path);
-		JobSuite js = new JobSuite(info, cdl);
-		return js;
-	}
+    public static JobSuite createWithoutBase(File file) {
+        String path = file.getAbsolutePath();
+        ConfigDescription cdl = ConfigDescription.create(file);
+        JobInfo info = new JobInfo(path);
+        JobSuite js = new JobSuite(info, cdl);
+        return js;
+    }
 
-	/**
-	 * Gets a super JobSuite document that provides
-	 * default values (id, output)
-	 */
-	public static ConfigDescription baseDescription() {
-		return ConfigDescription.create(JobSuite.class, SUPER_SUITE);
-	}
+    public static JobSuite create(File file) {
+        ConfigDescription base = baseDescription();
+        String path = file.getAbsolutePath();
+        ConfigDescription cdl = ConfigDescription.create(file, base);
+        JobInfo info = new JobInfo(path);
+        JobSuite js = new JobSuite(info, cdl);
+        return js;
+    }
 
-	public JobSuite(JobInfo info, ConfigDescription cdl) {
-		this.info = info;
-		this.cdl = cdl;
-		this.id = cdl.get(ID);
-		if (id == null) {
-			throw new ConfigException("mssing value: id");
-		}
-		output = cdl.get(ELEM_OUTPUT);
-		if (output == null) {
-			throw new ConfigException("mssing value: output");
-		}
-		info.setId(id);
-		info.setOutDir(output);
-	}
-	public JobInfo info() {
-		return info;
-	}
-	@Override
-	public Iterator<Job> iterator() {
-		return new JobIterator(info,
-				cdl.evaluate().iterator());
-	}
+    /**
+     * Gets a super JobSuite document that provides default values (id, output)
+     */
+    public static ConfigDescription baseDescription() {
+        return ConfigDescription.create(JobSuite.class, SUPER_SUITE);
+    }
 
-	/**
-	 * Write (save) JobSuite (before
-	 * loop unfolding and reference resolution)
-	 */
-	public void write(Writer writer) {
-		cdl.write(writer);
-	}
+    public JobSuite(JobInfo info, ConfigDescription cdl) {
+        this.info = info;
+        this.cdl = cdl;
+        this.id = cdl.get(ID);
+        if (id == null) {
+            throw new ConfigException("mssing value: id");
+        }
+        output = cdl.get(ELEM_OUTPUT);
+        if (output == null) {
+            throw new ConfigException("mssing value: output");
+        }
+        info.setId(id);
+        info.setOutDir(output);
+    }
 
-	public String getOutput() {
-		return output;
-	}
-	public String getId() {
-		return id;
-	}
+    public JobInfo info() {
+        return info;
+    }
 
-	static class JobIterator implements Iterator<Job> {
-		private final Iterator<ConfigValue> itr;
-		private final JobInfo info;
-		private int id = 0;
-		JobIterator(JobInfo info, Iterator<ConfigValue> itr) {
-			this.info = info;
-			this.itr = itr;
-		}
-		@Override
-		public boolean hasNext() {
-			return itr.hasNext();
-		}
+    @Override
+    public Iterator<Job> iterator() {
+        return new JobIterator(info,
+                cdl.evaluate().iterator());
+    }
 
-		@Override
-		public Job next() {
-			ConfigValue jobsuite = itr.next();
-			return new Job(nextInfo(), jobsuite
-					.getValue(Job.TAG_NAME));
-		}
-		private JobInfo nextInfo() {
-			JobInfo info1 = info.copy(id);
-			id++;
-			return info1;
-		}
+    /**
+     * Write (save) JobSuite (before loop unfolding and reference resolution)
+     */
+    public void write(Writer writer) {
+        cdl.write(writer);
+    }
 
-		@Override
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-	}
+    public String getOutput() {
+        return output;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    static class JobIterator implements Iterator<Job> {
+        private final Iterator<ConfigValue> itr;
+        private final JobInfo info;
+        private int id = 0;
+
+        JobIterator(JobInfo info, Iterator<ConfigValue> itr) {
+            this.info = info;
+            this.itr = itr;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return itr.hasNext();
+        }
+
+        @Override
+        public Job next() {
+            ConfigValue jobsuite = itr.next();
+            return new Job(nextInfo(), jobsuite
+                    .getValue(Job.TAG_NAME));
+        }
+
+        private JobInfo nextInfo() {
+            JobInfo info1 = info.copy(id);
+            id++;
+            return info1;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
 
 }

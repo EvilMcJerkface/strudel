@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument.impl;
 
 import java.util.HashMap;
@@ -28,58 +29,61 @@ import com.nec.strudel.metrics.ProfilerValue;
 
 @NotThreadSafe
 public class CountingProfiler implements Profiler, CountInstrument {
-	private final Map<String, Long> counts =
-			new HashMap<String, Long>();
-	private final String name;
-	private final MeasurementState measure;
-	public CountingProfiler(String name) {
-		this.name = name;
-		this.measure = MeasurementState.ALWAYS;
-	}
-	public CountingProfiler(String name, MeasurementState measure) {
-		this.name = name;
-		this.measure = measure;
-	}
+    private final Map<String, Long> counts = new HashMap<String, Long>();
+    private final String name;
+    private final MeasurementState measure;
 
-	@Override
-	public void increment(String name) {
-		add(name, 1);
-	}
-	@Override
-	public void add(String name, long value) {
-		if (measure.isMeasuring()) {
-			Long v = counts.get(name);
-			if (v != null) {
-				v += value;
-				counts.put(name, v);
-			} else {
-				counts.put(name, value);
-			}
-		}
-	}
+    public CountingProfiler(String name) {
+        this.name = name;
+        this.measure = MeasurementState.ALWAYS;
+    }
 
-	@Override
-	public JsonObject getValue() {
-		return ProfilerValue.builder(name)
-				.set(counts).build();
-	}
-	public static NoCount NO_COUNT = new NoCount();
+    public CountingProfiler(String name, MeasurementState measure) {
+        this.name = name;
+        this.measure = measure;
+    }
 
-	public static class NoCount implements Profiler, CountInstrument {
-		private final JsonObject empty =
-				Json.createObjectBuilder().build();
-		@Override
-		public void increment(String name) {
-		}
+    @Override
+    public void increment(String name) {
+        add(name, 1);
+    }
 
-		@Override
-		public void add(String name, long value) {
-		}
+    @Override
+    public void add(String name, long value) {
+        if (measure.isMeasuring()) {
+            Long val = counts.get(name);
+            if (val != null) {
+                val += value;
+                counts.put(name, val);
+            } else {
+                counts.put(name, value);
+            }
+        }
+    }
 
-		@Override
-		public JsonObject getValue() {
-			return empty;
-		}
-		
-	}
+    @Override
+    public JsonObject getValue() {
+        return ProfilerValue.builder(name)
+                .set(counts).build();
+    }
+
+    public static NoCount NO_COUNT = new NoCount();
+
+    public static class NoCount implements Profiler, CountInstrument {
+        private final JsonObject empty = Json.createObjectBuilder().build();
+
+        @Override
+        public void increment(String name) {
+        }
+
+        @Override
+        public void add(String name, long value) {
+        }
+
+        @Override
+        public JsonObject getValue() {
+            return empty;
+        }
+
+    }
 }

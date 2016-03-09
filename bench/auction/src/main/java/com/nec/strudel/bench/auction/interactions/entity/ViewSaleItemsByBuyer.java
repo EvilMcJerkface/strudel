@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.entity;
 
 import java.util.ArrayList;
@@ -31,61 +32,60 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class ViewSaleItemsByBuyer extends AbstractViewSaleItemsByBuyer<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
 
-		int buyerId = getBuyerId(param);
+        int buyerId = getBuyerId(param);
 
-		List<SaleItem> itemList = new ArrayList<SaleItem>();
-		List<BuyNowSale> bnsList =
-				db.getEntitiesByIndex(BuyNowSale.class, "buyerId", buyerId);
+        List<SaleItem> itemList = new ArrayList<SaleItem>();
+        List<BuyNowSale> bnsList = db.getEntitiesByIndex(BuyNowSale.class,
+                "buyerId", buyerId);
 
-		for (BuyNowSale bns : bnsList) {
-			SaleItem saleItem = db.get(SaleItem.class, bns.getItemId());
-			if (saleItem != null) {
-				itemList.add(saleItem);
-			} else {
-				res.warn("sale item not found for id =" + bns.getItemId());
-			}
-		}
-		return resultOf(itemList, bnsList, res);
-	}
+        for (BuyNowSale bns : bnsList) {
+            SaleItem saleItem = db.get(SaleItem.class, bns.getItemId());
+            if (saleItem != null) {
+                itemList.add(saleItem);
+            } else {
+                res.warn("sale item not found for id =" + bns.getItemId());
+            }
+        }
+        return resultOf(itemList, bnsList, res);
+    }
 
-	public void executeWithTransactions(int buyerId, EntityDB db,
-			List<SaleItem> itemList, List<BuyNowSale> bnsList, ResultBuilder res) {
-		for (SaleId id : db.scanIds(SaleId.class, BuyNowSale.class,
-				"buyerId", buyerId)) {
-			EntityPair<SaleItem, BuyNowSale> pair =
-					db.run(BuyNowSale.class, id,
-						getSaleItemBNS(id));
+    public void executeWithTransactions(int buyerId, EntityDB db,
+            List<SaleItem> itemList, List<BuyNowSale> bnsList,
+            ResultBuilder res) {
+        for (SaleId id : db.scanIds(SaleId.class, BuyNowSale.class,
+                "buyerId", buyerId)) {
+            EntityPair<SaleItem, BuyNowSale> pair = db.run(BuyNowSale.class, id,
+                    getSaleItemBns(id));
 
-			SaleItem saleItem = pair.getFirst();
-			BuyNowSale bns = pair.getSecond();
-			if (saleItem != null) {
-				itemList.add(saleItem);
-			} else {
-				res.warn("sale item not found for id =" + id);
-			}
-			if (bns != null) {
-				bnsList.add(bns);
-			}
-		}
-		
-	}
+            SaleItem saleItem = pair.getFirst();
+            BuyNowSale bns = pair.getSecond();
+            if (saleItem != null) {
+                itemList.add(saleItem);
+            } else {
+                res.warn("sale item not found for id =" + id);
+            }
+            if (bns != null) {
+                bnsList.add(bns);
+            }
+        }
 
-	public EntityTask<EntityPair<SaleItem, BuyNowSale>> getSaleItemBNS(
-			final SaleId bnsKey) {
+    }
+
+    public EntityTask<EntityPair<SaleItem, BuyNowSale>> getSaleItemBns(
+            final SaleId bnsKey) {
         return new EntityTask<EntityPair<SaleItem, BuyNowSale>>() {
             @Override
             public EntityPair<SaleItem, BuyNowSale> run(EntityTransaction tx) {
-            	BuyNowSale bns = null;
-            	SaleItem saleItem =
-                    tx.get(SaleItem.class, bnsKey.getItemId());
-            	if (saleItem != null) {
-            		bns = tx.get(BuyNowSale.class, bnsKey);
-            	}
-				return EntityPair.of(saleItem, bns);
+                BuyNowSale bns = null;
+                SaleItem saleItem = tx.get(SaleItem.class, bnsKey.getItemId());
+                if (saleItem != null) {
+                    bns = tx.get(BuyNowSale.class, bnsKey);
+                }
+                return EntityPair.of(saleItem, bns);
             }
         };
     }

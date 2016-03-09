@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument;
 
 public interface BinaryEventStat {
 
-	void event(boolean mode);
+    void event(boolean mode);
 
-	double getTrueRatio();
+    double getTrueRatio();
 
 }

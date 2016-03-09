@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.tkvs;
 
 public interface BackoffTime {
-	/**
-	 * Returns the msec to wait
-	 * @return -1 if it reaches
-	 * the trial limit.
-	 */
-	long failed();
+    /**
+     * Returns the msec to wait
+     * 
+     * @return -1 if it reaches the trial limit.
+     */
+    long failed();
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.jpa;
 
 import java.util.List;
@@ -29,23 +30,22 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class ListMyPosts extends AbstractListMyPosts<EntityManager>
-implements Interaction<EntityManager> {
-	static final String QUERY =
-			"SELECT e FROM Post e WHERE e.userId = :uid";
-	static final String PARAM_UID = "uid";
+        implements Interaction<EntityManager> {
+    static final String QUERY = "SELECT e FROM Post e WHERE e.userId = :uid";
+    static final String PARAM_UID = "uid";
 
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		int userId = param.getInt(SessionParam.USER_ID);
-		List<Post> posts = em.createQuery(QUERY, Post.class)
-				.setParameter(PARAM_UID, userId)
-				.getResultList();
-		res.set(OutParam.POST_LIST, posts);
-		if (posts.isEmpty()) {
-			return res.success(ResultMode.EMPTY_RESULT);
-		} else {
-			return res.success();
-		}
-	}
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        int userId = param.getInt(SessionParam.USER_ID);
+        List<Post> posts = em.createQuery(QUERY, Post.class)
+                .setParameter(PARAM_UID, userId)
+                .getResultList();
+        res.set(OutParam.POST_LIST, posts);
+        if (posts.isEmpty()) {
+            return res.success(ResultMode.EMPTY_RESULT);
+        } else {
+            return res.success();
+        }
+    }
 
 }

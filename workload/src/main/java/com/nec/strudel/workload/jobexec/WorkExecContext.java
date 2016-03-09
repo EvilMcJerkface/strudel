@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.jobexec;
 
 import java.util.ArrayList;
@@ -29,48 +30,50 @@ import com.nec.strudel.workload.com.CommandContext;
 import com.nec.strudel.workload.worker.WorkGroup;
 
 public class WorkExecContext implements CommandContext {
-	private WorkGroup wg;
-	private final Logger logger;
-	private List<WorkloadResult> results = new ArrayList<WorkloadResult>();
+    private WorkGroup wg;
+    private final Logger logger;
+    private List<WorkloadResult> results = new ArrayList<WorkloadResult>();
 
-	public WorkExecContext(WorkGroup wg, Logger logger) {
-		this.wg = wg;
-		this.logger = logger;
-	}
+    public WorkExecContext(WorkGroup wg, Logger logger) {
+        this.wg = wg;
+        this.logger = logger;
+    }
 
-	@Override
-	public <T> List<Future<T>> call(List<? extends Callable<T>> calls) {
-		return wg.call(calls);
-	}
+    @Override
+    public <T> List<Future<T>> call(List<? extends Callable<T>> calls) {
+        return wg.call(calls);
+    }
 
-	@Override
-	public Logger logger() {
-		return logger;
-	}
+    @Override
+    public Logger logger() {
+        return logger;
+    }
 
-	public WorkGroup workGroup() {
-		return wg;
-	}
+    public WorkGroup workGroup() {
+        return wg;
+    }
 
-	public synchronized void result(WorkloadResult res) {
-		this.results.add(res);
-	}
+    public synchronized void result(WorkloadResult res) {
+        this.results.add(res);
+    }
 
-	public synchronized WorkloadResult getResult() {
-		List<String> warns = new ArrayList<String>();
-		List<JsonObject> values = new ArrayList<JsonObject>();
-		for (WorkloadResult r : results) {
-			values.add(r.getResult());
-			warns.addAll(r.getWarns());
-		}
-		return new WorkloadResult(
-				JsonValues.union(values), warns);
-	}
-	public void terminate() throws InterruptedException {
-		wg.terminate();
-	}
-	public void close() {
-		wg.close();
-	}
+    public synchronized WorkloadResult getResult() {
+        List<String> warns = new ArrayList<String>();
+        List<JsonObject> values = new ArrayList<JsonObject>();
+        for (WorkloadResult r : results) {
+            values.add(r.getResult());
+            warns.addAll(r.getWarns());
+        }
+        return new WorkloadResult(
+                JsonValues.union(values), warns);
+    }
+
+    public void terminate() throws InterruptedException {
+        wg.terminate();
+    }
+
+    public void close() {
+        wg.close();
+    }
 
 }

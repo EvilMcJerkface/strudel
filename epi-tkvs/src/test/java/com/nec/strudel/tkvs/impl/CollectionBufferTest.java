@@ -28,12 +28,12 @@ import com.nec.strudel.tkvs.impl.CollectionBuffer;
 import com.nec.strudel.tkvs.impl.CollectionBufferImpl;
 import com.nec.strudel.tkvs.impl.KVStore;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
-import com.nec.strudel.tkvs.impl.inmemory.InMemoryDB;
+import com.nec.strudel.tkvs.impl.inmemory.InMemoryDb;
 
 public class CollectionBufferTest {
 
 	protected KVStore getKVStore() {
-		return new InMemoryDB("test").store("test", Key.create("test"));
+		return new InMemoryDb("test").store("test", Key.create("test"));
 	}
 
 	@Test

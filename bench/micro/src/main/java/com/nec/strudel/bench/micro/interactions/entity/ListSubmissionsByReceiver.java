@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import java.util.List;
@@ -27,22 +28,22 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ListSubmissionsByReceiver extends AbstractListSubmissionsByReceiver<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int receiverId = param.getInt(InParam.RECEIVER_ID);
-		List<Submission> submissions =
-				db.getEntitiesByIndex(Submission.class,
-					"receiverId", receiverId);
+public class ListSubmissionsByReceiver
+        extends AbstractListSubmissionsByReceiver<EntityDB>
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int receiverId = param.getInt(InParam.RECEIVER_ID);
+        List<Submission> submissions = db.getEntitiesByIndex(Submission.class,
+                "receiverId", receiverId);
 
-		res.set(TransitionParam.PEER_USER_ID, receiverId);
-		res.set(OutParam.SUBMISSION_LIST, submissions);
-		if (submissions.isEmpty()) {
-			return res.success(ResultMode.EMPTY_RESULT);
-		} else {
-			return res.success();
-		}
-	}
+        res.set(TransitionParam.PEER_USER_ID, receiverId);
+        res.set(OutParam.SUBMISSION_LIST, submissions);
+        if (submissions.isEmpty()) {
+            return res.success(ResultMode.EMPTY_RESULT);
+        } else {
+            return res.success();
+        }
+    }
 
 }

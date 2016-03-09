@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.entity;
 
 import com.nec.strudel.bench.auction.entity.AuctionItem;
@@ -24,13 +25,12 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 /**
- * Creates a new auction item that is sold by the current
- * user.
+ * Creates a new auction item that is sold by the current user.
  *
  */
 public class SellAuctionItem extends AbstractSellAuctionItem<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
+        implements Interaction<EntityDB> {
+    @Override
     public Result execute(Param param, EntityDB db, ResultBuilder res) {
         AuctionItem item = createItem(param);
 

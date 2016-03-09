@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.job;
 
 import java.util.Random;
@@ -44,165 +45,186 @@ import com.nec.strudel.workload.util.TimeValue;
  *
  */
 public class PopulateWorkItem implements WorkItem {
-	private static final Random RAND = new Random(System.nanoTime());
-	public static final String TYPE = "populate";
-	public static final String TAG_NAME = "populate";
-	private Random rand = newRandom();
+    private static final Random RAND = new Random(System.nanoTime());
+    public static final String TYPE = "populate";
+    public static final String TAG_NAME = "populate";
+    private Random rand = newRandom();
 
-	private String name = "";
-	private boolean validate = false;
-	private int numOfThreads = 0;
-	private int startSlack = 0;
-	private String classPath = "";
-	private String factory = "";
-	private String packageName = "";
-	private ParamConfig params = ParamConfig.empty();
-	private String randomSeed = "";
-	private int min = -1;
-	private int max = -1;
-	private int size = -1;
+    private String name = "";
+    private boolean validate = false;
+    private int numOfThreads = 0;
+    private int startSlack = 0;
+    private String classPath = "";
+    private String factory = "";
+    private String packageName = "";
+    private ParamConfig params = ParamConfig.empty();
+    private String randomSeed = "";
+    private int min = -1;
+    private int max = -1;
+    private int size = -1;
 
-	private static Random newRandom() {
-		synchronized (RAND) {
-			return new Random(RAND.nextLong());
-		}
-	}
+    private static Random newRandom() {
+        synchronized (RAND) {
+            return new Random(RAND.nextLong());
+        }
+    }
 
-	public PopulateWorkItem() {
-	}
-	@Override
-	public String tagName() {
-		return TAG_NAME;
-	}
+    public PopulateWorkItem() {
+    }
 
-	@Override
-	public ConfigValue getConfig() {
-		ConfigValue v = Values.create(this);
-		return Values.builder(TAG_NAME, v)
-				.add("params", params.getConfig())
-				.build();
-	}
-	@Override
-	public String getType() {
-		return TYPE;
-	}
+    @Override
+    public String tagName() {
+        return TAG_NAME;
+    }
 
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public ConfigValue getConfig() {
+        ConfigValue value = Values.create(this);
+        return Values.builder(TAG_NAME, value)
+                .add("params", params.getConfig())
+                .build();
+    }
 
-	public Range<Integer> getIdRange() {
-	    if (size > 0) {
-	        if (min != -1) {
-	            return Range.range(min, min + size);
-	        }
-	        return Range.range(0, size);
-	    }
+    @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Range<Integer> getIdRange() {
+        if (size > 0) {
+            if (min != -1) {
+                return Range.range(min, min + size);
+            }
+            return Range.range(0, size);
+        }
         if (min == -1 || max == -1) {
             throw new ConfigException(
-            "size or range not specified");
+                    "size or range not specified");
         }
         return Range.range(min, max);
-	}
+    }
 
-	public boolean isValidate() {
-		return validate;
-	}
-	public boolean getValidate() {
-		return validate;
-	}
-	public void setValidate(boolean validate) {
-		this.validate = validate;
-	}
+    public boolean isValidate() {
+        return validate;
+    }
 
-	@Override
-	public int numOfThreads() {
-		return numOfThreads;
-	}
-	public int getNumOfThreads() {
-		return numOfThreads;
-	}
-	public void setNumOfThreads(int numOfThreads) {
-		this.numOfThreads = numOfThreads;
-	}
+    public boolean getValidate() {
+        return validate;
+    }
 
-	@Override
-	public TimeValue startSlackTime() {
-		return TimeValue.seconds(startSlack);
-	}
-	public int getStartSlack() {
-		return startSlack;
-	}
-	public void setStartSlack(int startSlack) {
-		this.startSlack = startSlack;
-	}
+    public void setValidate(boolean validate) {
+        this.validate = validate;
+    }
 
-	@Override
-	public synchronized Random getRandom() {
-		return new Random(rand.nextLong());
-	}
+    @Override
+    public int numOfThreads() {
+        return numOfThreads;
+    }
 
-	@Override
-	public ConfigParam getParam() {
-		return ConfigParam.empty();
-	}
+    public int getNumOfThreads() {
+        return numOfThreads;
+    }
 
-	public ParamConfig getParamConfig() {
-		return params;
-	}
-	public void setParams(ParamConfig params) {
-		this.params = params;
-	}
-	public int getMax() {
-		return max;
-	}
-	public void setMax(int max) {
-		this.max = max;
-	}
-	public int getMin() {
-		return min;
-	}
-	public void setMin(int min) {
-		this.min = min;
-	}
-	public int getSize() {
-		return size;
-	}
-	public void setSize(int size) {
-		this.size = size;
-	}
+    public void setNumOfThreads(int numOfThreads) {
+        this.numOfThreads = numOfThreads;
+    }
 
-	public String getFactory() {
-		return factory;
-	}
-	public void setFactory(String factory) {
-		this.factory = factory;
-	}
+    @Override
+    public TimeValue startSlackTime() {
+        return TimeValue.seconds(startSlack);
+    }
 
-	public String getPackageName() {
-		return packageName;
-	}
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
-	}
-	public String getRandomSeed() {
-		return randomSeed;
-	}
-	public void setRandomSeed(String randomSeed) {
-		if (randomSeed != null && !randomSeed.isEmpty()) {
-			rand = new Random(TaskUtil.toSeed(randomSeed));
-		}
-		this.randomSeed = randomSeed;
-	}
+    public int getStartSlack() {
+        return startSlack;
+    }
 
-	@Override
-	public String getClassPath() {
-		return classPath;
-	}
-	public void setClassPath(String classPath) {
-		this.classPath = classPath;
-	}
+    public void setStartSlack(int startSlack) {
+        this.startSlack = startSlack;
+    }
+
+    @Override
+    public synchronized Random getRandom() {
+        return new Random(rand.nextLong());
+    }
+
+    @Override
+    public ConfigParam getParam() {
+        return ConfigParam.empty();
+    }
+
+    public ParamConfig getParamConfig() {
+        return params;
+    }
+
+    public void setParams(ParamConfig params) {
+        this.params = params;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getFactory() {
+        return factory;
+    }
+
+    public void setFactory(String factory) {
+        this.factory = factory;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public String getRandomSeed() {
+        return randomSeed;
+    }
+
+    public void setRandomSeed(String randomSeed) {
+        if (randomSeed != null && !randomSeed.isEmpty()) {
+            rand = new Random(TaskUtil.toSeed(randomSeed));
+        }
+        this.randomSeed = randomSeed;
+    }
+
+    @Override
+    public String getClassPath() {
+        return classPath;
+    }
+
+    public void setClassPath(String classPath) {
+        this.classPath = classPath;
+    }
 }

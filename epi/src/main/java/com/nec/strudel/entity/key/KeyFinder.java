@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.key;
 
 import java.lang.reflect.Method;
@@ -24,38 +25,39 @@ import com.nec.strudel.entity.EntityUtil;
 import com.nec.strudel.entity.info.BeanInfo;
 
 public abstract class KeyFinder {
-	public abstract Object getKey(Object entity);
+    public abstract Object getKey(Object entity);
 
-	public static KeyFinder identity(Class<?> keyClass) {
-		return new SelfKeyFinder(keyClass);
-	}
-	public static KeyFinder finderFor(BeanInfo srcInfo,
-			Class<?> dstClass,
-			List<String> properties) {
-		if (srcInfo.getClass().equals(dstClass)) {
-			return new SelfKeyFinder(dstClass);
-		}
-		if (properties.size() == 1) {
-			String fname = properties.get(0);
-			return new SingleKeyFinder(
-					srcInfo.getGetter(fname));
-		}
-		Map<String, Method> getters = new HashMap<String, Method>();
-		for (String fname : properties) {
-			getters.put(fname, srcInfo.getGetter(fname));
-		}
-		return new CompoundKeyFinder(
-				dstClass, getters);
-	}
+    public static KeyFinder identity(Class<?> keyClass) {
+        return new SelfKeyFinder(keyClass);
+    }
 
-	public static KeyFinder propertyFinder(final String name) {
-		return new KeyFinder() {
+    public static KeyFinder finderFor(BeanInfo srcInfo,
+            Class<?> dstClass,
+            List<String> properties) {
+        if (srcInfo.getClass().equals(dstClass)) {
+            return new SelfKeyFinder(dstClass);
+        }
+        if (properties.size() == 1) {
+            String fname = properties.get(0);
+            return new SingleKeyFinder(
+                    srcInfo.getGetter(fname));
+        }
+        Map<String, Method> getters = new HashMap<String, Method>();
+        for (String fname : properties) {
+            getters.put(fname, srcInfo.getGetter(fname));
+        }
+        return new CompoundKeyFinder(
+                dstClass, getters);
+    }
 
-			@Override
-			public Object getKey(Object entity) {
-				return EntityUtil.getProperty(entity, name);
-			}
-			
-		};
-	}
+    public static KeyFinder propertyFinder(final String name) {
+        return new KeyFinder() {
+
+            @Override
+            public Object getKey(Object entity) {
+                return EntityUtil.getProperty(entity, name);
+            }
+
+        };
+    }
 }

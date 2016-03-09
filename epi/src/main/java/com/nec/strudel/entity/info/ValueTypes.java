@@ -13,62 +13,68 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.info;
 
 import java.util.Date;
 
 public final class ValueTypes {
-	private static final Class<?>[] PRIMITIVES = {
-		Number.class,
-		String.class,
-		Byte.class,
-		Boolean.class,
-		Character.class,
-		Date.class,
-		java.util.Calendar.class,
-		byte[].class,
-		Byte[].class,
-		char[].class,
-		Character[].class,
-		java.sql.Date.class,
-		java.sql.Time.class,
-		java.sql.Timestamp.class,
-	};
-	private ValueTypes() {
-	}
+    private static final Class<?>[] PRIMITIVES = {
+            Number.class,
+            String.class,
+            Byte.class,
+            Boolean.class,
+            Character.class,
+            Date.class,
+            java.util.Calendar.class,
+            byte[].class,
+            Byte[].class,
+            char[].class,
+            Character[].class,
+            java.sql.Date.class,
+            java.sql.Time.class,
+            java.sql.Timestamp.class,
+    };
 
-	public static boolean isPrimitive(Class<?> valueClass) {
-		if (valueClass.isPrimitive()) {
-			return true;
-		}
-		for (Class<?> pc : PRIMITIVES) {
-			if (pc.isAssignableFrom(valueClass)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	public static ValueInfo infoOf(Class<?> valueClass) {
-		if (isPrimitive(valueClass)) {
-			return new PrimitiveValueInfo(valueClass);
-		} else {
-			return new BeanInfo(valueClass);
-		}
-	}
-	public static class PrimitiveValueInfo implements ValueInfo {
-		private final Class<?> valueClass;
-		public PrimitiveValueInfo(Class<?> valueClass) {
-			this.valueClass = valueClass;
-		}
-		@Override
-		public Class<?> valueClass() {
-			return valueClass;
-		}
+    private ValueTypes() {
+    }
 
-		@Override
-		public boolean isPrimitive() {
-			return true;
-		}
-		
-	}
+    public static boolean isPrimitive(Class<?> valueClass) {
+        if (valueClass.isPrimitive()) {
+            return true;
+        }
+        for (Class<?> pc : PRIMITIVES) {
+            if (pc.isAssignableFrom(valueClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ValueInfo infoOf(Class<?> valueClass) {
+        if (isPrimitive(valueClass)) {
+            return new PrimitiveValueInfo(valueClass);
+        } else {
+            return new BeanInfo(valueClass);
+        }
+    }
+
+    public static class PrimitiveValueInfo implements ValueInfo {
+        private final Class<?> valueClass;
+
+        public PrimitiveValueInfo(Class<?> valueClass) {
+            this.valueClass = valueClass;
+        }
+
+        @Override
+        public Class<?> valueClass() {
+            return valueClass;
+        }
+
+        @Override
+        public boolean isPrimitive() {
+            return true;
+        }
+
+    }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import com.nec.strudel.bench.micro.entity.Submission;
@@ -25,16 +26,16 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class CreateSubmission extends AbstractCreateSubmission<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int userId = param.getInt(SessionParam.USER_ID);
-		int receiverId = param.getInt(InParam.RECEIVER_ID);
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int userId = param.getInt(SessionParam.USER_ID);
+        int receiverId = param.getInt(InParam.RECEIVER_ID);
 
-		Submission sub = new Submission(receiverId, userId);
-		sub.setContent(param.get(InParam.CONTENT));
-		db.create(sub);
-		return res.success();
-	}
+        Submission sub = new Submission(receiverId, userId);
+        sub.setContent(param.get(InParam.CONTENT));
+        db.create(sub);
+        return res.success();
+    }
 
 }

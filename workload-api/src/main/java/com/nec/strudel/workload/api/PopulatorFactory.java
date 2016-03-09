@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.api;
 
 import javax.annotation.Nullable;
 
-
 public interface PopulatorFactory<T> {
 
-	/**
-	 * Crates a populator.
-	 * @param name
-	 * @return null if there is no such populator.
-	 */
-	@Nullable
-	Populator<T, ?> create(String name);
+    /**
+     * Crates a populator.
+     * 
+     * @param name
+     * @return null if there is no such populator.
+     */
+    @Nullable
+    Populator<T, ?> create(String name);
 }

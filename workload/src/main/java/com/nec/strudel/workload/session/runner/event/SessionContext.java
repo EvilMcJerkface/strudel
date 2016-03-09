@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner.event;
 
 import org.apache.log4j.Logger;
@@ -28,7 +29,7 @@ import com.nec.strudel.workload.session.SessionProfiler;
 import com.nec.strudel.workload.util.WarningReporter;
 
 public class SessionContext<T> {
-	private static final Logger LOGGER = Logger.getLogger(SessionContext.class);
+    private static final Logger LOGGER = Logger.getLogger(SessionContext.class);
     private static final int WARN_MAX = 20;
     private final Instrumented<? extends SessionProfiler> profile;
     private final Target<T> target;
@@ -36,44 +37,48 @@ public class SessionContext<T> {
     private final WarningReporter warn;
     private final Profiler profiler;
 
-	public SessionContext(Target<T> target,
-			Instrumented<T> con,
-			Instrumented<? extends SessionProfiler> profile) {
-		this.target = target;
-		this.con = con;
-		this.profile = profile;
-		this.warn = new WarningReporter(WARN_MAX, LOGGER);
-		this.profiler = ProfilerUtil.union(profile.getProfiler(), con.getProfiler());
-	}
+    public SessionContext(Target<T> target,
+            Instrumented<T> con,
+            Instrumented<? extends SessionProfiler> profile) {
+        this.target = target;
+        this.con = con;
+        this.profile = profile;
+        this.warn = new WarningReporter(WARN_MAX, LOGGER);
+        this.profiler = ProfilerUtil.union(profile.getProfiler(),
+                con.getProfiler());
+    }
 
-	public T getConnection() {
-		return con.getObject();
-	}
-	public SessionProfiler profiler() {
-		return profile.getObject();
-	}
-	public Target<T> target() {
-		return target;
-	}
-	public Report getReport() {
-		return Report.report(profiler.getValue(), warn.report());
-	}
+    public T getConnection() {
+        return con.getObject();
+    }
 
-	public void inspectResult(String name, Result r) {
-        if (r.isSuccess()) {
+    public SessionProfiler profiler() {
+        return profile.getObject();
+    }
+
+    public Target<T> target() {
+        return target;
+    }
+
+    public Report getReport() {
+        return Report.report(profiler.getValue(), warn.report());
+    }
+
+    public void inspectResult(String name, Result result) {
+        if (result.isSuccess()) {
             LOGGER.debug("done: "
                     + name
-                    + (r.hasMode() ? ":" + r.getMode() : ""));
+                    + (result.hasMode() ? ":" + result.getMode() : ""));
         } else {
             LOGGER.debug("failed: "
                     + name
-                    + (r.hasMode() ? ":" + r.getMode() : ""));
+                    + (result.hasMode() ? ":" + result.getMode() : ""));
         }
-        if (r.hasWarning()) {
-        	for (Warn w : r.getWarnings()) {
+        if (result.hasWarning()) {
+            for (Warn w : result.getWarnings()) {
                 warn.warn(name + ":" + w.getMessage());
-        	}
+            }
         }
-	}
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session;
 
 import com.nec.strudel.session.Interaction;
@@ -23,10 +24,9 @@ import com.nec.strudel.session.impl.ParamBuilderImpl;
 import com.nec.strudel.session.impl.State;
 import com.nec.strudel.session.impl.StateModifierImpl;
 
-
 /**
- * A class that encapsulates a session instance and
- * its state.
+ * A class that encapsulates a session instance and its state.
+ * 
  * @author tatemura
  *
  * @param <T>
@@ -43,9 +43,11 @@ public class SessionContainer<T> {
         this.state = state;
         prepareNext();
     }
+
     public boolean isActive() {
         return action != null;
     }
+
     public String nextName() {
         if (action != null) {
             return action.getName();
@@ -53,6 +55,7 @@ public class SessionContainer<T> {
             return null;
         }
     }
+
     public Result doAction(SessionProfiler prof, T db) {
         if (action == null) {
             return new ResultBuilder().failure("INTERNAL_ERROR");
@@ -61,19 +64,18 @@ public class SessionContainer<T> {
         Param param = new Param();
         intr.prepare(new ParamBuilderImpl(state, param));
         prof.startInteraction(action.getName());
-        Result r = intr.execute(
+        Result result = intr.execute(
                 param, db,
                 new ResultBuilder());
-        prof.finishInteraction(r);
-        state.setResultMode(r.getMode());
-        intr.complete(new StateModifierImpl(r, state));
+        prof.finishInteraction(result);
+        state.setResultMode(result.getMode());
+        intr.complete(new StateModifierImpl(result, state));
         prepareNext();
-        return r;
+        return result;
     }
 
     private void prepareNext() {
-        waitTime =
-                (action != null ? action.getThinkTime() : 0);
+        waitTime = (action != null ? action.getThinkTime() : 0);
         action = session.next(state);
         if (action != null) {
             waitTime += action.getPrepareTime();
@@ -83,15 +85,19 @@ public class SessionContainer<T> {
             nextTime = -1;
         }
     }
+
     public long waitTime() {
         return waitTime;
     }
+
     public long nextTime() {
         return nextTime;
     }
+
     public boolean isReady() {
         return nextTime <= System.currentTimeMillis();
     }
+
     public void delay(long msec) {
         if (nextTime != -1) {
             waitTime += msec;

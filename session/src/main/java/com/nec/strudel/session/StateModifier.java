@@ -13,27 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.session;
 
 import javax.annotation.Nullable;
 
 public interface StateModifier {
 
-	StateModifier export(StateParam p);
+    StateModifier export(StateParam paramName);
 
-	StateModifier set(StateParam name, Object value);
+    StateModifier set(StateParam name, Object value);
 
-	StateModifier choose(StateParam p, ParamName listName);
+    StateModifier choose(StateParam paranName, ParamName listName);
 
-	StateModifier chooseSubset(StateParam p, StateParam sizeName,
-			ParamName listName);
+    StateModifier chooseSubset(StateParam paramName, StateParam sizeName,
+            ParamName listName);
 
-	@Nullable
-	Object get(ParamName name);
+    @Nullable
+    Object get(ParamName name);
 
-	@Nullable
-	<T> T getOne(ParamName listName);
+    @Nullable
+    <T> T getOne(ParamName listName);
 
-	boolean isSuccess();
+    boolean isSuccess();
 
 }

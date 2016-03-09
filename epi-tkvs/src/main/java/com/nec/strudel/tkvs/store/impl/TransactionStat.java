@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.tkvs.store.impl;
 
 import java.util.concurrent.TimeUnit;
@@ -27,56 +28,63 @@ import com.nec.strudel.management.resource.ManagedResource;
 import com.nec.strudel.management.resource.ResourceName;
 
 @ThreadSafe
-@ManagedResource(description =
-"monitors the performance of transaction")
+@ManagedResource(description = "monitors the performance of transaction")
 public class TransactionStat {
-	public static final int WINDOW_SIZE = 5;
-	public static final long WINDOW_STEP_MS = TimeUnit.SECONDS.toMillis(1);
-	public static TransactionStat create(String name, ProfilerService profs) {
-		return new TransactionStat(name, profs, WINDOW_SIZE, WINDOW_STEP_MS);
-	}
-	public static TransactionStat create(String name, ProfilerService profs,
-			int windowSize, long windowStepMs) {
-		return new TransactionStat(name, profs, windowSize, windowStepMs);
-	}
+    public static final int WINDOW_SIZE = 5;
+    public static final long WINDOW_STEP_MS = TimeUnit.SECONDS.toMillis(1);
 
-	private final String name;
-	private final OperationStat commitMon;
-	private final OperationStat getMon;
-	public TransactionStat(String name, ProfilerService profs, int size, long step) {
-		this.name = name;
-		commitMon = profs.createOperationStat(size, step);
-		getMon = profs.createOperationStat(size, step);
-	}
+    public static TransactionStat create(String name, ProfilerService profs) {
+        return new TransactionStat(name, profs, WINDOW_SIZE, WINDOW_STEP_MS);
+    }
 
-	@GetOperationListener("commit")
-	public OperationStat commitMonitor() {
-		return commitMon;
-	}
+    public static TransactionStat create(String name, ProfilerService profs,
+            int windowSize, long windowStepMs) {
+        return new TransactionStat(name, profs, windowSize, windowStepMs);
+    }
 
-	@GetOperationListener("get")
-	public OperationStat getMonitor() {
-		return getMon;
-	}
+    private final String name;
+    private final OperationStat commitMon;
+    private final OperationStat getMon;
 
-	@ResourceName
-	public String getName() {
-		return name;
-	}
-	@Getter(description = "average response time of a commit operation (ms)")
-	public double getAvgCommitTime() {
-		return commitMon.getAverageOperationTime();
-	}
-	@Getter(description = "number of commit operations per second")
-	public double getCommitPerSec() {
-		return commitMon.getOperationsPerSec();
-	}
-	@Getter(description = "average response time of a get operation (ms)")
-	public double getAvgGetTime() {
-		return getMon.getAverageOperationTime();
-	}
-	@Getter(description = "number of get operations per second")
-	public double getGetPerSec() {
-		return getMon.getOperationsPerSec();
-	}
+    public TransactionStat(String name, ProfilerService profs, int size,
+            long step) {
+        this.name = name;
+        commitMon = profs.createOperationStat(size, step);
+        getMon = profs.createOperationStat(size, step);
+    }
+
+    @GetOperationListener("commit")
+    public OperationStat commitMonitor() {
+        return commitMon;
+    }
+
+    @GetOperationListener("get")
+    public OperationStat getMonitor() {
+        return getMon;
+    }
+
+    @ResourceName
+    public String getName() {
+        return name;
+    }
+
+    @Getter(description = "average response time of a commit operation (ms)")
+    public double getAvgCommitTime() {
+        return commitMon.getAverageOperationTime();
+    }
+
+    @Getter(description = "number of commit operations per second")
+    public double getCommitPerSec() {
+        return commitMon.getOperationsPerSec();
+    }
+
+    @Getter(description = "average response time of a get operation (ms)")
+    public double getAvgGetTime() {
+        return getMon.getAverageOperationTime();
+    }
+
+    @Getter(description = "number of get operations per second")
+    public double getGetPerSec() {
+        return getMon.getOperationsPerSec();
+    }
 }

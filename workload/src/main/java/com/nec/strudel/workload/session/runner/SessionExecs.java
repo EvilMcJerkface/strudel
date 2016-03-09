@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner;
 
 import com.nec.strudel.exceptions.ConfigException;
@@ -21,29 +22,29 @@ import com.nec.strudel.workload.session.runner.event.SemiOpenSessionExecFactory;
 
 public final class SessionExecs {
 
-	private SessionExecs() {
-		// not instantiated
-	}
-	public static <T> SessionExecFactory<T> createFactory(
-			String type,
-			String classPath) {
-		if (SimpleClosedSessionExecFactory.TYPE.equals(type)) {
-			return new SimpleClosedSessionExecFactory<T>();
-		} else if (SemiOpenSessionExecFactory.TYPE.equals(type)) {
-			return new SemiOpenSessionExecFactory<T>();
-		} else {
-			throw new ConfigException("unknown session execType: " + type);
-		}
-	}
+    private SessionExecs() {
+        // not instantiated
+    }
 
-	public static <T> SessionExecFactory<T> createFactory(
-			SessionConfig<T> conf,
-			String classPath) {
-		if (conf.getSessionConcurrency() > 0) {
-			return new SemiOpenSessionExecFactory<T>();
-		}
-		return new SimpleClosedSessionExecFactory<T>();
-	}
-	
+    public static <T> SessionExecFactory<T> createFactory(
+            String type,
+            String classPath) {
+        if (SimpleClosedSessionExecFactory.TYPE.equals(type)) {
+            return new SimpleClosedSessionExecFactory<T>();
+        } else if (SemiOpenSessionExecFactory.TYPE.equals(type)) {
+            return new SemiOpenSessionExecFactory<T>();
+        } else {
+            throw new ConfigException("unknown session execType: " + type);
+        }
+    }
+
+    public static <T> SessionExecFactory<T> createFactory(
+            SessionConfig<T> conf,
+            String classPath) {
+        if (conf.getSessionConcurrency() > 0) {
+            return new SemiOpenSessionExecFactory<T>();
+        }
+        return new SimpleClosedSessionExecFactory<T>();
+    }
 
 }

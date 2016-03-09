@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.base;
 
 import com.nec.strudel.bench.micro.params.SessionParam;
@@ -24,25 +25,25 @@ import com.nec.strudel.session.StateModifier;
 
 public abstract class AbstractListShared<T> implements Interaction<T> {
 
-	public enum InParam implements LocalParam {
-		SET_ID
-	}
+    public enum InParam implements LocalParam {
+        SET_ID
+    }
 
-	public enum OutParam implements LocalParam {
-		ENTITY_LIST,
-	}
+    public enum OutParam implements LocalParam {
+        ENTITY_LIST,
+    }
 
-	@Override
-	public void prepare(ParamBuilder paramBuilder) {
-		paramBuilder.randomIntId(InParam.SET_ID,
-				SessionParam.MIN_SET_ID, SessionParam.SET_NUM);
-	}
+    @Override
+    public void prepare(ParamBuilder paramBuilder) {
+        paramBuilder.randomIntId(InParam.SET_ID,
+                SessionParam.MIN_SET_ID, SessionParam.SET_NUM);
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-		modifier.chooseSubset(TransitionParam.SHARED,
-				SessionParam.NUM_UPDATE_ITEMS,
-				OutParam.ENTITY_LIST);
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        modifier.chooseSubset(TransitionParam.SHARED,
+                SessionParam.NUM_UPDATE_ITEMS,
+                OutParam.ENTITY_LIST);
+    }
 
 }

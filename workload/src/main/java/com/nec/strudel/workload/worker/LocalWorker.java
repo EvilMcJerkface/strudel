@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.worker;
 
 import java.util.concurrent.TimeUnit;
@@ -36,98 +37,97 @@ import com.nec.strudel.workload.util.TimeValue;
 
 @ManagedResource(description = "Worker that runs one work")
 public class LocalWorker implements Worker {
-	public static final long TERMINATION_TIMEOUT_SEC = 300;
+    public static final long TERMINATION_TIMEOUT_SEC = 300;
 
-	private static final Logger LOGGER =
-		    Logger.getLogger(LocalWorker.class);
-	private final String workId;
-	private final WorkExec wexec;
-	private final ManagementService mx;
-	private final TimeValue slack;
-	private final String type;
+    private static final Logger LOGGER = Logger.getLogger(LocalWorker.class);
+    private final String workId;
+    private final WorkExec wexec;
+    private final ManagementService mx;
+    private final TimeValue slack;
+    private final String type;
 
-	public static LocalWorker create(String workId, WorkRequest work) {
-		ManagementService mx =
-				new JmxManagementService();
-		LocalWorker w = new LocalWorker(workId, work, mx);
-		mx.register(w);
-		return w;
-	}
+    public static LocalWorker create(String workId, WorkRequest work) {
+        ManagementService mx = new JmxManagementService();
+        LocalWorker worker = new LocalWorker(workId, work, mx);
+        mx.register(worker);
+        return worker;
+    }
 
-	public LocalWorker(String workId, WorkRequest work,
-			ManagementService mx) {
-		this.workId = workId;
-		this.wexec = new WorkloadFactory(work).createExec(mx);
-		this.mx = mx;
-		this.slack = work.startSlackTime();
-		this.type = work.getType();
-	}
+    public LocalWorker(String workId, WorkRequest work,
+            ManagementService mx) {
+        this.workId = workId;
+        this.wexec = new WorkloadFactory(work).createExec(mx);
+        this.mx = mx;
+        this.slack = work.startSlackTime();
+        this.type = work.getType();
+    }
 
-	@Override
-	@ResourceId
-	public String getWorkId() {
-		return workId;
-	}
+    @Override
+    @ResourceId
+    public String getWorkId() {
+        return workId;
+    }
 
-	@Override
-	@Operation
-	public synchronized void start() {
-		wexec.start(slack);
-	}
+    @Override
+    @Operation
+    public synchronized void start() {
+        wexec.start(slack);
+    }
 
-	@Override
-	public void operate(String name, JsonObject data) {
-		wexec.operate(name, data);
-	}
+    @Override
+    public void operate(String name, JsonObject data) {
+        wexec.operate(name, data);
+    }
 
-	@Override
-	public Report getReport() {
-		return wexec.getReport();
-	}
+    @Override
+    public Report getReport() {
+        return wexec.getReport();
+    }
 
-	@Override
-	@Operation
-	public void stop() {
-		wexec.stop();
-	}
+    @Override
+    @Operation
+    public void stop() {
+        wexec.stop();
+    }
 
-	@Override
-	@Operation
-	public synchronized void terminate() throws InterruptedException {
-		boolean done = wexec.terminate(
-				TERMINATION_TIMEOUT_SEC, TimeUnit.SECONDS);
-		if (!done) {
-			LOGGER.error("work termination timeout");
-			/**
-			 * TODO exception
-			 */
-		}
-		wexec.close();
-		try {
-			mx.unregister(this);
-		} catch (RegistrationException e) {
-			LOGGER.warn("Worker unregister failed. ignoring...", e);
-		}
-	}
+    @Override
+    @Operation
+    public synchronized void terminate() throws InterruptedException {
+        boolean done = wexec.terminate(
+                TERMINATION_TIMEOUT_SEC, TimeUnit.SECONDS);
+        if (!done) {
+            LOGGER.error("work termination timeout");
+            /**
+             * TODO exception
+             */
+        }
+        wexec.close();
+        try {
+            mx.unregister(this);
+        } catch (RegistrationException ex) {
+            LOGGER.warn("Worker unregister failed. ignoring...", ex);
+        }
+    }
 
-	@Getter(description = "current state of workload")
-	@Override
-	public String getState() {
-		return wexec.getState();
-	}
+    @Getter(description = "current state of workload")
+    @Override
+    public String getState() {
+        return wexec.getState();
+    }
 
-	@Getter(description = "slack time at start up (ms)")
-	public long getStartSlackMS() {
-		return slack.toMillis();
-	}
+    @Getter(description = "slack time at start up (ms)")
+    public long getStartSlackMs() {
+        return slack.toMillis();
+    }
 
-	@Getter(description = "number of threads per worker")
-	public int getThreadNum() {
-		return wexec.numOfThreads();
-	}
-	@Getter(description = "type of workload")
-	public String getWorkloadType() {
-		return type;
-	}
+    @Getter(description = "number of threads per worker")
+    public int getThreadNum() {
+        return wexec.numOfThreads();
+    }
+
+    @Getter(description = "type of workload")
+    public String getWorkloadType() {
+        return type;
+    }
 
 }

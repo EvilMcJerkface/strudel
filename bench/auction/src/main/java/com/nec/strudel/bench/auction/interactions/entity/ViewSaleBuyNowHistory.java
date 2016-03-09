@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.entity;
 
 import java.util.ArrayList;
@@ -28,25 +29,26 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ViewSaleBuyNowHistory extends AbstractViewSaleBuyNowHistory<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		ItemId itemId = getItemId(param);
+public class ViewSaleBuyNowHistory
+        extends AbstractViewSaleBuyNowHistory<EntityDB>
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        ItemId itemId = getItemId(param);
 
-		List<BuyNowSale> bnsList = db.getEntitiesByIndex(
-				BuyNowSale.class,
-				"itemId", itemId);
+        List<BuyNowSale> bnsList = db.getEntitiesByIndex(
+                BuyNowSale.class,
+                "itemId", itemId);
 
-		List<User> buyers = new ArrayList<User>();
+        List<User> buyers = new ArrayList<User>();
 
-		for (BuyNowSale bns : bnsList) {
-			User buyer = db.get(User.class, bns.getBuyerId());
-			if (buyer != null) {
-				buyers.add(buyer);
-			}
-		}
+        for (BuyNowSale bns : bnsList) {
+            User buyer = db.get(User.class, bns.getBuyerId());
+            if (buyer != null) {
+                buyers.add(buyer);
+            }
+        }
 
-		return resultOf(bnsList, buyers, res);
-	}
+        return resultOf(bnsList, buyers, res);
+    }
 }

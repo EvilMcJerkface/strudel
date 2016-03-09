@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity;
 
 import java.lang.reflect.Field;
@@ -23,51 +24,46 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-
 public final class EntityGroup {
-	private EntityGroup() {
-		// not instantiated
-	}
+    private EntityGroup() {
+        // not instantiated
+    }
 
+    public static boolean isRoot(Class<?> cls) {
+        Group grp = cls.getAnnotation(Group.class);
+        if (grp != null) {
+            return grp.parent() == Object.class;
+        } else {
+            /**
+             * No group specification: default is that each class is a root.
+             */
+            return true;
+        }
+    }
 
-	public static boolean isRoot(Class<?> c) {
-		Group g = c.getAnnotation(Group.class);
-		if (g != null) {
-			return g.parent() == Object.class;
-		} else {
-			/**
-			 * No group specification: default
-			 * is that each class is a root.
-			 */
-			return true;
-		}
-	}
+    public static EntityDescriptor descriptor(Class<?> entityClass) {
+        EntityDescriptor desc = DESCS.get(entityClass);
+        if (desc == null) {
+            desc = new EntityDescriptor(entityClass);
+            DESCS.putIfAbsent(entityClass, desc);
+        }
 
+        return desc;
+    }
 
-	public static EntityDescriptor descriptor(Class<?> entityClass) {
-		EntityDescriptor desc = DESCS.get(entityClass);
-		if (desc == null) {
-			desc = new EntityDescriptor(entityClass);
-			DESCS.putIfAbsent(entityClass, desc);
-		}
-		
-		return desc;
-	}
+    private static final ConcurrentHashMap<Class<?>, EntityDescriptor> DESCS =
+            new ConcurrentHashMap<Class<?>, EntityDescriptor>();
 
-	private static final ConcurrentHashMap<Class<?>, EntityDescriptor> DESCS =
-			new ConcurrentHashMap<Class<?>, EntityDescriptor>();
-
-
-	public static List<String> requiredKeyProperties(Class<?> entityClass) {
-		List<String> keys = new ArrayList<String>();
-		for (Field f : entityClass.getDeclaredFields()) {
-			if (f.isAnnotationPresent(Id.class)) {
-				if (!f.isAnnotationPresent(GeneratedValue.class)) {
-					keys.add(f.getName());
-				}
-			}
-		}
-		return keys;
-	}
+    public static List<String> requiredKeyProperties(Class<?> entityClass) {
+        List<String> keys = new ArrayList<String>();
+        for (Field f : entityClass.getDeclaredFields()) {
+            if (f.isAnnotationPresent(Id.class)) {
+                if (!f.isAnnotationPresent(GeneratedValue.class)) {
+                    keys.add(f.getName());
+                }
+            }
+        }
+        return keys;
+    }
 
 }

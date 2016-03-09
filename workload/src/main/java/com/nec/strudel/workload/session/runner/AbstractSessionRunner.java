@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner;
 
 import org.apache.log4j.Logger;
@@ -33,9 +34,9 @@ import com.nec.strudel.workload.session.StateFactory;
 import com.nec.strudel.workload.util.WarningReporter;
 
 public abstract class AbstractSessionRunner<T>
-implements WorkThread, RunnerStat {
-    private static final Logger LOGGER =
-            Logger.getLogger(AbstractSessionRunner.class);
+        implements WorkThread, RunnerStat {
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractSessionRunner.class);
     private static final int WARN_MAX = 20;
 
     private final SessionFactory<T> sfactory;
@@ -49,6 +50,7 @@ implements WorkThread, RunnerStat {
     private final Target<T> target;
     private final WarningReporter warn;
     private final Profiler profiler;
+
     public AbstractSessionRunner(int id,
             SessionFactory<T> sfactory,
             Instrumented<T> con,
@@ -63,85 +65,90 @@ implements WorkThread, RunnerStat {
         this.sessionProf = prof;
         this.warn = new WarningReporter(WARN_MAX, LOGGER);
         this.profiler = ProfilerUtil.union(prof.getProfiler(),
-        		con.getProfiler());
+                con.getProfiler());
     }
+
     @Override
     public int getId() {
-    	return id;
+        return id;
     }
 
     @Override
     public Report getReport() {
-    	return Report.report(profiler.getValue(),
-    			warn.report());
+        return Report.report(profiler.getValue(),
+                warn.report());
     }
 
     @Override
     public void stop() {
-    	running = false;
-    	synchronized (this) {
-    		this.notifyAll();
-    	}
+        running = false;
+        synchronized (this) {
+            this.notifyAll();
+        }
     }
-	@Override
-	public final void run() {
-	    running = true;
-	    try {
-		    runSessions();
-		    success = true;
-	    } finally {
-	    	running = false;
-	    	done = true;
-	    }
-	}
-	@Override
-	public boolean isDone() {
-		return done;
-	}
 
-	protected void inspectResult(String name, Result r) {
-        if (r.isSuccess()) {
+    @Override
+    public final void run() {
+        running = true;
+        try {
+            runSessions();
+            success = true;
+        } finally {
+            running = false;
+            done = true;
+        }
+    }
+
+    @Override
+    public boolean isDone() {
+        return done;
+    }
+
+    protected void inspectResult(String name, Result result) {
+        if (result.isSuccess()) {
             LOGGER.debug("done: "
                     + name
-                    + (r.hasMode() ? ":" + r.getMode() : "")
+                    + (result.hasMode() ? ":" + result.getMode() : "")
                     + "@" + id);
         } else {
             LOGGER.debug("failed: "
                     + name
-                    + (r.hasMode() ? ":" + r.getMode() : "")
+                    + (result.hasMode() ? ":" + result.getMode() : "")
                     + "@" + id);
         }
-        if (r.hasWarning()) {
-        	for (Warn w : r.getWarnings()) {
+        if (result.hasWarning()) {
+            for (Warn w : result.getWarnings()) {
                 warn.warn(name + ":" + w.getMessage());
-        	}
+            }
         }
-	}
+    }
+
     public abstract void runSessions();
 
     @Override
     public boolean isRunning() {
         return running;
     }
+
     @Override
     public boolean isSuccessful() {
-    	return success;
+        return success;
     }
 
     protected Result doAction(SessionContainer<T> sc) {
-    	T c = con.getObject();
-    	target.beginUse(c);
-    	try {
-            return sc.doAction(sessionProf.getObject(), c);
-    	} finally {
-    		target.endUse(c);
-    	}
+        T connection = con.getObject();
+        target.beginUse(connection);
+        try {
+            return sc.doAction(sessionProf.getObject(), connection);
+        } finally {
+            target.endUse(connection);
+        }
     }
 
     protected SessionContainer<T> newSession() {
         State state = states.next();
         if (state != null) {
-        	sessionProf.getObject().newSession();
+            sessionProf.getObject().newSession();
             return new SessionContainer<T>(sfactory.create(), state);
         } else {
             return null;
@@ -149,15 +156,15 @@ implements WorkThread, RunnerStat {
     }
 
     protected void waitTime(long msec) {
-    	if (msec > 0 && running) {
-    		try {
-    			synchronized (this) {
-    				this.wait(msec);
-    			}
-    		} catch (InterruptedException e) {
-    			Thread.currentThread().interrupt();
-    		}
-    	}
+        if (msec > 0 && running) {
+            try {
+                synchronized (this) {
+                    this.wait(msec);
+                }
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
 }

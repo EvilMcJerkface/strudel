@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.json.func;
 
 import javax.json.Json;
@@ -29,87 +30,92 @@ import com.nec.strudel.json.JsonValues;
  *
  */
 public class Div implements Func {
-	private static final Div DIV = new Div();
-	public static Func of(Func dividend, Func divisor) {
-		return new Apply(DIV, dividend, divisor);
-	}
-	public Div() {
-	}
+    private static final Div DIV = new Div();
 
-	@Override
-	public JsonValue get(JsonValue... input) {
-		JsonValue dividend = input[0];
-		JsonValue divisor = input[1];
-		if (dividend.getValueType() == ValueType.OBJECT) {
-			if (divisor.getValueType() == ValueType.OBJECT) {
-				return compute((JsonObject) dividend,
-						(JsonObject) divisor).build();
-			}
-		} else if (dividend.getValueType() == ValueType.NUMBER) {
-			if (divisor.getValueType() == ValueType.NUMBER) {
-				return compute((JsonNumber) dividend,
-						(JsonNumber) divisor);
-			}
-		} else if (dividend == JsonValue.NULL ||
-				divisor == JsonValue.NULL) {
-			return JsonValue.NULL;
-		}
-		/**
-		 * TODO support OBJECT div NUMBER and NUMBER div OBJECT
-		 */
-		throw new RuntimeException("unsupported type for DIV");
-	}
-	JsonObjectBuilder compute(JsonObject dividend, JsonObject divisor) {
-		JsonObjectBuilder b = Json.createObjectBuilder();
-		for (String name : divisor.keySet()) {
-			double c = getDouble(divisor, name);
-			if (c != 0) {
-				double t = getDouble(dividend, name);
-				b.add(name, t / c);
-			}
-		}
-		return b;
-	}
-	JsonValue compute(JsonNumber dividend, JsonNumber divisor) {
-		double v1 = dividend.doubleValue();
-		double v2 = divisor.doubleValue();
-		if (v2 == 0) {
-			return JsonValue.NULL;
-		}
-		return JsonValues.toValue(v1 / v2);
-	}
-    double getDouble(JsonObject obj, String name) {
-    	JsonNumber v = obj.getJsonNumber(name);
-    	if (v != null) {
-    		return v.doubleValue();
-    	} else {
-    		return 0;
-    	}
+    public static Func of(Func dividend, Func divisor) {
+        return new Apply(DIV, dividend, divisor);
     }
 
-	@Override
-	public void output(JsonObjectBuilder out, String name,
-			JsonValue... input) {
-		JsonValue dividend = input[0];
-		JsonValue divisor = input[1];
-		if (dividend.getValueType() == ValueType.OBJECT) {
-			if (divisor.getValueType() == ValueType.OBJECT) {
-				out.add(name, compute((JsonObject) dividend,
-						(JsonObject) divisor));
-			}
-		} else if (dividend.getValueType() == ValueType.NUMBER) {
-			if (divisor.getValueType() == ValueType.NUMBER) {
-				JsonValue value = compute(
-						(JsonNumber) dividend,
-						(JsonNumber) divisor);
-				if (value != null) {
-					out.add(name, value);
-				}
-			}
-		} else if (dividend == JsonValue.NULL || divisor == JsonValue.NULL) {
-			out.add(name, JsonValue.NULL);
-		}
-		// else throw exception
-	}
+    public Div() {
+    }
+
+    @Override
+    public JsonValue get(JsonValue... input) {
+        JsonValue dividend = input[0];
+        JsonValue divisor = input[1];
+        if (dividend.getValueType() == ValueType.OBJECT) {
+            if (divisor.getValueType() == ValueType.OBJECT) {
+                return compute((JsonObject) dividend,
+                        (JsonObject) divisor).build();
+            }
+        } else if (dividend.getValueType() == ValueType.NUMBER) {
+            if (divisor.getValueType() == ValueType.NUMBER) {
+                return compute((JsonNumber) dividend,
+                        (JsonNumber) divisor);
+            }
+        } else if (dividend == JsonValue.NULL
+                || divisor == JsonValue.NULL) {
+            return JsonValue.NULL;
+        }
+        /**
+         * TODO support OBJECT div NUMBER and NUMBER div OBJECT
+         */
+        throw new RuntimeException("unsupported type for DIV");
+    }
+
+    JsonObjectBuilder compute(JsonObject dividend, JsonObject divisor) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        for (String name : divisor.keySet()) {
+            double divisorValue = getDouble(divisor, name);
+            if (divisorValue != 0) {
+                double dividendValue = getDouble(dividend, name);
+                builder.add(name, dividendValue / divisorValue);
+            }
+        }
+        return builder;
+    }
+
+    JsonValue compute(JsonNumber dividend, JsonNumber divisor) {
+        double v1 = dividend.doubleValue();
+        double v2 = divisor.doubleValue();
+        if (v2 == 0) {
+            return JsonValue.NULL;
+        }
+        return JsonValues.toValue(v1 / v2);
+    }
+
+    double getDouble(JsonObject obj, String name) {
+        JsonNumber value = obj.getJsonNumber(name);
+        if (value != null) {
+            return value.doubleValue();
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public void output(JsonObjectBuilder out, String name,
+            JsonValue... input) {
+        JsonValue dividend = input[0];
+        JsonValue divisor = input[1];
+        if (dividend.getValueType() == ValueType.OBJECT) {
+            if (divisor.getValueType() == ValueType.OBJECT) {
+                out.add(name, compute((JsonObject) dividend,
+                        (JsonObject) divisor));
+            }
+        } else if (dividend.getValueType() == ValueType.NUMBER) {
+            if (divisor.getValueType() == ValueType.NUMBER) {
+                JsonValue value = compute(
+                        (JsonNumber) dividend,
+                        (JsonNumber) divisor);
+                if (value != null) {
+                    out.add(name, value);
+                }
+            }
+        } else if (dividend == JsonValue.NULL || divisor == JsonValue.NULL) {
+            out.add(name, JsonValue.NULL);
+        }
+        // else throw exception
+    }
 
 }

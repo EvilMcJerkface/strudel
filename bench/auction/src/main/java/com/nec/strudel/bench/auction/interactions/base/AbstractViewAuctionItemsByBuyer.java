@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.base;
 
 import java.util.List;
@@ -32,33 +33,34 @@ import com.nec.strudel.session.StateModifier;
  * Retrieves the auction items sold by the current user.
  *
  */
-public abstract class AbstractViewAuctionItemsByBuyer<T> implements Interaction<T> {
+public abstract class AbstractViewAuctionItemsByBuyer<T>
+        implements Interaction<T> {
 
-	public enum OutParam implements LocalParam {
-		AUCTION_ITEM_LIST,
-		BNA_LIST,
-	}
+    public enum OutParam implements LocalParam {
+        AUCTION_ITEM_LIST, BNA_LIST,
+    }
 
-	@Override
-	public void prepare(ParamBuilder builder) {
-		builder
-		.use(SessionParam.USER_ID);
-	}
+    @Override
+    public void prepare(ParamBuilder builder) {
+        builder
+                .use(SessionParam.USER_ID);
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-	    // do nothing
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        // do nothing
+    }
 
-	public int getBuyerId(Param param) {
-		return param.getInt(SessionParam.USER_ID);
-	}
+    public int getBuyerId(Param param) {
+        return param.getInt(SessionParam.USER_ID);
+    }
 
-	public Result resultOf(List<AuctionItem> itemList, List<BuyNowAuction> bnaList, ResultBuilder res) {
-		return res
-				.set(OutParam.AUCTION_ITEM_LIST, itemList)
-				.set(OutParam.BNA_LIST, bnaList)
-				.success();
-	}
+    public Result resultOf(List<AuctionItem> itemList,
+            List<BuyNowAuction> bnaList, ResultBuilder res) {
+        return res
+                .set(OutParam.AUCTION_ITEM_LIST, itemList)
+                .set(OutParam.BNA_LIST, bnaList)
+                .success();
+    }
 
 }

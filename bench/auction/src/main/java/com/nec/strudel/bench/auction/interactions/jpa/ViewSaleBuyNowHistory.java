@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.jpa;
 
 import java.util.ArrayList;
@@ -29,52 +30,53 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ViewSaleBuyNowHistory extends AbstractViewSaleBuyNowHistory<EntityManager>
-implements Interaction<EntityManager> {
-	public static final String QUERY =
-			"SELECT b FROM BuyNowSale b WHERE b.sellerId = :sid AND b.itemNo = :ino";
-	public static final String JOIN_QUERY =
-			"SELECT b,u FROM BuyNowSale b, User u WHERE b.sellerId = :sid"
-			+ " AND b.itemNo = :ino AND b.buyerId = u.userId";
-	public static final String P_SELLER = "sid";
-	public static final String P_ITEM_NO = "ino";
+public class ViewSaleBuyNowHistory
+        extends AbstractViewSaleBuyNowHistory<EntityManager>
+        implements Interaction<EntityManager> {
+    public static final String QUERY =
+            "SELECT b FROM BuyNowSale b WHERE b.sellerId = :sid AND b.itemNo = :ino";
+    public static final String JOIN_QUERY =
+            "SELECT b,u FROM BuyNowSale b, User u WHERE b.sellerId = :sid"
+            + " AND b.itemNo = :ino AND b.buyerId = u.userId";
+    public static final String P_SELLER = "sid";
+    public static final String P_ITEM_NO = "ino";
 
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		ItemId itemId = getItemId(param);
-		List<User> buyers = new ArrayList<User>();
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        ItemId itemId = getItemId(param);
+        List<User> buyers = new ArrayList<User>();
 
-		List<BuyNowSale> bnsList = new ArrayList<BuyNowSale>();
-		for (Object o : em.createQuery(JOIN_QUERY)
-				.setParameter(P_SELLER, itemId.getSellerId())
-				.setParameter(P_ITEM_NO, itemId.getItemNo())
-				.getResultList()) {
-			Object[] tuple = (Object[]) o;
-			BuyNowSale bns = (BuyNowSale) tuple[0];
-			User buyer = (User) tuple[1];
-			bnsList.add(bns);
-			buyers.add(buyer);
-		}
+        List<BuyNowSale> bnsList = new ArrayList<BuyNowSale>();
+        for (Object o : em.createQuery(JOIN_QUERY)
+                .setParameter(P_SELLER, itemId.getSellerId())
+                .setParameter(P_ITEM_NO, itemId.getItemNo())
+                .getResultList()) {
+            Object[] tuple = (Object[]) o;
+            BuyNowSale bns = (BuyNowSale) tuple[0];
+            User buyer = (User) tuple[1];
+            bnsList.add(bns);
+            buyers.add(buyer);
+        }
 
-		return resultOf(bnsList, buyers, res);
-	}
-	public Result executeByFind(ItemId itemId, EntityManager em, ResultBuilder res) {
-		List<BuyNowSale> bnsList =
-				em.createQuery(QUERY, BuyNowSale.class)
-				.setParameter(P_SELLER, itemId.getSellerId())
-				.setParameter(P_ITEM_NO, itemId.getItemNo())
-				.getResultList();
+        return resultOf(bnsList, buyers, res);
+    }
 
-		List<User> buyers = new ArrayList<User>();
+    public Result executeByFind(ItemId itemId, EntityManager em,
+            ResultBuilder res) {
+        List<BuyNowSale> bnsList = em.createQuery(QUERY, BuyNowSale.class)
+                .setParameter(P_SELLER, itemId.getSellerId())
+                .setParameter(P_ITEM_NO, itemId.getItemNo())
+                .getResultList();
 
-		for (BuyNowSale bns : bnsList) {
-			User buyer = em.find(User.class, bns.getBuyerId());
-			if (buyer != null) {
-				buyers.add(buyer);
-			}
-		}
+        List<User> buyers = new ArrayList<User>();
 
-		return resultOf(bnsList, buyers, res);
-	}
+        for (BuyNowSale bns : bnsList) {
+            User buyer = em.find(User.class, bns.getBuyerId());
+            if (buyer != null) {
+                buyers.add(buyer);
+            }
+        }
+
+        return resultOf(bnsList, buyers, res);
+    }
 }
-

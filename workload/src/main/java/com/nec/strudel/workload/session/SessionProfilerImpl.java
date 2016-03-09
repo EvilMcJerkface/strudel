@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -30,84 +31,83 @@ import com.nec.strudel.workload.session.runner.SessionStatMonitor;
 
 @NotThreadSafe
 public class SessionProfilerImpl implements SessionProfiler {
-	public static final String PROFILE_NAME = "session";
-	public static final String INTERACTION = "interaction";
-	public static final String COUNT_TIMES = TimeMetrics.timeOf(INTERACTION);
-	public static final String COUNT_COUNTS = TimeMetrics.countOf(INTERACTION);
+    public static final String PROFILE_NAME = "session";
+    public static final String INTERACTION = "interaction";
+    public static final String COUNT_TIMES = TimeMetrics.timeOf(INTERACTION);
+    public static final String COUNT_COUNTS = TimeMetrics.countOf(INTERACTION);
 
-	public static final String INTERACTION_PER_SEC =
-			"interaction_per_sec";
-	public static final String AVG_EXEC_TIME =
-			"average_exec_time";
-	public static final String COUNT_AVG_TIMES =
-			"interaction_avg_exec_time";
-	private static final Output OUTPUT =
-			Output.builder()
-			.add(INTERACTION_PER_SEC,
-				Div.of(
-					Sum.of(Value.of(COUNT_COUNTS)),
-					Value.of(ReportNames.VALUE_MEASURE)))
+    public static final String INTERACTION_PER_SEC = "interaction_per_sec";
+    public static final String AVG_EXEC_TIME = "average_exec_time";
+    public static final String COUNT_AVG_TIMES = "interaction_avg_exec_time";
+    private static final Output OUTPUT = Output.builder()
+            .add(INTERACTION_PER_SEC,
+                    Div.of(
+                            Sum.of(Value.of(COUNT_COUNTS)),
+                            Value.of(ReportNames.VALUE_MEASURE)))
 
-			.add(AVG_EXEC_TIME,
-				Div.of(
-					Sum.of(Value.of(COUNT_TIMES)),
-					Sum.of(Value.of(COUNT_COUNTS))))
+            .add(AVG_EXEC_TIME,
+                    Div.of(
+                            Sum.of(Value.of(COUNT_TIMES)),
+                            Sum.of(Value.of(COUNT_COUNTS))))
 
-			.add(new TimeMetrics(INTERACTION)
-					.avg(COUNT_AVG_TIMES).outputs())
-			.build();
+            .add(new TimeMetrics(INTERACTION)
+                    .avg(COUNT_AVG_TIMES).outputs())
+            .build();
 
-	@Instrument
-	private TimeInstrument interaction;
-	private SessionStatMonitor mon;
+    @Instrument
+    private TimeInstrument interaction;
+    private SessionStatMonitor mon;
 
-	public SessionProfilerImpl() {
-	}
-	public TimeInstrument getInteraction() {
-		return interaction;
-	}
-	public void setInteraction(TimeInstrument interaction) {
-		this.interaction = interaction;
-	}
-	public void setMon(SessionStatMonitor mon) {
-		this.mon = mon;
-	}
+    public SessionProfilerImpl() {
+    }
 
-	@Override
-	public void newSession() {
-		mon.newSession();
-	}
+    public TimeInstrument getInteraction() {
+        return interaction;
+    }
 
-	@Override
-	public void startInteraction(String name) {
-		interaction.start(name);
-	}
+    public void setInteraction(TimeInstrument interaction) {
+        this.interaction = interaction;
+    }
 
-	@Override
-	public void finishInteraction(Result result) {
-		long micro = interaction.end();
-		if (micro > 0) {
-			mon.interaction(micro, result.isSuccess());
-		}
-	}
+    public void setMon(SessionStatMonitor mon) {
+        this.mon = mon;
+    }
 
+    @Override
+    public void newSession() {
+        mon.newSession();
+    }
 
-	public static Output output() {
-		return OUTPUT;
-	}
-	public static SessionProfiler noProfile() {
-		return new SessionProfiler() {
-			@Override
-			public void startInteraction(String name) {
-			}
+    @Override
+    public void startInteraction(String name) {
+        interaction.start(name);
+    }
 
-			@Override
-			public void newSession() {
-			}
+    @Override
+    public void finishInteraction(Result result) {
+        long micro = interaction.end();
+        if (micro > 0) {
+            mon.interaction(micro, result.isSuccess());
+        }
+    }
 
-			@Override
-			public void finishInteraction(Result result) {
-			}
-		};
-	}
+    public static Output output() {
+        return OUTPUT;
+    }
+
+    public static SessionProfiler noProfile() {
+        return new SessionProfiler() {
+            @Override
+            public void startInteraction(String name) {
+            }
+
+            @Override
+            public void newSession() {
+            }
+
+            @Override
+            public void finishInteraction(Result result) {
+            }
+        };
+    }
 }

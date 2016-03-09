@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.com;
 
 import com.nec.congenio.ConfigValue;
 
 public interface ActionBuilder {
-	void build(ConfigValue action, CommandBuilder builder);
+    void build(ConfigValue action, CommandBuilder builder);
 }

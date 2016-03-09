@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session;
 
 import java.util.Map;
@@ -26,10 +27,12 @@ import com.nec.strudel.session.impl.State;
 public class StateFactory {
     private final Random rand;
     private final ParamSequence params;
+
     public StateFactory(ParamSequence params, Random rand) {
         this.params = params;
         this.rand = rand;
     }
+
     @Nullable
     public State next() {
         Map<String, Object> param = params.nextParam(rand);
@@ -39,7 +42,8 @@ public class StateFactory {
             return null;
         }
     }
+
     public Random getRandom() {
-    	return rand;
+        return rand;
     }
 }

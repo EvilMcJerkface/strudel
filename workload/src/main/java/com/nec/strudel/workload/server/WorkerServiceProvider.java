@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.server;
 
 import com.nec.strudel.workload.cluster.Node;
 
 public interface WorkerServiceProvider {
 
-	WorkerService create(Node node);
+    WorkerService create(Node node);
 }

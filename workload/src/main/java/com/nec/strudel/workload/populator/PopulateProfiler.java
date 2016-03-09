@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.populator;
 
 import java.util.concurrent.TimeUnit;
@@ -23,17 +24,20 @@ import com.nec.strudel.instrument.OperationListener;
 
 @NotThreadSafe
 public class PopulateProfiler {
-	private final OperationListener listener;
-	private long startNano;
+    private final OperationListener listener;
+    private long startNano;
 
-	public PopulateProfiler(OperationListener listener) {
-		this.listener = listener;
-	}
-	public void start() {
-		startNano = System.nanoTime();
-	}
-	public void end() {
-		long timeMicro = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - startNano);
-		listener.operation(timeMicro);
-	}
+    public PopulateProfiler(OperationListener listener) {
+        this.listener = listener;
+    }
+
+    public void start() {
+        startNano = System.nanoTime();
+    }
+
+    public void end() {
+        long timeMicro = TimeUnit.NANOSECONDS
+                .toMicros(System.nanoTime() - startNano);
+        listener.operation(timeMicro);
+    }
 }

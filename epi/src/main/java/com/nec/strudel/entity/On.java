@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * NOTE: it is not directly placed but
- * used in Indexes
+ * NOTE: it is not directly placed but used in Indexes
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface On {
-	String property();
-	String name() default "";
-	boolean auto() default false;
+    String property();
+
+    String name() default "";
+
+    boolean auto() default false;
 }

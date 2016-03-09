@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.info;
 
 public interface ValueInfo {
-	Class<?> valueClass();
-	boolean isPrimitive();
+    Class<?> valueClass();
+
+    boolean isPrimitive();
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.measure;
 
 import java.util.Map;
@@ -31,67 +32,69 @@ import com.nec.strudel.workload.util.TimeValue;
  *   "poll"? : int (1)
  *   "Process"? [workflow],
  *   "monitors"? : {
- *   	NAME : JmxMonitorSpecCreator
+ *       NAME : JmxMonitorSpecCreator
  *   },
  * }
  * </pre>
  */
 public class MeasurementConfig {
 
-	private int rampup;
-	private int duration;
-	private int poll;
-	private MonitorSet monitors = new MonitorSet();
-	private Workflow process;
+    private int rampup;
+    private int duration;
+    private int poll;
+    private MonitorSet monitors = new MonitorSet();
+    private Workflow process;
 
-	public static final String TAG_MEASURE = "measure";
+    public static final String TAG_MEASURE = "measure";
 
-	public MeasurementConfig() {
-	}
+    public MeasurementConfig() {
+    }
 
-	/**
-	 * Gets the ramp-up duration.
-	 */
-	public TimeValue rampupTime() {
-		return TimeValue.seconds(rampup);
-	}
+    /**
+     * Gets the ramp-up duration.
+     */
+    public TimeValue rampupTime() {
+        return TimeValue.seconds(rampup);
+    }
 
-	/**
-	 * Gets the measure duration.
-	 */
-	public TimeValue measureTime() {
-		return TimeValue.seconds(duration);
-	}
-	public TimeValue pollTime() {
-		return TimeValue.seconds(poll);
-	}
+    /**
+     * Gets the measure duration.
+     */
+    public TimeValue measureTime() {
+        return TimeValue.seconds(duration);
+    }
 
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
+    public TimeValue pollTime() {
+        return TimeValue.seconds(poll);
+    }
 
-	public void setPoll(int poll) {
-		this.poll = poll;
-	}
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
-	public void setRampup(int rampup) {
-		this.rampup = rampup;
-	}
+    public void setPoll(int poll) {
+        this.poll = poll;
+    }
 
-	public void setMonitors(MonitorSet monitors) {
-		this.monitors = monitors;
-	}
+    public void setRampup(int rampup) {
+        this.rampup = rampup;
+    }
 
-	public Map<String, JmxMonitorConfig> monitors() {
-		return monitors.getMonitors();
-	}
+    public void setMonitors(MonitorSet monitors) {
+        this.monitors = monitors;
+    }
 
-	@Nullable
-	public Workflow getProcess() {
-		return process;
-	}
-	public void setProcess(Workflow process) {
-		this.process = process;
-	}
+    public Map<String, JmxMonitorConfig> monitors() {
+        return monitors.getMonitors();
+    }
+
+    @Nullable
+    public Workflow getProcess() {
+        return process;
+    }
+
+    public void setProcess(Workflow process) {
+        this.process = process;
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.jpa;
 
 import javax.persistence.EntityManager;
@@ -23,43 +24,43 @@ import com.nec.strudel.entity.EntityGroup;
 import com.nec.strudel.entity.EntityTransaction;
 
 public class EntityTransactionImpl implements EntityTransaction {
-	private final EntityManager em;
-	public EntityTransactionImpl(EntityManager em) {
-		this.em = em;
-	}
+    private final EntityManager em;
 
-	@Override
-	public <T> T get(Class<T> c, Object key) {
-		return em.find(c, key, LockModeType.PESSIMISTIC_WRITE);
-	}
+    public EntityTransactionImpl(EntityManager em) {
+        this.em = em;
+    }
 
-	@Override
-	public void update(Object entity) {
-		em.merge(entity);
-	}
-	@Override
-	public void create(Object entity) {
-		em.persist(entity);
-	}
+    @Override
+    public <T> T get(Class<T> cls, Object key) {
+        return em.find(cls, key, LockModeType.PESSIMISTIC_WRITE);
+    }
 
+    @Override
+    public void update(Object entity) {
+        em.merge(entity);
+    }
 
-	@Override
-	public void delete(Object entity) {
-		try {
-			em.remove(entity);
-		} catch (IllegalArgumentException e) {
-			/**
-			 * it may be because entity is detached.
-			 * try to find it again (then remove).
-			 */
-			EntityDescriptor desc =
-					EntityGroup.descriptor(entity.getClass());
-			Object storedEntity = em.find(entity.getClass(),
-					desc.getKey(entity),
-					LockModeType.PESSIMISTIC_WRITE);
-			if (storedEntity != null) {
-				em.remove(storedEntity);
-			}
-		}
-	}
+    @Override
+    public void create(Object entity) {
+        em.persist(entity);
+    }
+
+    @Override
+    public void delete(Object entity) {
+        try {
+            em.remove(entity);
+        } catch (IllegalArgumentException ex) {
+            /**
+             * it may be because entity is detached. try to find it again (then
+             * remove).
+             */
+            EntityDescriptor desc = EntityGroup.descriptor(entity.getClass());
+            Object storedEntity = em.find(entity.getClass(),
+                    desc.getKey(entity),
+                    LockModeType.PESSIMISTIC_WRITE);
+            if (storedEntity != null) {
+                em.remove(storedEntity);
+            }
+        }
+    }
 }

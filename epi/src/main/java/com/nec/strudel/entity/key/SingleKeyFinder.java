@@ -13,34 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.key;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class SingleKeyFinder extends KeyFinder {
-	private final Method getter;
-	private final Class<?> valueClass;
-	public SingleKeyFinder(Method getter) {
-		this.getter = getter;
-		this.valueClass = getter.getDeclaringClass();
-	}
-	@Override
-	public Object getKey(Object entity) {
-		if (!valueClass.isInstance(entity)) {
-			throw new IllegalArgumentException(
-			"invalid class given ("
-			+ entity.getClass().getName() + ")"
-			+ " expected:" + valueClass);
-		}
-		try {
-			return getter.invoke(entity);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private final Method getter;
+    private final Class<?> valueClass;
+
+    public SingleKeyFinder(Method getter) {
+        this.getter = getter;
+        this.valueClass = getter.getDeclaringClass();
+    }
+
+    @Override
+    public Object getKey(Object entity) {
+        if (!valueClass.isInstance(entity)) {
+            throw new IllegalArgumentException(
+                    "invalid class given ("
+                            + entity.getClass().getName() + ")"
+                            + " expected:" + valueClass);
+        }
+        try {
+            return getter.invoke(entity);
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.jpa;
 
 import javax.persistence.EntityManager;
@@ -26,18 +27,18 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class CreateSubmission extends AbstractCreateSubmission<EntityManager>
-implements Interaction<EntityManager> {
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		int userId = param.getInt(SessionParam.USER_ID);
-		int receiverId = param.getInt(InParam.RECEIVER_ID);
-		String content = param.get(InParam.CONTENT);
-		Submission sub = new Submission(receiverId, userId);
-		sub.setContent(content);
-		em.getTransaction().begin();
-		em.persist(sub);
-		em.getTransaction().commit();
-		return res.success();
-	}
+        implements Interaction<EntityManager> {
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        int userId = param.getInt(SessionParam.USER_ID);
+        int receiverId = param.getInt(InParam.RECEIVER_ID);
+        String content = param.get(InParam.CONTENT);
+        Submission sub = new Submission(receiverId, userId);
+        sub.setContent(content);
+        em.getTransaction().begin();
+        em.persist(sub);
+        em.getTransaction().commit();
+        return res.success();
+    }
 
 }

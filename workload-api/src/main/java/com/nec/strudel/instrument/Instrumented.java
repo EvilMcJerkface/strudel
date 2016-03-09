@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
-
 @NotThreadSafe
 public interface Instrumented<T> {
 
-	T getObject();
-	Profiler getProfiler();
+    T getObject();
+
+    Profiler getProfiler();
 }

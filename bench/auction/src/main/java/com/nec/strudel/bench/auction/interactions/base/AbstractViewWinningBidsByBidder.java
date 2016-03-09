@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.base;
 
 import java.util.List;
@@ -29,43 +30,44 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 import com.nec.strudel.session.StateModifier;
 
-public abstract class AbstractViewWinningBidsByBidder<T> implements Interaction<T> {
+public abstract class AbstractViewWinningBidsByBidder<T>
+        implements Interaction<T> {
 
-	public enum OutParam implements LocalParam {
-		WIN_ITEM_LIST,
-		WIN_BIDS
-	}
+    public enum OutParam implements LocalParam {
+        WIN_ITEM_LIST, WIN_BIDS
+    }
 
-	@Override
-	public void prepare(ParamBuilder builder) {
-		builder
-		.use(SessionParam.USER_ID);
-	}
+    @Override
+    public void prepare(ParamBuilder builder) {
+        builder
+                .use(SessionParam.USER_ID);
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-	    // do nothing
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        // do nothing
+    }
 
-	public int getBidderId(Param param) {
-		return param.getInt(SessionParam.USER_ID);
-	}
+    public int getBidderId(Param param) {
+        return param.getInt(SessionParam.USER_ID);
+    }
 
-	public Result resultOf(List<AuctionItem> winItemList, List<Bid> winBids, ResultBuilder res) {
-		res.set(OutParam.WIN_ITEM_LIST, winItemList)
-		.set(OutParam.WIN_BIDS, winBids);
-	
-	return res.success();
-	}
+    public Result resultOf(List<AuctionItem> winItemList, List<Bid> winBids,
+            ResultBuilder res) {
+        res.set(OutParam.WIN_ITEM_LIST, winItemList)
+                .set(OutParam.WIN_BIDS, winBids);
 
-	public boolean isWinning(Bid bid, AuctionItem item) {
-		if (AuctionItem.isSold(item)) {
-			return false;
-		}
-		if (item.getEndDate() > ParamUtil.now()) {
-			return false; // still open
-		}
-		return bid.getBidAmount() == item.getMaxBid();
-	}
+        return res.success();
+    }
+
+    public boolean isWinning(Bid bid, AuctionItem item) {
+        if (AuctionItem.isSold(item)) {
+            return false;
+        }
+        if (item.getEndDate() > ParamUtil.now()) {
+            return false; // still open
+        }
+        return bid.getBidAmount() == item.getMaxBid();
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.exec.populate;
 
 import java.util.ArrayList;
@@ -23,37 +24,42 @@ import org.apache.log4j.Logger;
 import com.nec.strudel.workload.api.ValidateReporter;
 
 public class LoggingValidateReporter implements ValidateReporter {
-	private final Logger logger;
-	private boolean delayedCheck;
-	private final List<String> warns;
-	private final int reportMax;
-	public LoggingValidateReporter(int reportMax, Logger logger) {
-		this.logger = logger;
-		this.reportMax = reportMax;
-		warns = new ArrayList<String>(reportMax);
-	}
-	public void setDelayedCheck(boolean doubleCheck) {
-		this.delayedCheck = doubleCheck;
-	}
+    private final Logger logger;
+    private boolean delayedCheck;
+    private final List<String> warns;
+    private final int reportMax;
 
-	@Override
-	public void error(String message) {
-		if (delayedCheck) {
-			warn("delayed double check: " + message);
-		} else {
-			warn(message);
-		}
-	}
-	private void warn(String message) {
-		if (warns.size() < reportMax) {
-			warns.add(message);
-		}
-		logger.warn(message);
-	}
-	public boolean hasWarn() {
-		return !warns.isEmpty();
-	}
-	public List<String> getWarns() {
-		return warns;
-	}
+    public LoggingValidateReporter(int reportMax, Logger logger) {
+        this.logger = logger;
+        this.reportMax = reportMax;
+        warns = new ArrayList<String>(reportMax);
+    }
+
+    public void setDelayedCheck(boolean doubleCheck) {
+        this.delayedCheck = doubleCheck;
+    }
+
+    @Override
+    public void error(String message) {
+        if (delayedCheck) {
+            warn("delayed double check: " + message);
+        } else {
+            warn(message);
+        }
+    }
+
+    private void warn(String message) {
+        if (warns.size() < reportMax) {
+            warns.add(message);
+        }
+        logger.warn(message);
+    }
+
+    public boolean hasWarn() {
+        return !warns.isEmpty();
+    }
+
+    public List<String> getWarns() {
+        return warns;
+    }
 }

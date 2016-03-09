@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import java.util.List;
@@ -30,39 +31,38 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class UpdateShared extends AbstractUpdateShared<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		final List<SharedId> ids = param.getObjectList(
-				InParam.SHARED_IDS);
-		if (ids.isEmpty()) {
-			return res.warn("SHARED_ID is not set")
-			.failure(ResultMode.MISSING_PARAM);
-		}
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        final List<SharedId> ids = param.getObjectList(
+                InParam.SHARED_IDS);
+        if (ids.isEmpty()) {
+            return res.warn("SHARED_ID is not set")
+                    .failure(ResultMode.MISSING_PARAM);
+        }
 
-		final String content = param.get(InParam.CONTENT);
-		boolean updated = db.run(Shared.class, ids.get(0),
-				new EntityTask<Boolean>() {
-			@Override
-			public Boolean run(EntityTransaction tx) {
-				boolean hasUpdate = false;
-				for (SharedId id : ids) {
-					Shared shared =
-						tx.get(Shared.class, id);
-					if (shared != null) {
-						shared .setContent(content);
-						tx.update(shared);
-						hasUpdate = true;
-					}
-				}
-				return hasUpdate;
-			}
-		});
-		if (updated) {
-			return res.success();
-		} else {
-			return res.success(ResultMode.EMPTY_RESULT);
-		}
-	}
+        final String content = param.get(InParam.CONTENT);
+        boolean updated = db.run(Shared.class, ids.get(0),
+                new EntityTask<Boolean>() {
+                    @Override
+                    public Boolean run(EntityTransaction tx) {
+                        boolean hasUpdate = false;
+                        for (SharedId id : ids) {
+                            Shared shared = tx.get(Shared.class, id);
+                            if (shared != null) {
+                                shared.setContent(content);
+                                tx.update(shared);
+                                hasUpdate = true;
+                            }
+                        }
+                        return hasUpdate;
+                    }
+                });
+        if (updated) {
+            return res.success();
+        } else {
+            return res.success(ResultMode.EMPTY_RESULT);
+        }
+    }
 
 }

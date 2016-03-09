@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -22,10 +23,10 @@ import com.nec.strudel.session.Result;
 @NotThreadSafe
 public interface SessionProfiler {
 
-	void newSession();
+    void newSession();
 
-	void startInteraction(String name);
+    void startInteraction(String name);
 
-	void finishInteraction(Result result);
+    void finishInteraction(Result result);
 
 }

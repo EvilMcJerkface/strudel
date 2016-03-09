@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.exec;
 
 import com.nec.strudel.workload.state.MeasureWorkState;
 
 public final class ReportNames {
 
-	public static final String VALUE_MEASURE = MeasureWorkState.VALUE_MEASURE;
+    public static final String VALUE_MEASURE = MeasureWorkState.VALUE_MEASURE;
 
-	private ReportNames() {
-	}
+    private ReportNames() {
+    }
 
 }

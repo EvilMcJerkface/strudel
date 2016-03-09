@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.entity;
 
 import java.util.ArrayList;
@@ -30,77 +31,73 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ViewAuctionItemsByBuyer extends AbstractViewAuctionItemsByBuyer<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int buyerId = getBuyerId(param);
+public class ViewAuctionItemsByBuyer
+        extends AbstractViewAuctionItemsByBuyer<EntityDB>
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int buyerId = getBuyerId(param);
 
-		List<AuctionItem> itemList =
-				new ArrayList<AuctionItem>();
-		List<BuyNowAuction> bnaList = 
-				db.getEntitiesByIndex(BuyNowAuction.class, "buyerId", buyerId);
-		for (BuyNowAuction bna : bnaList) {
-			AuctionItem item = db.get(AuctionItem.class, bna.getItemId());
-			if (item != null) {
-				itemList.add(item);
-			} else {
-				res.warn("bna (" + bna.getItemId()
-						+ ") not found for buyer="
-						+ buyerId);
-			}
-		}
-		return resultOf(itemList, bnaList, res);
-	}
+        List<AuctionItem> itemList = new ArrayList<AuctionItem>();
+        List<BuyNowAuction> bnaList = db.getEntitiesByIndex(BuyNowAuction.class,
+                "buyerId", buyerId);
+        for (BuyNowAuction bna : bnaList) {
+            AuctionItem item = db.get(AuctionItem.class, bna.getItemId());
+            if (item != null) {
+                itemList.add(item);
+            } else {
+                res.warn("bna (" + bna.getItemId()
+                        + ") not found for buyer="
+                        + buyerId);
+            }
+        }
+        return resultOf(itemList, bnaList, res);
+    }
 
-	/**
-	 * an alternative way to execute each pair
-	 * of ItemId and BuyNowAuction (that are in the
-	 * same group) in the same transaction.
-	 */
-	public void executeWithTransactions(int buyerId,
-			EntityDB db, List<AuctionItem> itemList,
-			List<BuyNowAuction> bnaList,  ResultBuilder res) {
-		for (ItemId id : db.scanIds(ItemId.class,
-				BuyNowAuction.class, "buyerId", buyerId)) {
-			EntityPair<AuctionItem, BuyNowAuction> pair =
-					db.run(AuctionItem.class, id,
-							getAuctionItemBNA(id));
+    /**
+     * an alternative way to execute each pair of ItemId and BuyNowAuction (that
+     * are in the same group) in the same transaction.
+     */
+    public void executeWithTransactions(int buyerId,
+            EntityDB db, List<AuctionItem> itemList,
+            List<BuyNowAuction> bnaList, ResultBuilder res) {
+        for (ItemId id : db.scanIds(ItemId.class,
+                BuyNowAuction.class, "buyerId", buyerId)) {
+            EntityPair<AuctionItem, BuyNowAuction> pair = db.run(
+                    AuctionItem.class, id,
+                    getAuctionItemBna(id));
 
-			AuctionItem auctionItem = pair.getFirst();
-			BuyNowAuction bna = pair.getSecond();
+            AuctionItem auctionItem = pair.getFirst();
+            BuyNowAuction bna = pair.getSecond();
 
-			if (auctionItem != null) {
-				itemList.add(auctionItem);
-			} else {
-				res.warn("auction item (" + id
-						+ ") not found for buyer="
-						+ buyerId);
-			}
-			if (bna != null) {
-				bnaList.add(bna);
-			} else {
-				res.warn("bna (" + id
-						+ ") not found for buyer="
-						+ buyerId);
-			}
-		}
-		
-	}
+            if (auctionItem != null) {
+                itemList.add(auctionItem);
+            } else {
+                res.warn("auction item (" + id
+                        + ") not found for buyer="
+                        + buyerId);
+            }
+            if (bna != null) {
+                bnaList.add(bna);
+            } else {
+                res.warn("bna (" + id
+                        + ") not found for buyer="
+                        + buyerId);
+            }
+        }
 
-	public EntityTask<EntityPair<AuctionItem, BuyNowAuction>>
-	getAuctionItemBNA(final ItemId itemKey) {
-		return new EntityTask<EntityPair<AuctionItem,
-							BuyNowAuction>>() {
-			@Override
-			public EntityPair<AuctionItem, BuyNowAuction> run(
-					EntityTransaction tx) {
-				AuctionItem auctionItem =
-					tx.get(AuctionItem.class, itemKey);
-				BuyNowAuction bna =
-					tx.get(BuyNowAuction.class, itemKey);
-				return EntityPair.of(auctionItem, bna);
-			}
-		};
-	}
+    }
+
+    public EntityTask<EntityPair<AuctionItem, BuyNowAuction>> getAuctionItemBna(
+            final ItemId itemKey) {
+        return new EntityTask<EntityPair<AuctionItem, BuyNowAuction>>() {
+            @Override
+            public EntityPair<AuctionItem, BuyNowAuction> run(
+                    EntityTransaction tx) {
+                AuctionItem auctionItem = tx.get(AuctionItem.class, itemKey);
+                BuyNowAuction bna = tx.get(BuyNowAuction.class, itemKey);
+                return EntityPair.of(auctionItem, bna);
+            }
+        };
+    }
 }

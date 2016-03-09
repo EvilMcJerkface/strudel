@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.env;
 
 import org.apache.log4j.Logger;
@@ -27,51 +28,52 @@ public class CommandEnv implements Environment {
 
     @Override
     public void start(ExecConfig conf) {
-    	runCommand("start", conf);
+        runCommand("start", conf);
     }
 
     @Override
     public void stop(ExecConfig conf) {
-    	runCommand("stop", conf);
+        runCommand("stop", conf);
     }
+
     @Override
     public void startSuite(ExecConfig conf) {
-    	runCommand("startSuite", conf);
+        runCommand("startSuite", conf);
     }
+
     @Override
     public void stopSuite(ExecConfig conf) {
-    	runCommand("stopSuite", conf);
+        runCommand("stopSuite", conf);
     }
 
     protected void runCommand(String name, ExecConfig conf) {
-    	Command com = conf.toCommand();
-    	if (com != null) {
-        	runCommand(name, com);
+        Command com = conf.toCommand();
+        if (com != null) {
+            runCommand(name, com);
         } else {
             LOGGER.debug("no command for " + name);
-    	}
+        }
     }
 
     protected void runCommand(String name, Command com) {
         try {
-        	LOGGER.info("starting command for " + name);
-        	CommandResult res = com.run(Commands.createContext(LOGGER));
-        	if (res.isSuccessful()) {
-        		String log = res.getLog();
+            LOGGER.info("starting command for " + name);
+            CommandResult res = com.run(Commands.createContext(LOGGER));
+            if (res.isSuccessful()) {
+                String log = res.getLog();
                 LOGGER.info(name + " command done"
-                	+ (log.isEmpty() ? "" : "\n" + log));
-        	} else {
-        		String msg = res.getMsg();
-            	LOGGER.error(msg + "\n" + res.getLog());
-            	throw new WorkloadException(msg);
-        	}
-        } catch (InterruptedException e) {
-        	Thread.currentThread().interrupt();
-        	LOGGER.error("interrupted", e);
-        	throw new WorkloadException(
-        			name + " interrupted", e);
-		}
+                        + (log.isEmpty() ? "" : "\n" + log));
+            } else {
+                String msg = res.getMsg();
+                LOGGER.error(msg + "\n" + res.getLog());
+                throw new WorkloadException(msg);
+            }
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            LOGGER.error("interrupted", ex);
+            throw new WorkloadException(
+                    name + " interrupted", ex);
+        }
     }
-
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.jpa;
 
 import javax.persistence.EntityManager;
@@ -26,20 +27,20 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class CreatePost extends AbstractCreatePost<EntityManager>
-implements Interaction<EntityManager> {
+        implements Interaction<EntityManager> {
 
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		int userId = param.getInt(SessionParam.USER_ID);
-		String content = param.get(InParam.CONTENT);
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        int userId = param.getInt(SessionParam.USER_ID);
+        String content = param.get(InParam.CONTENT);
 
-		Post item = new Post(userId);
-		item.setContent(content);
-		em.getTransaction().begin();
-		em.persist(item);
-		em.getTransaction().commit();
+        Post item = new Post(userId);
+        item.setContent(content);
+        em.getTransaction().begin();
+        em.persist(item);
+        em.getTransaction().commit();
 
-		return res.success();
-	}
+        return res.success();
+    }
 
 }

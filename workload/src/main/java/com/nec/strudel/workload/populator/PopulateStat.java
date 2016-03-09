@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.populator;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -24,38 +25,41 @@ import com.nec.strudel.management.resource.ManagedResource;
 import com.nec.strudel.management.resource.ResourceName;
 
 @ThreadSafe
-@ManagedResource(description =
-"monitors the performance of populate tasks")
+@ManagedResource(description = "monitors the performance of populate tasks")
 public class PopulateStat {
-	public static final int WINDOW_SIZE = 5;
-	public static final long WINDOW_STEP_MS = 1000;
-	private final OperationStat mon;
-	private final String name;
-	private final int threadNum;
-	public PopulateStat(String name, int threadNum, ProfilerService profs) {
-		mon = profs.createOperationStat(WINDOW_SIZE, WINDOW_STEP_MS);
-		this.name = name;
-		this.threadNum = threadNum;
-	}
-	@ResourceName
-	public String getName() {
-		return name;
-	}
+    public static final int WINDOW_SIZE = 5;
+    public static final long WINDOW_STEP_MS = 1000;
+    private final OperationStat mon;
+    private final String name;
+    private final int threadNum;
 
-	@Getter(description = "number of threads per worker")
-	public int getThreadNum() {
-		return threadNum;
-	}
+    public PopulateStat(String name, int threadNum, ProfilerService profs) {
+        mon = profs.createOperationStat(WINDOW_SIZE, WINDOW_STEP_MS);
+        this.name = name;
+        this.threadNum = threadNum;
+    }
 
-	@Getter(description = "number of populator execution units per second")
-	public double getTasksPerSec() {
-		return mon.getOperationsPerSec();
-	}
-	@Getter(description = "average time (ms) for one populator execution unit")
-	public double getAvgTaskTime() {
-		return mon.getAverageOperationTime();
-	}
-	public PopulateProfiler profiler() {
-		return new PopulateProfiler(mon);
-	}
+    @ResourceName
+    public String getName() {
+        return name;
+    }
+
+    @Getter(description = "number of threads per worker")
+    public int getThreadNum() {
+        return threadNum;
+    }
+
+    @Getter(description = "number of populator execution units per second")
+    public double getTasksPerSec() {
+        return mon.getOperationsPerSec();
+    }
+
+    @Getter(description = "average time (ms) for one populator execution unit")
+    public double getAvgTaskTime() {
+        return mon.getAverageOperationTime();
+    }
+
+    public PopulateProfiler profiler() {
+        return new PopulateProfiler(mon);
+    }
 }

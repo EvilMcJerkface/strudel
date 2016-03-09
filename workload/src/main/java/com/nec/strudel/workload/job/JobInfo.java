@@ -13,55 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.job;
 
 /**
- * an encapsulation of additional information on job (suite)
- * which does not appear in the XML document itself (such as its
- * file name)
+ * an encapsulation of additional information on job (suite) which does not
+ * appear in the XML document itself (such as its file name)
+ * 
  * @author tatemura
  *
  */
 public class JobInfo {
-	private String outDir;
-	private String path;
-	private String id;
-	private int jobId;
-	public JobInfo() {
-	}
-	public JobInfo(String path) {
-		this.path = path;
-	}
-	public String getPath() {
-		return path;
-	}
-	public void setPath(String path) {
-		this.path = path;
-	}
-	public String getOutDir() {
-		return outDir;
-	}
-	public void setOutDir(String outDir) {
-		this.outDir = outDir;
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public void setJobId(int jobId) {
-		this.jobId = jobId;
-	}
-	public int getJobId() {
-		return jobId;
-	}
-	public JobInfo copy(int jobId) {
-		JobInfo info = new JobInfo(path);
-		info.setJobId(jobId);
-		info.setOutDir(getOutDir());
-		info.setId(getId());
-		return info;
-	}
+    private String outDir;
+    private String path;
+    private String id;
+    private int jobId;
+
+    public JobInfo() {
+    }
+
+    public JobInfo(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getOutDir() {
+        return outDir;
+    }
+
+    public void setOutDir(String outDir) {
+        this.outDir = outDir;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
+    }
+
+    public int getJobId() {
+        return jobId;
+    }
+
+    public JobInfo copy(int jobId) {
+        JobInfo info = new JobInfo(path);
+        info.setJobId(jobId);
+        info.setOutDir(getOutDir());
+        info.setId(getId());
+        return info;
+    }
 
 }

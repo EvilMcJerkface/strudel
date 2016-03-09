@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.job;
 
 import javax.annotation.Nullable;
@@ -22,38 +23,42 @@ import com.nec.congenio.Values;
 
 public class ConfigParam {
 
-	public static ConfigParam empty() {
-		return new ConfigParam(Values.NONE);
-	}
-	public static ConfigParam create(ConfigValue conf) {
-		return new ConfigParam(conf);
-	}
+    public static ConfigParam empty() {
+        return new ConfigParam(Values.NONE);
+    }
 
-	private final ConfigValue conf;
-	public ConfigParam(ConfigValue conf) {
-		this.conf = conf;
-	}
+    public static ConfigParam create(ConfigValue conf) {
+        return new ConfigParam(conf);
+    }
 
-	public <T> T getObject(String name, Class<T> cls) {
-		return conf.getObject(name, cls);
-	}
+    private final ConfigValue conf;
 
-	@Nullable
-	public String findString(String name) {
-		return conf.find(name);
-	}
+    public ConfigParam(ConfigValue conf) {
+        this.conf = conf;
+    }
 
-	public String getString(String name) {
-		return conf.get(name);
-	}
+    public <T> T getObject(String name, Class<T> cls) {
+        return conf.getObject(name, cls);
+    }
 
-	public int getInt(String name, int defaultValue) {
-		return conf.getInt(name, defaultValue);
-	}
-	public int getInt(String name) {
-		return conf.getInt(name);
-	}
-	public double getDouble(String name, double defaultValue) {
-		return conf.getDouble(name, defaultValue);
-	}
+    @Nullable
+    public String findString(String name) {
+        return conf.find(name);
+    }
+
+    public String getString(String name) {
+        return conf.get(name);
+    }
+
+    public int getInt(String name, int defaultValue) {
+        return conf.getInt(name, defaultValue);
+    }
+
+    public int getInt(String name) {
+        return conf.getInt(name);
+    }
+
+    public double getDouble(String name, double defaultValue) {
+        return conf.getDouble(name, defaultValue);
+    }
 }

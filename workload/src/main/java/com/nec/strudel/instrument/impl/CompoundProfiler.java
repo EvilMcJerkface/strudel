@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument.impl;
 
 import java.util.List;
@@ -24,19 +25,19 @@ import com.nec.strudel.json.JsonValues;
 
 public class CompoundProfiler implements Profiler {
 
-	private final List<Profiler> profilers;
+    private final List<Profiler> profilers;
 
-	public CompoundProfiler(List<Profiler> profilers) {
-		this.profilers = profilers;
-	}
+    public CompoundProfiler(List<Profiler> profilers) {
+        this.profilers = profilers;
+    }
 
-	@Override
-	public JsonObject getValue() {
-		JsonObject[] values = new JsonObject[profilers.size()];
-		for (int i = 0; i < values.length; i++) {
-			values[i] = profilers.get(i).getValue();
-		}
-		return JsonValues.union(values);
-	}
+    @Override
+    public JsonObject getValue() {
+        JsonObject[] values = new JsonObject[profilers.size()];
+        for (int i = 0; i < values.length; i++) {
+            values[i] = profilers.get(i).getValue();
+        }
+        return JsonValues.union(values);
+    }
 
 }

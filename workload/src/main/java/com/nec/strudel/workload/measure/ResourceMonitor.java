@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.measure;
 
 import java.util.List;
@@ -31,95 +32,97 @@ import com.nec.strudel.workload.com.Caller;
 
 public class ResourceMonitor implements Closeable {
 
-	private final Closeable[] closeables;
-	private final List<ValueFetcher> fetchers;
-	private final Map<?, ValueCollector> collectors;
-	private final ResultAggregation aggr;
+    private final Closeable[] closeables;
+    private final List<ValueFetcher> fetchers;
+    private final Map<?, ValueCollector> collectors;
+    private final ResultAggregation aggr;
 
-	public ResourceMonitor(List<ValueFetcher> fetchers,
-			Map<?, ValueCollector> collectors,
-			ResultAggregation aggr, Closeable... closeables) {
-		this.fetchers = fetchers;
-		this.collectors = collectors;
-		this.aggr = aggr;
-		this.closeables = closeables;
-	}
-	public interface ValueFetcher extends Callable<Map<Object, Object>> {
-	}
+    public ResourceMonitor(List<ValueFetcher> fetchers,
+            Map<?, ValueCollector> collectors,
+            ResultAggregation aggr, Closeable... closeables) {
+        this.fetchers = fetchers;
+        this.collectors = collectors;
+        this.aggr = aggr;
+        this.closeables = closeables;
+    }
 
-	public void process(Caller caller) throws InterruptedException {
-		aggr.put(fetch(caller));
-	}
+    public interface ValueFetcher extends Callable<Map<Object, Object>> {
+    }
 
-	public JsonValue getResult() {
-		return aggr.get();
-	}
+    public void process(Caller caller) throws InterruptedException {
+        aggr.put(fetch(caller));
+    }
 
-	@Override
-	public void close() {
-		for (Closeable c : closeables) {
-			c.close();
-		}
-	}
+    public JsonValue getResult() {
+        return aggr.get();
+    }
 
-	public int size() {
-		return fetchers.size();
-	}
+    @Override
+    public void close() {
+        for (Closeable c : closeables) {
+            c.close();
+        }
+    }
 
-	protected JsonObject fetch(Caller caller) throws InterruptedException {
-		for (ValueCollector c : collectors.values()) {
-			c.clear();
-		}
-		List<Future<Map<Object, Object>>> res =
-				caller.call(fetchers);
-		for (int i = 0; i < res.size(); i++) {
-			try {
-				Map<Object, Object> map =
-						res.get(i).get();
-				for (Map.Entry<Object, Object> e
-						: map.entrySet()) {
-					collectors.get(e.getKey())
-					.set(i, e.getValue());
-				}
-			} catch (ExecutionException e) {
-				/**
-				 * TODO appropriate exception:
-				 */
-				throw new RuntimeException(e);
-			}
-		}
-		JsonObjectBuilder builder = Json.createObjectBuilder();
-		for (ValueCollector c : collectors.values()) {
-			builder.add(c.getName(), c.getValue());
-		}
-		return builder.build();
-	}
+    public int size() {
+        return fetchers.size();
+    }
 
-	public static class ValueCollector {
-		private final Object[] values;
-		private final String name;
-		private final ClusterAggregation aggr;
-		public ValueCollector(String name,
-				ClusterAggregation aggr, int size) {
-			this.name = name;
-			this.aggr = aggr;
-			this.values = new Object[size];
-		}
-		public void clear() {
-			for (int i = 0; i < values.length; i++) {
-				values[i] = null;
-			}
-		}
-		public void set(int idx, Object value) {
-			this.values[idx] = value;
-		}
-		public String getName() {
-			return name;
-		}
-		public JsonValue getValue() {
-			return aggr.aggregate(values);
-		}
-	}
+    protected JsonObject fetch(Caller caller) throws InterruptedException {
+        for (ValueCollector c : collectors.values()) {
+            c.clear();
+        }
+        List<Future<Map<Object, Object>>> res = caller.call(fetchers);
+        for (int i = 0; i < res.size(); i++) {
+            try {
+                Map<Object, Object> map = res.get(i).get();
+                for (Map.Entry<Object, Object> e : map.entrySet()) {
+                    collectors.get(e.getKey())
+                            .set(i, e.getValue());
+                }
+            } catch (ExecutionException ex) {
+                /**
+                 * TODO appropriate exception:
+                 */
+                throw new RuntimeException(ex);
+            }
+        }
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        for (ValueCollector c : collectors.values()) {
+            builder.add(c.getName(), c.getValue());
+        }
+        return builder.build();
+    }
 
+    public static class ValueCollector {
+        private final Object[] values;
+        private final String name;
+        private final ClusterAggregation aggr;
+
+        public ValueCollector(String name,
+                ClusterAggregation aggr, int size) {
+            this.name = name;
+            this.aggr = aggr;
+            this.values = new Object[size];
+        }
+
+        public void clear() {
+            for (int i = 0; i < values.length; i++) {
+                values[i] = null;
+            }
+        }
+
+        public void set(int idx, Object value) {
+            this.values[idx] = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public JsonValue getValue() {
+            return aggr.aggregate(values);
+        }
+    }
 
 }

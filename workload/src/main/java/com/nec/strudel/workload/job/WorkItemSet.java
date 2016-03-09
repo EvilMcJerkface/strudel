@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.job;
 
 import java.util.Collections;
@@ -24,26 +25,30 @@ import javax.annotation.Nullable;
 
 /**
  * WorkItem classes supported by the system
+ * 
  * @author tatemura
  *
  */
 public final class WorkItemSet {
 
-	private WorkItemSet() {
-	}
-	private static final Map<String, Class<? extends WorkItem>> ITEM_CLASSES =
-			new HashMap<String, Class<? extends WorkItem>>();
-	static {
-		ITEM_CLASSES.put(WorkloadTask.TAG_NAME, WorkloadTask.class);
-		ITEM_CLASSES.put(PopulateWorkItem.TAG_NAME, PopulateWorkItem.class);
-	}
+    private WorkItemSet() {
+    }
 
-	@Nullable
-	public static Class<? extends WorkItem> classOf(String name) {
-		return ITEM_CLASSES.get(name);
-	}
-	public static Set<String> names() {
-		return Collections.unmodifiableSet(ITEM_CLASSES.keySet());
-	}
+    private static final Map<String, Class<? extends WorkItem>> ITEM_CLASSES =
+            new HashMap<String, Class<? extends WorkItem>>();
+
+    static {
+        ITEM_CLASSES.put(WorkloadTask.TAG_NAME, WorkloadTask.class);
+        ITEM_CLASSES.put(PopulateWorkItem.TAG_NAME, PopulateWorkItem.class);
+    }
+
+    @Nullable
+    public static Class<? extends WorkItem> classOf(String name) {
+        return ITEM_CLASSES.get(name);
+    }
+
+    public static Set<String> names() {
+        return Collections.unmodifiableSet(ITEM_CLASSES.keySet());
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.job;
 
 import com.nec.strudel.target.impl.DatabaseConfig;
@@ -21,6 +22,7 @@ import com.nec.strudel.workload.util.TimeValue;
 
 /**
  * A unit of work given to a worker node
+ * 
  * <pre>
  * "work" : {
  *   "node" : Node,
@@ -30,54 +32,60 @@ import com.nec.strudel.workload.util.TimeValue;
  * </pre>
  */
 public class WorkRequest {
-	private final Node node;
-	private final WorkItem item;
-	private final DatabaseConfig database;
+    private final Node node;
+    private final WorkItem item;
+    private final DatabaseConfig database;
 
-	public static WorkRequest createLocal(
-			WorkItem item, DatabaseConfig dbConfig) {
-		return new WorkRequest(Node.empty(), item, dbConfig);
-	}
+    public static WorkRequest createLocal(
+            WorkItem item, DatabaseConfig dbConfig) {
+        return new WorkRequest(Node.empty(), item, dbConfig);
+    }
 
-	public WorkRequest(Node node,
-			WorkItem item, DatabaseConfig dbConfig) {
-		this.node = node;
-		this.item = item;
-		this.database = dbConfig;
-	}
+    public WorkRequest(Node node,
+            WorkItem item, DatabaseConfig dbConfig) {
+        this.node = node;
+        this.item = item;
+        this.database = dbConfig;
+    }
 
-	public Node getNode() {
-		return node;
-	}
-	public int getNodeId() {
-		return node.getId();
-	}
-	public int getNodeNum() {
-		return node.getNum();
-	}
-	public WorkItem getWorkItem() {
-		return item;
-	}
-	public String getType() {
-		return item.getType();
-	}
-	public String getClassPath() {
-		return item.getClassPath();
-	}
-	public DatabaseConfig getDatabase() {
-		return database;
-	}
+    public Node getNode() {
+        return node;
+    }
 
-	public WorkConfig getConfig() {
-		return new WorkConfig(
-				node.getId(),
-				node.getNum(),
-				item, database);
+    public int getNodeId() {
+        return node.getId();
+    }
 
-	}
+    public int getNodeNum() {
+        return node.getNum();
+    }
 
-	public TimeValue startSlackTime() {
-		return item.startSlackTime();
-	}
+    public WorkItem getWorkItem() {
+        return item;
+    }
+
+    public String getType() {
+        return item.getType();
+    }
+
+    public String getClassPath() {
+        return item.getClassPath();
+    }
+
+    public DatabaseConfig getDatabase() {
+        return database;
+    }
+
+    public WorkConfig getConfig() {
+        return new WorkConfig(
+                node.getId(),
+                node.getNum(),
+                item, database);
+
+    }
+
+    public TimeValue startSlackTime() {
+        return item.startSlackTime();
+    }
 
 }

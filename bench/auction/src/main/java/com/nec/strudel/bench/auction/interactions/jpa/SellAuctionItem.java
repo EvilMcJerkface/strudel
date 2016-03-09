@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.jpa;
 
 import javax.persistence.EntityManager;
@@ -25,17 +26,17 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class SellAuctionItem extends AbstractSellAuctionItem<EntityManager>
-implements Interaction<EntityManager> {
+        implements Interaction<EntityManager> {
 
-	@Override
-	public Result execute(Param param, EntityManager db, ResultBuilder res) {
+    @Override
+    public Result execute(Param param, EntityManager db, ResultBuilder res) {
 
-		AuctionItem item = createItem(param);
-		db.getTransaction().begin();
-		db.persist(item);
-		db.getTransaction().commit();
+        AuctionItem item = createItem(param);
+        db.getTransaction().begin();
+        db.persist(item);
+        db.getTransaction().commit();
 
-		return res.success();
-	}
+        return res.success();
+    }
 
 }

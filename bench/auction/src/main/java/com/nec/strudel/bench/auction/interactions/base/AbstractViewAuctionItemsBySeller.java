@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.base;
 
 import java.util.List;
@@ -30,63 +31,63 @@ import com.nec.strudel.session.ResultBuilder;
 import com.nec.strudel.session.StateModifier;
 
 /**
- * Retrieves a set of auction items sold by a user
- * (chosen randomly from the set of the users except the
- * current user).
- * The successful result may have the following mode:
+ * Retrieves a set of auction items sold by a user (chosen randomly from the set
+ * of the users except the current user). The successful result may have the
+ * following mode:
  * <ul>
- * <li> EMPTY_RESULT: the specified user has no auction
- * item to sell.
+ * <li>EMPTY_RESULT: the specified user has no auction item to sell.
  * </ul>
  * It changes the transient state:
  * <ul>
- * <li> AUCTION_ITEM_ID: the ID of an item randomly
- * chosen from the retrieved set if it is not empty.
+ * <li>AUCTION_ITEM_ID: the ID of an item randomly chosen from the retrieved set
+ * if it is not empty.
  * </ul>
  */
-public abstract class AbstractViewAuctionItemsBySeller<T> implements Interaction<T> {
+public abstract class AbstractViewAuctionItemsBySeller<T>
+        implements Interaction<T> {
 
-	public enum InParam implements LocalParam {
-		SELLER_ID
-	}
+    public enum InParam implements LocalParam {
+        SELLER_ID
+    }
 
-	public enum OutParam implements LocalParam {
-		AUCTION_ITEM_LIST
-	}
+    public enum OutParam implements LocalParam {
+        AUCTION_ITEM_LIST
+    }
 
-	@Override
-	public void prepare(ParamBuilder builder) {
-		builder.randomIntId(InParam.SELLER_ID,
-				SessionParam.MIN_USER_ID,
-				SessionParam.TOTAL_USER,
-				SessionParam.USER_ID);
-	}
+    @Override
+    public void prepare(ParamBuilder builder) {
+        builder.randomIntId(InParam.SELLER_ID,
+                SessionParam.MIN_USER_ID,
+                SessionParam.TOTAL_USER,
+                SessionParam.USER_ID);
+    }
 
-	@Override
-	public void complete(StateModifier modifier) {
-		AuctionItem item = modifier.getOne(
-				OutParam.AUCTION_ITEM_LIST);
-		if (item != null) {
-			modifier.set(TransParam.AUCTION_ITEM_ID,
-					item.getItemId());
-		}
-	}
+    @Override
+    public void complete(StateModifier modifier) {
+        AuctionItem item = modifier.getOne(
+                OutParam.AUCTION_ITEM_LIST);
+        if (item != null) {
+            modifier.set(TransParam.AUCTION_ITEM_ID,
+                    item.getItemId());
+        }
+    }
 
-	public int getSellerId(Param param) {
-		return param.getInt(InParam.SELLER_ID);
-	}
+    public int getSellerId(Param param) {
+        return param.getInt(InParam.SELLER_ID);
+    }
 
-	public Result resultOf(List<AuctionItem> itemList, Param param, ResultBuilder res) {
-		res.set(OutParam.AUCTION_ITEM_LIST, itemList);
-	
-		if (itemList.isEmpty()) {
-			int sellerId = getSellerId(param);
-			res.warn("no item found for seller=" + sellerId);
-			return res.success(ResultMode.EMPTY_RESULT);
-		} else {
-			return res.success();
-		}
-		
-	}
+    public Result resultOf(List<AuctionItem> itemList, Param param,
+            ResultBuilder res) {
+        res.set(OutParam.AUCTION_ITEM_LIST, itemList);
+
+        if (itemList.isEmpty()) {
+            int sellerId = getSellerId(param);
+            res.warn("no item found for seller=" + sellerId);
+            return res.success(ResultMode.EMPTY_RESULT);
+        } else {
+            return res.success();
+        }
+
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.management.resource;
 
 import java.lang.annotation.ElementType;
@@ -23,6 +24,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Getter {
-	String name() default "";
-	String description() default "";
+    String name() default "";
+
+    String description() default "";
 }

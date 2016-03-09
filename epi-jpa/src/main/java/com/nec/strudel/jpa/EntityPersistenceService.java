@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.jpa;
 
 import javax.persistence.EntityManager;
@@ -33,57 +34,60 @@ import com.nec.strudel.target.TargetLifecycle;
  */
 public class EntityPersistenceService implements TargetCreator<EntityDB> {
 
-	@Override
-	public Target<EntityDB> create(TargetConfig config) {
-		return new EntityStore(
-				new PersistenceService().create(config));
-	}
+    @Override
+    public Target<EntityDB> create(TargetConfig config) {
+        return new EntityStore(
+                new PersistenceService().create(config));
+    }
 
-	@Override
-	public TargetLifecycle createLifecycle(TargetConfig config) {
-		return new JPADatabaseCreator(config);
-	}
+    @Override
+    public TargetLifecycle createLifecycle(TargetConfig config) {
+        return new JpaDatabaseCreator(config);
+    }
 
-	@Override
-	public Class<?> instrumentedClass(TargetConfig config) {
-		return new PersistenceService().instrumentedClass(config);
-	}
+    @Override
+    public Class<?> instrumentedClass(TargetConfig config) {
+        return new PersistenceService().instrumentedClass(config);
+    }
 
-	static class EntityStore implements Target<EntityDB> {
-		private final Target<EntityManager> store;
-		EntityStore(Target<EntityManager> store) {
-			this.store = store;
-		}
-		@Override
-		public void close() {
-			store.close();
-		}
+    static class EntityStore implements Target<EntityDB> {
+        private final Target<EntityManager> store;
 
-		@Override
-		public EntityDB open() {
-			return new EntityDBImpl(store.open());
-		}
+        EntityStore(Target<EntityManager> store) {
+            this.store = store;
+        }
 
-		@Override
-		public void beginUse(EntityDB target) {
-			/**
-			 * Entity manager may be used by somebody before.
-			 * clear the internal state before using.
-			 */
-			((EntityDBImpl) target).getEntityManager().clear();
-		}
-		@Override
-		public void endUse(EntityDB target) {
-		}
-		@Override
-		public Instrumented<EntityDB> open(ProfilerService profs) {
-			/**
-			 * TODO implement EntityDBImpl that
-			 * measures statistics.
-			 */
-			return InstrumentUtil.uninstrumented(open());
-		}
-		
-	}
+        @Override
+        public void close() {
+            store.close();
+        }
+
+        @Override
+        public EntityDB open() {
+            return new EntityDBImpl(store.open());
+        }
+
+        @Override
+        public Instrumented<EntityDB> open(ProfilerService profs) {
+            /**
+             * TODO implement EntityDBImpl that measures statistics.
+             */
+            return InstrumentUtil.uninstrumented(open());
+        }
+
+        @Override
+        public void beginUse(EntityDB target) {
+            /**
+             * Entity manager may be used by somebody before. clear the internal
+             * state before using.
+             */
+            ((EntityDBImpl) target).getEntityManager().clear();
+        }
+
+        @Override
+        public void endUse(EntityDB target) {
+        }
+
+    }
 
 }

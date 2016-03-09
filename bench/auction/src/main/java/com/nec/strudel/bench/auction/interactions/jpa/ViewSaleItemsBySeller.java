@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.jpa;
 
 import java.util.List;
@@ -26,20 +27,20 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ViewSaleItemsBySeller extends AbstractViewSaleItemsBySeller<EntityManager>
-implements Interaction<EntityManager>  {
-	public static final String QUERY =
-			"SELECT s FROM SaleItem s WHERE s.sellerId = :sid";
-	public static final String PARAM = "sid";
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		int sellerId = getSellerId(param);
-		List<SaleItem> itemList =
-				em.createQuery(QUERY, SaleItem.class)
-				.setParameter(PARAM, sellerId)
-				.getResultList();
+public class ViewSaleItemsBySeller
+        extends AbstractViewSaleItemsBySeller<EntityManager>
+        implements Interaction<EntityManager> {
+    public static final String QUERY = "SELECT s FROM SaleItem s WHERE s.sellerId = :sid";
+    public static final String PARAM = "sid";
 
-		return resultOf(itemList, param, res);
-	}
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        int sellerId = getSellerId(param);
+        List<SaleItem> itemList = em.createQuery(QUERY, SaleItem.class)
+                .setParameter(PARAM, sellerId)
+                .getResultList();
+
+        return resultOf(itemList, param, res);
+    }
 
 }

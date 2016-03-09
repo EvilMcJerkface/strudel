@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.management;
 
 public class RegistrationException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public RegistrationException(String message) {
-		super(message);
-	}
+    public RegistrationException(String message) {
+        super(message);
+    }
 
-	public RegistrationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public RegistrationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.jpa;
 
 import java.util.Properties;
@@ -29,28 +30,28 @@ import com.nec.strudel.target.TargetLifecycle;
 
 public class PersistenceService implements TargetCreator<EntityManager> {
 
+    @Override
+    public PersistentStore create(TargetConfig dbConfig) {
+        String unitName = dbConfig.getName();
+        Properties props = dbConfig.getProperties();
+        /**
+         * NOTE proprietary feature of EclpseLink:
+         */
+        props.put(PersistenceUnitProperties.CLASSLOADER,
+                dbConfig.targetClassLoader());
 
-	@Override
-	public PersistentStore create(TargetConfig dbConfig) {
-		String unitName = dbConfig.getName();
-		Properties props = dbConfig.getProperties();
-		/**
-		 * NOTE proprietary feature of EclpseLink:
-		 */
-		props.put(PersistenceUnitProperties.CLASSLOADER,
-				dbConfig.targetClassLoader());
-		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory(
-				unitName, props);
-		return new PersistentStore(emf);
-	}
-	@Override
-	public TargetLifecycle createLifecycle(TargetConfig dbConfig) {
-		return new JPADatabaseCreator(dbConfig);
-	}
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(
+                unitName, props);
+        return new PersistentStore(emf);
+    }
 
-	@Override
-	public Class<?> instrumentedClass(TargetConfig config) {
-		return PersistentStore.class;
-	}
+    @Override
+    public TargetLifecycle createLifecycle(TargetConfig dbConfig) {
+        return new JpaDatabaseCreator(dbConfig);
+    }
+
+    @Override
+    public Class<?> instrumentedClass(TargetConfig config) {
+        return PersistentStore.class;
+    }
 }

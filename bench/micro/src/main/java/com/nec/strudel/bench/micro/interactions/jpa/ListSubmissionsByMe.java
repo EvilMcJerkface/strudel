@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.jpa;
 
 import java.util.List;
@@ -28,32 +29,32 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ListSubmissionsByMe extends AbstractListSubmissionsByMe<EntityManager>
-		implements Interaction<EntityManager> {
-	static final String Q_BY_SENDER =
-			"SELECT s FROM Submission s WHERE s.senderId = :uid";
+public class ListSubmissionsByMe
+        extends AbstractListSubmissionsByMe<EntityManager>
+        implements Interaction<EntityManager> {
+    static final String Q_BY_SENDER = "SELECT s FROM Submission s WHERE s.senderId = :uid";
 
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
-		int uid = param.getInt(SessionParam.USER_ID);
-		List<Submission> submissions =
-				em.createQuery(Q_BY_SENDER, Submission.class)
-				.setParameter("uid", uid).getResultList();
-		res.set(OutParam.SUBMISSION_LIST, submissions);
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
+        int uid = param.getInt(SessionParam.USER_ID);
+        List<Submission> submissions = em
+                .createQuery(Q_BY_SENDER, Submission.class)
+                .setParameter("uid", uid).getResultList();
+        res.set(OutParam.SUBMISSION_LIST, submissions);
 
-		/**
-		 * NOTE the state may be given to another
-		 * thread having a different EntityManager
-		 */
-		for (Submission s : submissions) {
-			em.detach(s);
-		}
+        /**
+         * NOTE the state may be given to another thread having a different
+         * EntityManager
+         */
+        for (Submission s : submissions) {
+            em.detach(s);
+        }
 
-		if (submissions.isEmpty()) {
-			return res.success(ResultMode.EMPTY_RESULT);
-		} else {
-			return res.success();
-		}
-	}
+        if (submissions.isEmpty()) {
+            return res.success(ResultMode.EMPTY_RESULT);
+        } else {
+            return res.success();
+        }
+    }
 
 }

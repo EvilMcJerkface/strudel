@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session.runner;
 
 import java.util.Comparator;
@@ -30,22 +31,23 @@ import com.nec.strudel.workload.session.SessionProfiler;
 import com.nec.strudel.workload.session.StateFactory;
 
 /**
- * A session runner that runs multiple sessions in an interleaving
- * manner: while one session is in its think time, it runs other sessions.
- * A new session is created when there is no session ready to run (think time
- * is done).
+ * A session runner that runs multiple sessions in an interleaving manner: while
+ * one session is in its think time, it runs other sessions. A new session is
+ * created when there is no session ready to run (think time is done).
+ * 
  * @author tatemura
  *
- * @param <T> the type of the database.
+ * @param <T>
+ *            the type of the database.
  */
 public class MultiSessionRunner<T> extends AbstractSessionRunner<T> {
-    private static final Logger LOGGER =
-            Logger.getLogger(MultiSessionRunner.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(MultiSessionRunner.class);
     private static final int INIT_QUEUE_SIZE = 32;
 
-    private final PriorityQueue<SessionContainer<T>> queue =
-            new PriorityQueue<SessionContainer<T>>(INIT_QUEUE_SIZE,
-                    new Comparator<SessionContainer<T>>() {
+    private final PriorityQueue<SessionContainer<T>> queue = new PriorityQueue<SessionContainer<T>>(
+            INIT_QUEUE_SIZE,
+            new Comparator<SessionContainer<T>>() {
 
                 @Override
                 public int compare(SessionContainer<T> o1,
@@ -55,25 +57,24 @@ public class MultiSessionRunner<T> extends AbstractSessionRunner<T> {
             });
 
     public MultiSessionRunner(int id, SessionFactory<T> sfactory,
-    		Instrumented<T> con,
-    		Target<T> target,
+            Instrumented<T> con,
+            Target<T> target,
             StateFactory states,
             Instrumented<? extends SessionProfiler> prof) {
         super(id, sfactory, con, target, states, prof);
     }
 
-
     @Override
     public void runSessions() {
-        for (SessionContainer<T> sc = nextSession();
-                isRunning() && sc != null; sc = nextSession()) {
+        for (SessionContainer<T> sc = nextSession(); isRunning()
+                && sc != null; sc = nextSession()) {
             runAction(sc);
         }
     }
 
     @Override
     public int getSessionConcurrency() {
-    	return queue.size() + 1;
+        return queue.size() + 1;
     }
 
     private void runAction(SessionContainer<T> sc) {
@@ -81,20 +82,21 @@ public class MultiSessionRunner<T> extends AbstractSessionRunner<T> {
         String name = sc.nextName();
         LOGGER.debug("start: " + name + "@" + id);
         try {
-            Result r = doAction(sc);
+            Result result = doAction(sc);
             LOGGER.debug("end: " + name + "@" + id);
-            inspectResult(name, r);
+            inspectResult(name, result);
             if (sc.isActive()) {
                 queue.add(sc);
             } else {
                 LOGGER.debug("one session finished @" + id);
             }
-        } catch (WorkloadException e) {
+        } catch (WorkloadException ex) {
             LOGGER.debug("one session failed @" + id);
-        	LOGGER.error("session failed due to exception", e);
+            LOGGER.error("session failed due to exception", ex);
         }
 
     }
+
     private SessionContainer<T> nextSession() {
         SessionContainer<T> top = queue.peek();
         if (top != null && top.isReady()) {

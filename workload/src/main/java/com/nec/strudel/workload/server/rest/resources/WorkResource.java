@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.server.rest.resources;
 
 import java.io.StringReader;
@@ -40,82 +41,84 @@ import com.nec.strudel.workload.server.rest.WorkerServiceRepository;
 @Path("/work/{workid}")
 @Produces(MediaType.APPLICATION_JSON)
 public class WorkResource {
-	public static final String START = "start";
-	public static final String STOP = "stop";
-	private static final Logger LOGGER =
-		    Logger.getLogger(WorkResource.class);
-	public static final String WORKER_SERVICE_NAME = "workerservice";
-	private WorkerService service;
-	public WorkResource() {
-		this.service = WorkerServiceRepository.getService(
-				WORKER_SERVICE_NAME);
-	}
-	@GET
-	public JsonObject getStat(@PathParam("workid") String workId) {
-		WorkStatus stat = service.getStatus(workId);
-		JsonObject json = stat.toJason();
-		return json;
-	}
+    public static final String START = "start";
+    public static final String STOP = "stop";
+    private static final Logger LOGGER = Logger.getLogger(WorkResource.class);
+    public static final String WORKER_SERVICE_NAME = "workerservice";
+    private WorkerService service;
 
-	@GET
-	@Path("/report")
-	public JsonObject getReport(@PathParam("workid") String workId) {
-		return service.getReport(workId);
-	}
+    public WorkResource() {
+        this.service = WorkerServiceRepository.getService(
+                WORKER_SERVICE_NAME);
+    }
 
-	@PUT
-	@Path("/status")
-	public JsonObject setStat(@PathParam("workid") String workId,
-			@FormParam("stat") String stat) {
-		if (START.equals(stat)) {
-			return start(workId);
-		} else if (STOP.equals(stat)) {
-			return stop(workId);
-		}
-		return error(workId, "unknown status:" + stat);
-	}
+    @GET
+    public JsonObject getStat(@PathParam("workid") String workId) {
+        WorkStatus stat = service.getStatus(workId);
+        JsonObject json = stat.toJason();
+        return json;
+    }
 
-	@POST
-	@Path("/c/{name}")
-	public JsonObject postCommand(@PathParam("workid") String workId,
-			@PathParam("name") String name, String value) {
-		LOGGER.info("command "
-				+ name  + "("
-				+ value + "): " + workId);
-		try {
-			JsonReader reader = Json.createReader(
-					new StringReader(value));
-			JsonObject json = reader.readObject();
-			reader.close();
-			return service.operate(workId, name, json).toJason();
-		} catch (JsonException e) {
-			return error(workId, e.getMessage());
-		}
-	}
+    @GET
+    @Path("/report")
+    public JsonObject getReport(@PathParam("workid") String workId) {
+        return service.getReport(workId);
+    }
 
-	private JsonObject start(String workId) {
-		LOGGER.info("start: " + workId);
-		return service.start(workId).toJason();
-	}
+    @PUT
+    @Path("/status")
+    public JsonObject setStat(@PathParam("workid") String workId,
+            @FormParam("stat") String stat) {
+        if (START.equals(stat)) {
+            return start(workId);
+        } else if (STOP.equals(stat)) {
+            return stop(workId);
+        }
+        return error(workId, "unknown status:" + stat);
+    }
 
-	private JsonObject stop(String workId) {
-		LOGGER.info("stop: " + workId);
-		return service.stop(workId).toJason();
-	}
+    @POST
+    @Path("/c/{name}")
+    public JsonObject postCommand(@PathParam("workid") String workId,
+            @PathParam("name") String name, String value) {
+        LOGGER.info("command "
+                + name + "("
+                + value + "): " + workId);
+        try {
+            JsonReader reader = Json.createReader(
+                    new StringReader(value));
+            JsonObject json = reader.readObject();
+            reader.close();
+            return service.operate(workId, name, json).toJason();
+        } catch (JsonException ex) {
+            return error(workId, ex.getMessage());
+        }
+    }
 
-	@DELETE
-	public JsonObject delete(@PathParam("workid") String workId) {
-		try {
-			LOGGER.info("delete: " + workId);
-			JsonObject res = service.terminate(workId).toJason();
-			LOGGER.info("delete done: " + workId);
-			return res;
-		} catch (InterruptedException e) {
-			LOGGER.info("delete interrupted", e);
-			return error(workId, "interrupted");
-		}
-	}
-	private JsonObject error(String workId, String msg) {
-		return WorkStatus.error(workId, msg).toJason();
-	}
+    private JsonObject start(String workId) {
+        LOGGER.info("start: " + workId);
+        return service.start(workId).toJason();
+    }
+
+    private JsonObject stop(String workId) {
+        LOGGER.info("stop: " + workId);
+        return service.stop(workId).toJason();
+    }
+
+    @DELETE
+    public JsonObject delete(@PathParam("workid") String workId) {
+        try {
+            LOGGER.info("delete: " + workId);
+            JsonObject res = service.terminate(workId).toJason();
+            LOGGER.info("delete done: " + workId);
+            return res;
+        } catch (InterruptedException ex) {
+            LOGGER.info("delete interrupted", ex);
+            return error(workId, "interrupted");
+        }
+    }
+
+    private JsonObject error(String workId, String msg) {
+        return WorkStatus.error(workId, msg).toJason();
+    }
 }

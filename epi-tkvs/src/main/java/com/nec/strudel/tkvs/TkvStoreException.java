@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.tkvs;
 
 public class TkvStoreException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-	public TkvStoreException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public TkvStoreException(Throwable cause) {
-		super(cause);
-	}
+    public TkvStoreException(String message) {
+        super(message);
+    }
 
-	public TkvStoreException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public TkvStoreException(Throwable cause) {
+        super(cause);
+    }
 
-	public TkvStoreException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+    public TkvStoreException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public TkvStoreException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

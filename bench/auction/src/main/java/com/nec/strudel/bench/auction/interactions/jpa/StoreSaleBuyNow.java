@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.jpa;
 
 import javax.persistence.EntityManager;
@@ -27,37 +28,36 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class StoreSaleBuyNow extends AbstractStoreSaleBuyNow<EntityManager>
-implements Interaction<EntityManager> {
+        implements Interaction<EntityManager> {
 
-	@Override
-	public Result execute(Param param, EntityManager em, ResultBuilder res) {
+    @Override
+    public Result execute(Param param, EntityManager em, ResultBuilder res) {
 
-		BuyNowSale bns = createBuyNowSale(param);
-		em.getTransaction().begin();
-		Result r = null;
-		try {
-			r = store(bns, em, res);
-			return r;
-		} finally {
-			if (r != null && r.isSuccess()) {
-				em.getTransaction().commit();
-			} else {
-				em.getTransaction().rollback();
-			}
-		}
-	}
+        BuyNowSale bns = createBuyNowSale(param);
+        em.getTransaction().begin();
+        Result execResult = null;
+        try {
+            execResult = store(bns, em, res);
+            return execResult;
+        } finally {
+            if (execResult != null && execResult.isSuccess()) {
+                em.getTransaction().commit();
+            } else {
+                em.getTransaction().rollback();
+            }
+        }
+    }
 
-	Result store(BuyNowSale bns, EntityManager em, ResultBuilder res) {
-		SaleItem sItem =
-				em.find(SaleItem.class, bns.getItemId(),
-						LockModeType.PESSIMISTIC_WRITE);
-		Result r = check(bns, sItem, res);
-		if (r.isSuccess()) {
-			int newQnty = sItem.getQnty()
-					- bns.getQnty();
-			em.persist(bns);
-			sItem.setQnty(newQnty);
-		}
-		return r;
-	}
+    Result store(BuyNowSale bns, EntityManager em, ResultBuilder res) {
+        SaleItem saleItem = em.find(SaleItem.class, bns.getItemId(),
+                LockModeType.PESSIMISTIC_WRITE);
+        Result execResult = check(bns, saleItem, res);
+        if (execResult.isSuccess()) {
+            int newQnty = saleItem.getQnty()
+                    - bns.getQnty();
+            em.persist(bns);
+            saleItem.setQnty(newQnty);
+        }
+        return execResult;
+    }
 }

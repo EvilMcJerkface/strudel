@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.entity;
 
 import java.util.List;
@@ -25,17 +26,17 @@ import com.nec.strudel.session.Param;
 import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
-public class ViewSaleItemsBySeller extends AbstractViewSaleItemsBySeller<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
+public class ViewSaleItemsBySeller
+        extends AbstractViewSaleItemsBySeller<EntityDB>
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
 
-		int sellerId = getSellerId(param);
+        int sellerId = getSellerId(param);
 
-		List<SaleItem> itemList =
-				db.getEntitiesByIndex(SaleItem.class,
-						"sellerId", sellerId);
+        List<SaleItem> itemList = db.getEntitiesByIndex(SaleItem.class,
+                "sellerId", sellerId);
 
-		return resultOf(itemList, param, res);
-	}
+        return resultOf(itemList, param, res);
+    }
 }

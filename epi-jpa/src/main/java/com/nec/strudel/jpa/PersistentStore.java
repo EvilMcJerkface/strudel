@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.jpa;
 
 import javax.json.Json;
@@ -26,53 +27,57 @@ import com.nec.strudel.instrument.ProfilerService;
 import com.nec.strudel.target.Target;
 
 public class PersistentStore implements Target<EntityManager> {
-	private final EntityManagerFactory factory;
-	public PersistentStore(EntityManagerFactory factory) {
-		this.factory = factory;
-	}
+    private final EntityManagerFactory factory;
 
-	@Override
-	public void close() {
-		factory.close();
-	}
+    public PersistentStore(EntityManagerFactory factory) {
+        this.factory = factory;
+    }
 
-	@Override
-	public EntityManager open() {
-		return factory.createEntityManager();
-	}
-	@Override
-	public void beginUse(EntityManager target) {
-		/**
-		 * EntityManager may have been used by
-		 * somebody - clear the internal state
-		 * before using.
-		 */
-		target.clear();
-	}
-	@Override
-	public void endUse(EntityManager target) {
-	}
+    @Override
+    public void close() {
+        factory.close();
+    }
 
-	@Override
-	public Instrumented<EntityManager> open(ProfilerService profs) {
-		return new Instrumented<EntityManager>() {
-			private Profiler prof = new Profiler() {
+    @Override
+    public EntityManager open() {
+        return factory.createEntityManager();
+    }
 
-				@Override
-				public JsonObject getValue() {
-					return Json.createObjectBuilder().build();
-				}
-			};
-			@Override
-			public EntityManager getObject() {
-				return factory.createEntityManager();
-			}
-			@Override
-			public Profiler getProfiler() {
-				return prof;
-			}
+    @Override
+    public Instrumented<EntityManager> open(ProfilerService profs) {
+        return new Instrumented<EntityManager>() {
+            private Profiler prof = new Profiler() {
 
-		};
-	}
+                @Override
+                public JsonObject getValue() {
+                    return Json.createObjectBuilder().build();
+                }
+            };
+
+            @Override
+            public EntityManager getObject() {
+                return factory.createEntityManager();
+            }
+
+            @Override
+            public Profiler getProfiler() {
+                return prof;
+            }
+
+        };
+    }
+
+    @Override
+    public void beginUse(EntityManager target) {
+        /**
+         * EntityManager may have been used by somebody - clear the internal
+         * state before using.
+         */
+        target.clear();
+    }
+
+    @Override
+    public void endUse(EntityManager target) {
+    }
 
 }

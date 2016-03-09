@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.tkvs;
 
 public class TransactionException extends RuntimeException {
-
 
     private static final long serialVersionUID = 1L;
 
@@ -24,8 +24,8 @@ public class TransactionException extends RuntimeException {
         super(msg);
     }
 
-    public TransactionException(String msg, Throwable e) {
-        super(msg, e);
+    public TransactionException(String msg, Throwable ex) {
+        super(msg, ex);
     }
 
 }

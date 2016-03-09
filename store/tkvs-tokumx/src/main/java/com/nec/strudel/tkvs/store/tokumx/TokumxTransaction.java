@@ -55,10 +55,10 @@ public class TokumxTransaction extends TransactionBaseImpl {
 	public static final BackoffPolicy MONGO_BACKOFF =
 			BackoffPolicy.builder()
 			.maxTrial(MONGO_RETRY)
-			.initWaitMS(INIT_WAIT)
+			.initWaitMs(INIT_WAIT)
 			.startBackoff(0) // backoff from the first retry
-			.maxWaitMS(TimeUnit.SECONDS.toMillis(MAX_WAIT_SEC))
-			.maxTotalMS(TimeUnit.SECONDS.toMillis(MAX_TOTAL_SEC))
+			.maxWaitMs(TimeUnit.SECONDS.toMillis(MAX_WAIT_SEC))
+			.maxTotalMs(TimeUnit.SECONDS.toMillis(MAX_TOTAL_SEC))
 			.build();
 	private final BulkWriteOperation bulkwriter;
 	//private final DBCollection coll;

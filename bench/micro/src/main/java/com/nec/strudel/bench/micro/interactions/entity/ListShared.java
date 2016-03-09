@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import java.util.List;
@@ -27,18 +28,18 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class ListShared extends AbstractListShared<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int setId = param.getInt(InParam.SET_ID);
-		List<Shared> shareds = db.getEntitiesByIndex(Shared.class,
-				"setId", setId);
-		res.set(OutParam.ENTITY_LIST, shareds);
-		if (shareds.isEmpty()) {
-			return res.success(ResultMode.EMPTY_RESULT);
-		} else {
-			return res.success();
-		}
-	}
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int setId = param.getInt(InParam.SET_ID);
+        List<Shared> shareds = db.getEntitiesByIndex(Shared.class,
+                "setId", setId);
+        res.set(OutParam.ENTITY_LIST, shareds);
+        if (shareds.isEmpty()) {
+            return res.success(ResultMode.EMPTY_RESULT);
+        } else {
+            return res.success();
+        }
+    }
 
 }

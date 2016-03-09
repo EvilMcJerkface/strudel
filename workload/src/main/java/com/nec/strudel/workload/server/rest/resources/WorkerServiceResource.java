@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.server.rest.resources;
 
 import javax.json.Json;
@@ -36,40 +37,44 @@ import com.nec.strudel.workload.server.rest.WorkerServiceRepository;
 @Path("/worker")
 @Produces(MediaType.APPLICATION_JSON)
 public class WorkerServiceResource {
-	private static final Logger LOGGER =
-		    Logger.getLogger(WorkerServiceResource.class);
-	private WorkerService service;
-	public WorkerServiceResource() {
-		this.service = WorkerServiceRepository.getService(
-				WorkResource.WORKER_SERVICE_NAME);
-	}
-	@GET
-	public JsonArray list() {
-		JsonArrayBuilder arry = Json.createArrayBuilder();
-		for (String id : service.works()) {
-			arry.add(id);
-		}
-		return arry.build();
-	}
-	@POST
-	public JsonObject create(String input) {
-		try {
-			WorkRequest work = WorkRequestParser.parse(input);
-			LOGGER.info("creating work for node="
-					+ work.getNodeId());
-			WorkStatus stat = service.init(work);
-			LOGGER.info("created: " + stat.getWorkId());
-			return stat.toJason();
-		} catch (Exception e) {
-			LOGGER.error("failed to create", e);
-			return error(e);
-		}
-	}
-	private JsonObject error(Exception e) {
-		String msg = e.getClass().getName()
-				+ ": "
-				+ e.getMessage();
-		return WorkStatus.error(msg)
-				.toJason();
-	}
+    private static final Logger LOGGER = Logger
+            .getLogger(WorkerServiceResource.class);
+    private WorkerService service;
+
+    public WorkerServiceResource() {
+        this.service = WorkerServiceRepository.getService(
+                WorkResource.WORKER_SERVICE_NAME);
+    }
+
+    @GET
+    public JsonArray list() {
+        JsonArrayBuilder arry = Json.createArrayBuilder();
+        for (String id : service.works()) {
+            arry.add(id);
+        }
+        return arry.build();
+    }
+
+    @POST
+    public JsonObject create(String input) {
+        try {
+            WorkRequest work = WorkRequestParser.parse(input);
+            LOGGER.info("creating work for node="
+                    + work.getNodeId());
+            WorkStatus stat = service.init(work);
+            LOGGER.info("created: " + stat.getWorkId());
+            return stat.toJason();
+        } catch (Exception ex) {
+            LOGGER.error("failed to create", ex);
+            return error(ex);
+        }
+    }
+
+    private JsonObject error(Exception ex) {
+        String msg = ex.getClass().getName()
+                + ": "
+                + ex.getMessage();
+        return WorkStatus.error(msg)
+                .toJason();
+    }
 }

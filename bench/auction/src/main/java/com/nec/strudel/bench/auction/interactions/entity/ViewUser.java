@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.auction.interactions.entity;
 
 import com.nec.strudel.bench.auction.entity.User;
@@ -24,12 +25,12 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class ViewUser extends AbstractViewUser<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int userId = getUserId(param);
-		User user = db.get(User.class, userId);
-		return resultOf(user, param, res);
-	}
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int userId = getUserId(param);
+        User user = db.get(User.class, userId);
+        return resultOf(user, param, res);
+    }
 
 }

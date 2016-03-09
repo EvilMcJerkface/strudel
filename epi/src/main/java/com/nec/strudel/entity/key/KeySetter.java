@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.entity.key;
 
 import java.lang.reflect.Field;
@@ -24,88 +25,97 @@ import java.util.List;
 import com.nec.strudel.entity.info.BeanInfo;
 
 public abstract class KeySetter {
-	public abstract void setKey(Object entity, Object key);
-	public static KeySetter createSetter(BeanInfo src, BeanInfo dst,
-			List<String> key) {
-		Class<?> keyClass = src.valueClass();
-		if (key.size() == 1) {
-			Method m = dst.getSetter(key.get(0), keyClass);
-			return new DirectSetter(m);
-		}
-		List<KeySetter> setters =
-				new ArrayList<KeySetter>(key.size());
-		for (String name : key) {
-			Method getter = src.getGetter(name);
-			Method setter = dst.getSetter(name,
-					getter.getReturnType());
-			setters.add(new GetterSetter(getter, setter));
-		}
-		return new CompoundSetter(setters);
-		
-	}
-	public static KeySetter createSetter(BeanInfo dst, String key) {
-		Field f = dst.findField(key);
-		if (f == null) {
-			throw new RuntimeException("no such field:" + key
-					+ " of " + dst.valueClass());
-		}
-		Method m = dst.findSetter(key, f.getType());
-		if (m == null) {
-			throw new RuntimeException("no setter for:" + key
-					+ " of " + dst.valueClass());
-		}
-		return new DirectSetter(m);
-	}
-	static class DirectSetter extends KeySetter {
-		private final Method setter;
-		public DirectSetter(Method setter) {
-			this.setter = setter;
-		}
-		@Override
-		public void setKey(Object entity, Object key) {
-			try {
-				setter.invoke(entity, key);
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			} catch (IllegalArgumentException e) {
-				throw new RuntimeException(e);
-			} catch (InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
-	static class GetterSetter extends KeySetter {
-		private final Method getter;
-		private final Method setter;
-		public GetterSetter(Method getter, Method setter) {
-			this.getter = getter;
-			this.setter = setter;
-		}
+    public abstract void setKey(Object entity, Object key);
 
-		@Override
-		public void setKey(Object entity, Object key) {
-			try {
-				setter.invoke(entity, getter.invoke(key));
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			} catch (IllegalArgumentException e) {
-				throw new RuntimeException(e);
-			} catch (InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
-	static class CompoundSetter extends KeySetter {
-		private final List<KeySetter> keySetters;
-		public CompoundSetter(List<KeySetter> keySetters) {
-			super();
-			this.keySetters = keySetters;
-		}
-		@Override
-		public void setKey(Object entity, Object key) {
-			for (KeySetter setter : keySetters) {
-				setter.setKey(entity, key);
-			}
-		}
-	}
+    public static KeySetter createSetter(BeanInfo src, BeanInfo dst,
+            List<String> key) {
+        Class<?> keyClass = src.valueClass();
+        if (key.size() == 1) {
+            Method method = dst.getSetter(key.get(0), keyClass);
+            return new DirectSetter(method);
+        }
+        List<KeySetter> setters = new ArrayList<KeySetter>(key.size());
+        for (String name : key) {
+            Method getter = src.getGetter(name);
+            Method setter = dst.getSetter(name,
+                    getter.getReturnType());
+            setters.add(new GetterSetter(getter, setter));
+        }
+        return new CompoundSetter(setters);
+
+    }
+
+    public static KeySetter createSetter(BeanInfo dst, String key) {
+        Field field = dst.findField(key);
+        if (field == null) {
+            throw new RuntimeException("no such field:" + key
+                    + " of " + dst.valueClass());
+        }
+        Method method = dst.findSetter(key, field.getType());
+        if (method == null) {
+            throw new RuntimeException("no setter for:" + key
+                    + " of " + dst.valueClass());
+        }
+        return new DirectSetter(method);
+    }
+
+    static class DirectSetter extends KeySetter {
+        private final Method setter;
+
+        public DirectSetter(Method setter) {
+            this.setter = setter;
+        }
+
+        @Override
+        public void setKey(Object entity, Object key) {
+            try {
+                setter.invoke(entity, key);
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            } catch (IllegalArgumentException ex) {
+                throw new RuntimeException(ex);
+            } catch (InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    static class GetterSetter extends KeySetter {
+        private final Method getter;
+        private final Method setter;
+
+        public GetterSetter(Method getter, Method setter) {
+            this.getter = getter;
+            this.setter = setter;
+        }
+
+        @Override
+        public void setKey(Object entity, Object key) {
+            try {
+                setter.invoke(entity, getter.invoke(key));
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            } catch (IllegalArgumentException ex) {
+                throw new RuntimeException(ex);
+            } catch (InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    static class CompoundSetter extends KeySetter {
+        private final List<KeySetter> keySetters;
+
+        public CompoundSetter(List<KeySetter> keySetters) {
+            super();
+            this.keySetters = keySetters;
+        }
+
+        @Override
+        public void setKey(Object entity, Object key) {
+            for (KeySetter setter : keySetters) {
+                setter.setKey(entity, key);
+            }
+        }
+    }
 }

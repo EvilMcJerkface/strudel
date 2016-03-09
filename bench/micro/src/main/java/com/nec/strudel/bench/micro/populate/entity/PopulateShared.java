@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.populate.entity;
 
 import java.util.List;
@@ -26,27 +27,27 @@ import com.nec.strudel.entity.EntityTransaction;
 import com.nec.strudel.workload.api.Populator;
 
 public class PopulateShared extends AbstractPopulateShared<EntityDB>
-implements Populator<EntityDB, ContentSet> {
+        implements Populator<EntityDB, ContentSet> {
 
-	@Override
-	public void process(EntityDB db, final ContentSet param) {
-		final int setId = param.getGroupId();
-		db.run(Shared.class, setId, new EntityTask<Void>() {
-			@Override
-			public Void run(EntityTransaction tx) {
-				for (String c : param.getContents()) {
-					Shared shared = new Shared(setId);
-					shared.setContent(c);
-					tx.create(shared);
-				}
-				return null;
-			}
-		});
-	}
+    @Override
+    public void process(EntityDB db, final ContentSet param) {
+        final int setId = param.getGroupId();
+        db.run(Shared.class, setId, new EntityTask<Void>() {
+            @Override
+            public Void run(EntityTransaction tx) {
+                for (String c : param.getContents()) {
+                    Shared shared = new Shared(setId);
+                    shared.setContent(c);
+                    tx.create(shared);
+                }
+                return null;
+            }
+        });
+    }
 
-	@Override
-	protected List<Shared> getSharedBySetId(EntityDB db, int setId) {
-		return db.getEntitiesByIndex(Shared.class,
-				"setId", setId);
-	}
+    @Override
+    protected List<Shared> getSharedBySetId(EntityDB db, int setId) {
+        return db.getEntitiesByIndex(Shared.class,
+                "setId", setId);
+    }
 }

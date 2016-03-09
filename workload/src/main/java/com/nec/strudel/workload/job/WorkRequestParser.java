@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.job;
 
 import com.nec.congenio.ConfigValue;
@@ -22,46 +23,49 @@ import com.nec.strudel.target.impl.DatabaseConfig;
 import com.nec.strudel.workload.cluster.Node;
 
 public class WorkRequestParser {
-	public static final String TAG_NAME = "work";
-	public static final String NODE = "node";
-	public static final String DATABASE = "database";
+    public static final String TAG_NAME = "work";
+    public static final String NODE = "node";
+    public static final String DATABASE = "database";
 
-	/**
-	 * Converts WorkRequest to XML string
-	 * @param req
-	 * @return XML string
-	 */
-	public static String toString(WorkRequest req) {
-		WorkItem item = req.getWorkItem();
-		return Values.builder(TAG_NAME)
-				.add(NODE, req.getNode())
-				.add(item.tagName(), item.getConfig())
-				.add(DATABASE, req.getDatabase())
-				.toXMLString();
-	}
-	/**
-	 * Converts XML string to WorkRequest
-	 * @param input
-	 * @return WorkRequest
-	 */
-	public static WorkRequest parse(String input) {
-		ConfigValue conf = Values.parseValue(input);
-		Node node = conf.getObject(NODE, Node.class);
-		WorkItem item = extractItem(conf);
-		DatabaseConfig dbConfig =
-				conf.getObject(DATABASE, DatabaseConfig.class);
-		dbConfig.setContextClassPath(item.getClassPath());
-		return new WorkRequest(node, item, dbConfig);
-	}
+    /**
+     * Converts WorkRequest to XML string
+     * 
+     * @param req
+     * @return XML string
+     */
+    public static String toString(WorkRequest req) {
+        WorkItem item = req.getWorkItem();
+        return Values.builder(TAG_NAME)
+                .add(NODE, req.getNode())
+                .add(item.tagName(), item.getConfig())
+                .add(DATABASE, req.getDatabase())
+                .toXMLString();
+    }
 
-	static WorkItem extractItem(ConfigValue conf) {
-		for (String name : WorkItemSet.names()) {
-			WorkItem item = conf.findObject(name, WorkItemSet.classOf(name));
-			if (item != null) {
-				return item;
-			}
-		}
-		throw new ConfigException("work item not found in request");
-	}
+    /**
+     * Converts XML string to WorkRequest
+     * 
+     * @param input
+     * @return WorkRequest
+     */
+    public static WorkRequest parse(String input) {
+        ConfigValue conf = Values.parseValue(input);
+        Node node = conf.getObject(NODE, Node.class);
+        WorkItem item = extractItem(conf);
+        DatabaseConfig dbConfig = conf.getObject(DATABASE,
+                DatabaseConfig.class);
+        dbConfig.setContextClassPath(item.getClassPath());
+        return new WorkRequest(node, item, dbConfig);
+    }
+
+    static WorkItem extractItem(ConfigValue conf) {
+        for (String name : WorkItemSet.names()) {
+            WorkItem item = conf.findObject(name, WorkItemSet.classOf(name));
+            if (item != null) {
+                return item;
+            }
+        }
+        throw new ConfigException("work item not found in request");
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.workload.session;
 
 import com.nec.strudel.exceptions.ConfigException;
@@ -26,6 +27,7 @@ import com.nec.strudel.workload.session.runner.SessionExecs;
 
 /**
  * Session config contains the following elements:
+ * 
  * <pre>
  * "Session" : {
  *   "maxCount" : 0,
@@ -40,182 +42,191 @@ import com.nec.strudel.workload.session.runner.SessionExecs;
  *   "Runner" : null
  * }
  * </pre>
- *Interactions contains a key-value:
- *<pre>
+ * 
+ * Interactions contains a key-value:
+ * 
+ * <pre>
  * NAME : {
  *   "prob" : 0,
  *   "ThinkTime" : null
  * }
- *</pre>
- *Transition contains a key-value:
- *<pre>
+ * </pre>
+ * 
+ * Transition contains a key-value:
+ * 
+ * <pre>
  * NAME : {
  *   NAME_1 : { "prob" : 1},
  *   ...
  *   NAME_N : { "prob" : 1}
  * }
- *</pre>
+ * </pre>
+ * 
  * @param <T>
  */
 public class SessionConfig<T> {
-	public static final String SESSION = "session";
+    public static final String SESSION = "session";
 
-	@SuppressWarnings("unchecked")
-	public static <T> SessionConfig<T> create(ConfigParam param) {
-		return param.getObject(SESSION, SessionConfig.class);
-	}
+    @SuppressWarnings("unchecked")
+    public static <T> SessionConfig<T> create(ConfigParam param) {
+        return param.getObject(SESSION, SessionConfig.class);
+    }
 
-	private int maxCount = 0;
-	private int maxTime = 0;
-	private int minTime = 0;
-	private ParamConfig params = ParamConfig.empty();
-	private ThinkTime thinkTime = ThinkTime.noTime();
-	private String packageName = "";
-	private String factory = "";
-	private String execType = "";
-	private String execFactory = "";
-	private int sessionConcurrency = 0;
-	private InteractionSet interactions = InteractionSet.empty();
-	private TransitionSet transitions = TransitionSet.empty();
+    private int maxCount = 0;
+    private int maxTime = 0;
+    private int minTime = 0;
+    private ParamConfig params = ParamConfig.empty();
+    private ThinkTime thinkTime = ThinkTime.noTime();
+    private String packageName = "";
+    private String factory = "";
+    private String execType = "";
+    private String execFactory = "";
+    private int sessionConcurrency = 0;
+    private InteractionSet interactions = InteractionSet.empty();
+    private TransitionSet transitions = TransitionSet.empty();
 
-	public SessionConfig() {
-	}
+    public SessionConfig() {
+    }
 
-	public int getSessionConcurrency() {
-		return sessionConcurrency;
-	}
-	public void setSessionConcurrency(int sessionConcurrency) {
-		this.sessionConcurrency = sessionConcurrency;
-	}
+    public int getSessionConcurrency() {
+        return sessionConcurrency;
+    }
 
-	public ParamConfig getParams() {
-		return params;
-	}
-	public void setParams(ParamConfig params) {
-		this.params = params;
-	}
-	public ThinkTime getThinkTime() {
-		return thinkTime;
-	}
-	public void setThinkTime(ThinkTime thinkTime) {
-		this.thinkTime = thinkTime;
-	}
+    public void setSessionConcurrency(int sessionConcurrency) {
+        this.sessionConcurrency = sessionConcurrency;
+    }
 
-	public int getMaxCount() {
-		return maxCount;
-	}
+    public ParamConfig getParams() {
+        return params;
+    }
 
-	public void setMaxCount(int maxCount) {
-		this.maxCount = maxCount;
-	}
+    public void setParams(ParamConfig params) {
+        this.params = params;
+    }
 
-	public int getMaxTime() {
-		return maxTime;
-	}
+    public ThinkTime getThinkTime() {
+        return thinkTime;
+    }
 
-	public void setMaxTime(int maxTime) {
-		this.maxTime = maxTime;
-	}
+    public void setThinkTime(ThinkTime thinkTime) {
+        this.thinkTime = thinkTime;
+    }
 
-	public int getMinTime() {
-		return minTime;
-	}
+    public int getMaxCount() {
+        return maxCount;
+    }
 
-	public void setMinTime(int minTime) {
-		this.minTime = minTime;
-	}
+    public void setMaxCount(int maxCount) {
+        this.maxCount = maxCount;
+    }
 
-	public String getPackageName() {
-		return packageName;
-	}
+    public int getMaxTime() {
+        return maxTime;
+    }
 
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
-	}
+    public void setMaxTime(int maxTime) {
+        this.maxTime = maxTime;
+    }
 
-	public String getFactory() {
-		return factory;
-	}
+    public int getMinTime() {
+        return minTime;
+    }
 
-	public void setFactory(String factory) {
-		this.factory = factory;
-	}
+    public void setMinTime(int minTime) {
+        this.minTime = minTime;
+    }
 
-	public String getExecType() {
-		return execType;
-	}
+    public String getPackageName() {
+        return packageName;
+    }
 
-	public void setExecType(String execType) {
-		this.execType = execType;
-	}
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
 
-	public String getExecFactory() {
-		return execFactory;
-	}
+    public String getFactory() {
+        return factory;
+    }
 
-	public void setExecFactory(String execFactory) {
-		this.execFactory = execFactory;
-	}
+    public void setFactory(String factory) {
+        this.factory = factory;
+    }
 
-	public InteractionSet getInteractions() {
-		return interactions;
-	}
+    public String getExecType() {
+        return execType;
+    }
 
-	public void setInteractions(InteractionSet interactions) {
-		this.interactions = interactions;
-	}
+    public void setExecType(String execType) {
+        this.execType = execType;
+    }
 
-	public TransitionSet getTransitions() {
-		return transitions;
-	}
+    public String getExecFactory() {
+        return execFactory;
+    }
 
-	public void setTransitions(TransitionSet transitions) {
-		this.transitions = transitions;
-	}
+    public void setExecFactory(String execFactory) {
+        this.execFactory = execFactory;
+    }
 
-	public SessionFactory<T> createSessionFactory(String classPath) {
-		SessionFactory.Builder<T> builder = new SessionFactory.Builder<T>()
-			.maxCount(maxCount)
-			.maxTime(maxTime)
-			.minTime(minTime);
+    public InteractionSet getInteractions() {
+        return interactions;
+    }
 
-		InteractionBuilder ib = InteractionBuilder.builder(interactions, transitions);
-		ib.build(createInteractionFactory(classPath), builder);
+    public void setInteractions(InteractionSet interactions) {
+        this.interactions = interactions;
+    }
 
-		return builder
-				.waitTime(ib.buildWaitTime(thinkTime))
-				.build();
-	}
+    public TransitionSet getTransitions() {
+        return transitions;
+    }
 
-	public InteractionFactory<T> createInteractionFactory(String classPath) {
-		if (!packageName.isEmpty()) {
-			return new PackageInteractionFactory<T>(packageName, classPath);
-		} else if (!factory.isEmpty()) {
-			return ClassUtil.create(factory, classPath);
-		} else {
-			throw new ConfigException("missing packageName or factory");
-		}
-	}
+    public void setTransitions(TransitionSet transitions) {
+        this.transitions = transitions;
+    }
 
-	public SessionExecFactory<T> getSessionExecFactory(String classPath) {
-		SessionExecFactory<T> factory =
-				createSessionExecFactory(classPath);
-		factory.initialize(this);
-		return factory;
-	}
+    public SessionFactory<T> createSessionFactory(String classPath) {
+        SessionFactory.Builder<T> builder = new SessionFactory.Builder<T>()
+                .maxCount(maxCount)
+                .maxTime(maxTime)
+                .minTime(minTime);
 
-	public Output output(String classPath) {
-		return createSessionExecFactory(classPath).output(this);
-	}
+        InteractionBuilder ib = InteractionBuilder.builder(interactions,
+                transitions);
+        ib.build(createInteractionFactory(classPath), builder);
 
-	private SessionExecFactory<T> createSessionExecFactory(String classPath) {
-		if (!execType.isEmpty()) {
-			return SessionExecs.createFactory(execType, classPath);
-		} else if (!execFactory.isEmpty()) {
-			return ClassUtil.create(execFactory, classPath);
-		}
-		return SessionExecs.createFactory(
-				this, classPath);
-	}
+        return builder
+                .waitTime(ib.buildWaitTime(thinkTime))
+                .build();
+    }
+
+    public InteractionFactory<T> createInteractionFactory(String classPath) {
+        if (!packageName.isEmpty()) {
+            return new PackageInteractionFactory<T>(packageName, classPath);
+        } else if (!factory.isEmpty()) {
+            return ClassUtil.create(factory, classPath);
+        } else {
+            throw new ConfigException("missing packageName or factory");
+        }
+    }
+
+    public SessionExecFactory<T> getSessionExecFactory(String classPath) {
+        SessionExecFactory<T> factory = createSessionExecFactory(classPath);
+        factory.initialize(this);
+        return factory;
+    }
+
+    public Output output(String classPath) {
+        return createSessionExecFactory(classPath).output(this);
+    }
+
+    private SessionExecFactory<T> createSessionExecFactory(String classPath) {
+        if (!execType.isEmpty()) {
+            return SessionExecs.createFactory(execType, classPath);
+        } else if (!execFactory.isEmpty()) {
+            return ClassUtil.create(execFactory, classPath);
+        }
+        return SessionExecs.createFactory(
+                this, classPath);
+    }
 
 }

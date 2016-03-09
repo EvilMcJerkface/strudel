@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.bench.micro.interactions.entity;
 
 import java.util.List;
@@ -28,19 +29,18 @@ import com.nec.strudel.session.Result;
 import com.nec.strudel.session.ResultBuilder;
 
 public class ListSubmissionsToMe extends AbstractListSubmissionsToMe<EntityDB>
-implements Interaction<EntityDB> {
-	@Override
-	public Result execute(Param param, EntityDB db, ResultBuilder res) {
-		int userId = param.getInt(SessionParam.USER_ID);
-		List<Submission> submissions =
-				db.getEntitiesByIndex(Submission.class,
-						"receiverId", userId);
-		res.set(OutParam.SUBMISSION_LIST, submissions);
-		if (submissions.isEmpty()) {
-			return res.success(ResultMode.EMPTY_RESULT);
-		} else {
-			return res.success();
-		}
-	}
+        implements Interaction<EntityDB> {
+    @Override
+    public Result execute(Param param, EntityDB db, ResultBuilder res) {
+        int userId = param.getInt(SessionParam.USER_ID);
+        List<Submission> submissions = db.getEntitiesByIndex(Submission.class,
+                "receiverId", userId);
+        res.set(OutParam.SUBMISSION_LIST, submissions);
+        if (submissions.isEmpty()) {
+            return res.success(ResultMode.EMPTY_RESULT);
+        } else {
+            return res.success();
+        }
+    }
 
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.metrics;
 
 import java.util.ArrayList;
@@ -28,81 +29,89 @@ import com.nec.strudel.json.func.Func;
 import com.nec.strudel.json.func.Value;
 
 public class Output {
-	private final List<Map.Entry<String, Func>> outs;
+    private final List<Map.Entry<String, Func>> outs;
 
-	public Output(List<Map.Entry<String, Func>> outs) {
-		this.outs = outs;
-	}
+    public Output(List<Map.Entry<String, Func>> outs) {
+        this.outs = outs;
+    }
 
-	public Iterable<Map.Entry<String, Func>> entries() {
-		return outs;
-	}
+    public Iterable<Map.Entry<String, Func>> entries() {
+        return outs;
+    }
 
-	public static Builder builder() {
-		return new Builder();
-	}
-	public static Output empty() {
-		return builder().build();
-	}
-	public static Output referenceTo(JsonObject values) {
-		Output.Builder b = builder();
-		for (String key : values.keySet()) {
-			b.add(key);
-		}
-		return b.build();
-	}
+    public static Builder builder() {
+        return new Builder();
+    }
 
-	public static Output valueOf(JsonObject values) {
-		Output.Builder b = builder();
-		for (String key : values.keySet()) {
-    		JsonValue value = values.get(key);
-    		b.add(key, value);	
-		}
-		return b.build();
-	}
-	public static Output names(String... names) {
-		Output.Builder b = builder();
-		for (String name : names) {
-			b.add(name);
-		}
-		return b.build();
-	}
-	public static Output funcs(Collection<? extends Map.Entry<String, Func>> funcs) {
-		return builder().add(funcs).build();
-	}
+    public static Output empty() {
+        return builder().build();
+    }
 
-	public String toString() {
-		return outs.toString();
-	}
+    public static Output referenceTo(JsonObject values) {
+        Output.Builder builder = builder();
+        for (String key : values.keySet()) {
+            builder.add(key);
+        }
+        return builder.build();
+    }
 
-	public static class Builder {
+    public static Output valueOf(JsonObject values) {
+        Output.Builder builder = builder();
+        for (String key : values.keySet()) {
+            JsonValue value = values.get(key);
+            builder.add(key, value);
+        }
+        return builder.build();
+    }
 
-		private final List<Map.Entry<String, Func>> outs =
-				new ArrayList<Map.Entry<String, Func>>();
+    public static Output names(String... names) {
+        Output.Builder builder = builder();
+        for (String name : names) {
+            builder.add(name);
+        }
+        return builder.build();
+    }
 
-		public Builder add(Output out) {
-			outs.addAll(out.outs);
-			return this;
-		}
+    public static Output funcs(
+            Collection<? extends Map.Entry<String, Func>> funcs) {
+        return builder().add(funcs).build();
+    }
 
-		public Builder add(String name, Func f) {
-			outs.add(new NamedFunc(name, f));
-			return this;
-		}
-		public Builder add(String name) {
-			return add(name, Value.of(name));
-		}
-		public Builder add(String name, JsonValue value) {
-			return add(name, Constant.of(value));
-		}
-		public Builder add(Collection<? extends Map.Entry<String, Func>> funcs) {
-			outs.addAll(funcs);
-			return this;
-		}
+    public String toString() {
+        return outs.toString();
+    }
 
-		public Output build() {
-			return new Output(outs);
-		}
+    public static class Builder {
 
-	}
+        private final List<Map.Entry<String, Func>> outs = new ArrayList<Map.Entry<String, Func>>();
+
+        public Builder add(Output out) {
+            outs.addAll(out.outs);
+            return this;
+        }
+
+        public Builder add(String name, Func func) {
+            outs.add(new NamedFunc(name, func));
+            return this;
+        }
+
+        public Builder add(String name) {
+            return add(name, Value.of(name));
+        }
+
+        public Builder add(String name, JsonValue value) {
+            return add(name, Constant.of(value));
+        }
+
+        public Builder add(
+                Collection<? extends Map.Entry<String, Func>> funcs) {
+            outs.addAll(funcs);
+            return this;
+        }
+
+        public Output build() {
+            return new Output(outs);
+        }
+
+    }
 }

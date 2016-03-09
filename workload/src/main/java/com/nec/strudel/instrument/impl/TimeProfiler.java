@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.nec.strudel.instrument.impl;
 
 import java.util.concurrent.TimeUnit;
@@ -29,78 +30,81 @@ import com.nec.strudel.metrics.TimeMetrics;
 
 @NotThreadSafe
 public class TimeProfiler implements Profiler, TimeInstrument {
-	private final CountingProfiler count;
-	private final CountingProfiler time;
-	private final MeasurementState measure;
-	private final OperationListener listener;
-	private String current = "";
-	private long start;
-	public static TimeMetrics output(String name) {
-		return new TimeMetrics(name);
-	}
+    private final CountingProfiler count;
+    private final CountingProfiler time;
+    private final MeasurementState measure;
+    private final OperationListener listener;
+    private String current = "";
+    private long start;
 
-	public TimeProfiler(String name, MeasurementState measure) {
-		this(name, measure, NO_LISTENER);
-	}
-	public TimeProfiler(String name,
-			MeasurementState measure, OperationListener listener) {
-		this.count = new CountingProfiler(TimeMetrics.countOf(name));
-		this.time = new CountingProfiler(TimeMetrics.timeOf(name));
-		this.measure = measure;
-		this.listener = listener;
-	}
-	@Override
-	public void start(String name) {
-		current = name;
-		start = System.nanoTime();
-	}
-	@Override
-	public long end() {
-		if (start == 0) {
-			return 0;
-		}
-		long micro =
-				TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - start);
-		if (measure.isMeasuring()) {
-			time.add(current, micro);
-			count.increment(current);
-		}
-		listener.operation(micro);
-		start = 0;
-		return micro;
-	}
+    public static TimeMetrics output(String name) {
+        return new TimeMetrics(name);
+    }
 
-	@Override
-	public JsonObject getValue() {
-		return JsonValues.union(
-				count.getValue(),
-				time.getValue());
-	}
+    public TimeProfiler(String name, MeasurementState measure) {
+        this(name, measure, NO_LISTENER);
+    }
 
-	private static final OperationListener NO_LISTENER =
-			new OperationListener() {
-				@Override
-				public void operation(long microSec) {
-				}
-	};
-	public static final NoTime NO_TIME = new NoTime();
-	public static class NoTime implements Profiler, TimeInstrument {
-		private final JsonObject empty =
-				Json.createObjectBuilder().build();
-		@Override
-		public void start(String name) {
-		}
+    public TimeProfiler(String name,
+            MeasurementState measure, OperationListener listener) {
+        this.count = new CountingProfiler(TimeMetrics.countOf(name));
+        this.time = new CountingProfiler(TimeMetrics.timeOf(name));
+        this.measure = measure;
+        this.listener = listener;
+    }
 
-		@Override
-		public long end() {
-			return 0;
-		}
+    @Override
+    public void start(String name) {
+        current = name;
+        start = System.nanoTime();
+    }
 
-		@Override
-		public JsonObject getValue() {
-			return empty;
-		}
-		
-	}
+    @Override
+    public long end() {
+        if (start == 0) {
+            return 0;
+        }
+        long micro = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - start);
+        if (measure.isMeasuring()) {
+            time.add(current, micro);
+            count.increment(current);
+        }
+        listener.operation(micro);
+        start = 0;
+        return micro;
+    }
+
+    @Override
+    public JsonObject getValue() {
+        return JsonValues.union(
+                count.getValue(),
+                time.getValue());
+    }
+
+    private static final OperationListener NO_LISTENER = new OperationListener() {
+        @Override
+        public void operation(long microSec) {
+        }
+    };
+    public static final NoTime NO_TIME = new NoTime();
+
+    public static class NoTime implements Profiler, TimeInstrument {
+        private final JsonObject empty = Json.createObjectBuilder().build();
+
+        @Override
+        public void start(String name) {
+        }
+
+        @Override
+        public long end() {
+            return 0;
+        }
+
+        @Override
+        public JsonObject getValue() {
+            return empty;
+        }
+
+    }
 
 }

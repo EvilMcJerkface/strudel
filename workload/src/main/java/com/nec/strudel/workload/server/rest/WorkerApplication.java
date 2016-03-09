@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.nec.strudel.workload.server.rest;
 
+package com.nec.strudel.workload.server.rest;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,18 +29,18 @@ import com.nec.strudel.workload.server.rest.resources.WorkResource;
 import com.nec.strudel.workload.server.rest.resources.WorkerServiceResource;
 
 public class WorkerApplication extends ResourceConfig {
-	public WorkerApplication() {
-		registerClasses(
-				WorkerServiceResource.class,
-				WorkResource.class
-		);
-		register(JsonProcessingFeature.class);
-		register(new LoggingFilter(logger(), false));
-		property(JsonGenerator.PRETTY_PRINTING, true);
-	}
-	static Logger logger() {
-		Logger logger = Logger.getAnonymousLogger();
-		logger.setLevel(Level.WARNING);
-		return logger;
-	}
+    public WorkerApplication() {
+        registerClasses(
+                WorkerServiceResource.class,
+                WorkResource.class);
+        register(JsonProcessingFeature.class);
+        register(new LoggingFilter(logger(), false));
+        property(JsonGenerator.PRETTY_PRINTING, true);
+    }
+
+    static Logger logger() {
+        Logger logger = Logger.getAnonymousLogger();
+        logger.setLevel(Level.WARNING);
+        return logger;
+    }
 }

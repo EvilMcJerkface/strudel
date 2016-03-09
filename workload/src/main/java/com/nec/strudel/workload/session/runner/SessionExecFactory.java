@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.nec.strudel.workload.session.runner;
 
+package com.nec.strudel.workload.session.runner;
 
 import java.util.Random;
 
@@ -33,15 +33,14 @@ import com.nec.strudel.workload.state.WorkState;
 @NotThreadSafe
 public interface SessionExecFactory<T> {
 
-	void initialize(SessionConfig<T> conf);
+    void initialize(SessionConfig<T> conf);
 
+    WorkExec create(WorkNodeInfo node,
+            Target<T> target,
+            SessionFactory<T> sfactory, WorkState state, ProfilerService profs,
+            ParamConfig pconf, Random rand);
 
-	WorkExec create(WorkNodeInfo node,
-			Target<T> target,
-			SessionFactory<T> sfactory, WorkState state, ProfilerService profs,
-			ParamConfig pconf, Random rand);
+    Output output(SessionConfig<T> conf);
 
-	Output output(SessionConfig<T> conf);
-
-	String getType();
+    String getType();
 }
