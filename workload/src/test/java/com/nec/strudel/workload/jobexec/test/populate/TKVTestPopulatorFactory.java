@@ -20,10 +20,12 @@ import java.util.Map;
 
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
+import com.nec.strudel.tkvs.SimpleRecord;
 import com.nec.strudel.tkvs.Transaction;
 import com.nec.strudel.tkvs.TransactionRunner;
 import com.nec.strudel.tkvs.TransactionTask;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.VarArrayFormat;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.workload.api.PopulateParam;
 import com.nec.strudel.workload.api.Populator;
 import com.nec.strudel.workload.api.PopulatorFactory;
@@ -34,29 +36,35 @@ import com.nec.strudel.workload.api.ValidateReporter;
  * @author tatemura
  *
  */
-public class TKVTestPopulatorFactory implements PopulatorFactory<TransactionalDB> {
+public class TKVTestPopulatorFactory implements PopulatorFactory<TransactionManager> {
 	public enum InParam {
 		COUNT,
 	}
     public static final String TASK_NAME = "populate";
     public static final String COLLECTION_NAME = "r";
-    private static final Map<String, Populator<TransactionalDB, ?>> POPS =
-            new HashMap<String, Populator<TransactionalDB, ?>>();
+    private static final Map<String, Populator<TransactionManager, ?>> POPS =
+            new HashMap<String, Populator<TransactionManager, ?>>();
     static {
         def(new PopulateRecords());
     }
-    private static final void def(Populator<TransactionalDB, ?> task) {
+    private static final void def(Populator<TransactionManager, ?> task) {
         POPS.put(task.getName(), task);
     }
+
+    public static Record createRecord(String... values) {
+        return SimpleRecord.create(
+                VarArrayFormat.toBytes(values));
+    }
+
     @Override
-    public Populator<TransactionalDB, ?> create(String name) {
+    public Populator<TransactionManager, ?> create(String name) {
         return POPS.get(name);
     }
 
     public static Record recordOf(int id) {
-        return Record.create(id, "v" + id);
+        return createRecord(Integer.toString(id), "v" + id);
     }
-    public static class PopulateRecords implements Populator<TransactionalDB, PopulateParam> {
+    public static class PopulateRecords implements Populator<TransactionManager, PopulateParam> {
 
         @Override
         public String getName() {
@@ -68,7 +76,7 @@ public class TKVTestPopulatorFactory implements PopulatorFactory<TransactionalDB
         }
 
         @Override
-        public void process(TransactionalDB db, PopulateParam p) {
+        public void process(TransactionManager db, PopulateParam p) {
         	PopulateParam param = (PopulateParam) p;
             int count = param.getInt(InParam.COUNT);
             final String name = COLLECTION_NAME;
@@ -85,7 +93,7 @@ public class TKVTestPopulatorFactory implements PopulatorFactory<TransactionalDB
             }
         }
         @Override
-        public boolean validate(TransactionalDB db, PopulateParam param,
+        public boolean validate(TransactionManager db, PopulateParam param,
         		ValidateReporter reporter) {
         	// TODO implement validation
         	return true;

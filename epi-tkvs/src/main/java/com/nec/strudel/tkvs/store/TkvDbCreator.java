@@ -20,7 +20,7 @@ import com.nec.strudel.target.Target;
 import com.nec.strudel.target.TargetConfig;
 import com.nec.strudel.target.TargetCreator;
 import com.nec.strudel.target.TargetLifecycle;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.util.ClassUtil;
 
 @SuppressWarnings("rawtypes")
@@ -29,7 +29,7 @@ public class TkvDbCreator implements TargetCreator {
     @Override
     public Target create(TargetConfig dbConfig) {
         TransactionalStore store = createStore(dbConfig);
-        Target<TransactionalDB> tkvStore = store.create(dbConfig.getName(),
+        Target<TransactionManager> tkvStore = store.create(dbConfig.getName(),
                 dbConfig.getProperties());
         String type = dbConfig.getType();
         if ("tkvs".equals(type)) {

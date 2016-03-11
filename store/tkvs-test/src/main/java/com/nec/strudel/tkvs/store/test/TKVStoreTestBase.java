@@ -26,15 +26,22 @@ import org.junit.Test;
 
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
+import com.nec.strudel.tkvs.SimpleRecord;
 import com.nec.strudel.tkvs.Transaction;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
+import com.nec.strudel.tkvs.VarArrayFormat;
 
 public abstract class TKVStoreTestBase {
 	static final AtomicInteger COUNTER = new AtomicInteger();
 
-	public abstract TransactionalDB getDB(String name);
+	public abstract TransactionManager getDB(String name);
 
-	protected String newName() {
+    public static Record createRecord(String... values) {
+        return SimpleRecord.create(
+                VarArrayFormat.toBytes(values));
+    }
+
+    protected String newName() {
 		return "db" + COUNTER.getAndIncrement();
 	}
 
@@ -44,11 +51,11 @@ public abstract class TKVStoreTestBase {
 		String txName = "tx";
 		Key tk = Key.create("t1");
 
-		TransactionalDB db = getDB(dbName);
+		TransactionManager db = getDB(dbName);
 		//assertEquals(dbName, db.getName());
 
 		String collection = "r";
-		Record r = Record.create("1","2");
+		Record r = createRecord("1","2");
 		Key pk = Key.create("k1");
 		Transaction tx = db.start(txName, tk);
 		assertNotNull(tx);
@@ -68,7 +75,7 @@ public abstract class TKVStoreTestBase {
 		assertEquals(r, r2);
 		tx1.commit();
 
-		TransactionalDB db1 = getDB(dbName);
+		TransactionManager db1 = getDB(dbName);
 		Transaction tx2 = db1.start(txName, tk);
 		Record r3 = tx2.get(collection, pk);
 		assertEquals(r, r3);
@@ -80,7 +87,7 @@ public abstract class TKVStoreTestBase {
 	        String txName = "tx";
 	        Key tk = Key.create("t1");
 
-	        TransactionalDB db = getDB(dbName);
+	        TransactionManager db = getDB(dbName);
 	        //assertEquals(dbName, db.getName());
 
 	        String collection = "idx";
@@ -89,7 +96,7 @@ public abstract class TKVStoreTestBase {
 	            ptrs[i] = "p" + i;
 	        }
 	        Key pk = Key.create("k1");
-	        Record d = Record.create(ptrs);
+	        Record d = createRecord(ptrs);
 	        Transaction tx = db.start(txName, tk);
 	        assertNotNull(tx);
 	        //Record r0 = tx.get(collection, pk);
@@ -113,11 +120,11 @@ public abstract class TKVStoreTestBase {
 		String txName = "tx";
 		Key tk = Key.create("t1");
 
-		TransactionalDB db = getDB(dbName);
+		TransactionManager db = getDB(dbName);
 		//assertEquals(dbName, db.getName());
 
 		String collection = "r";
-		Record r = Record.create("1","2");
+		Record r = createRecord("1","2");
 
 		Key pk = Key.create("k1");
 		Transaction tx = db.start(txName, tk);
@@ -132,7 +139,7 @@ public abstract class TKVStoreTestBase {
 
 		//test 2 transactions on the same primary key
 		Transaction tx3 = db.start(txName, tk);
-		Record r2 = Record.create("2","2");
+		Record r2 = createRecord("2","2");
 		tx3.put(collection, pk, r2);
 		Record r3 = tx3.get(collection, pk);
 		assertEquals(r2, r3);
@@ -145,14 +152,14 @@ public abstract class TKVStoreTestBase {
 		String txName = "tx";
 		Key tk = Key.create("t1");
 
-		TransactionalDB db = getDB(dbName);
+		TransactionManager db = getDB(dbName);
 
 		String collection = "r";
-		Record r = Record.create("1","2");
-		Record r1 = Record.create("2","2");
-		Record r2 = Record.create("3","3");
-		Record r3 = Record.create("4","4");
-		Record r4 = Record.create("5","5");
+		Record r = createRecord("1","2");
+		Record r1 = createRecord("2","2");
+		Record r2 = createRecord("3","3");
+		Record r3 = createRecord("4","4");
+		Record r4 = createRecord("5","5");
 
 		Key pk = Key.create("k1");
 		Transaction tx = db.start(txName, tk);
@@ -173,10 +180,10 @@ public abstract class TKVStoreTestBase {
 		String txName = "tx";
 		Key tk = Key.create("t1");
 
-		TransactionalDB db = getDB(dbName);
+		TransactionManager db = getDB(dbName);
 
 		String collection = "r";
-		Record r = Record.create("1","2");
+		Record r = createRecord("1","2");
 		Key pk = Key.create("k1");
 		Transaction tx = db.start(txName, tk);
 		assertNotNull(tx);

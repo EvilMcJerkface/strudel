@@ -24,27 +24,34 @@ import org.junit.Test;
 
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
+import com.nec.strudel.tkvs.SimpleRecord;
+import com.nec.strudel.tkvs.VarArrayFormat;
 import com.nec.strudel.tkvs.impl.CollectionBuffer;
 import com.nec.strudel.tkvs.impl.CollectionBufferImpl;
-import com.nec.strudel.tkvs.impl.KVStore;
+import com.nec.strudel.tkvs.impl.KeyValueReader;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.nec.strudel.tkvs.impl.inmemory.InMemoryDb;
 
 public class CollectionBufferTest {
 
-	protected KVStore getKVStore() {
+	protected KeyValueReader getKVStore() {
 		return new InMemoryDb("test").store("test", Key.create("test"));
 	}
 
-	@Test
+    public static Record createRecord(String... values) {
+        return SimpleRecord.create(
+                VarArrayFormat.toBytes(values));
+    }
+
+    @Test
 	public void testRead() {
-		KVStore kvs = getKVStore();
+		KeyValueReader kvs = getKVStore();
 		CollectionBuffer buff = new CollectionBufferImpl("r", kvs,
 				TransactionProfiler.NO_PROF);
 		Key k1 = Key.create("k1");
-		Record r1 = Record.create("r1");
+		Record r1 = createRecord("r1");
 		Key k2 = Key.create("k2");
-		Record r2 = Record.create("r2");
+		Record r2 = createRecord("r2");
 		Key k3 = Key.create("k3");
 //		Record r3 = Record.create("r3");
 		buff.load(k1, r1);
@@ -61,20 +68,20 @@ public class CollectionBufferTest {
 
 	@Test
 	public void testWrite() {
-		KVStore kvs = getKVStore();
+		KeyValueReader kvs = getKVStore();
 		CollectionBuffer buff = new CollectionBufferImpl("r", kvs,
 				TransactionProfiler.NO_PROF);
 		Key k1 = Key.create("k1");
-		Record r1 = Record.create("r1");
+		Record r1 = createRecord("r1");
 		Key k2 = Key.create("k2");
-		Record r2 = Record.create("r2");
+		Record r2 = createRecord("r2");
 		Key k3 = Key.create("k3");
-		Record r3 = Record.create("r3");
+		Record r3 = createRecord("r3");
 		buff.load(k1, r1);
 		buff.load(k2, r2);
 		buff.put(k3, r3);
 		buff.delete(k2);
-		Record r1a = Record.create("r1a");
+		Record r1a = createRecord("r1a");
 		buff.put(k1, r1a);
 		assertEquals(r1a, buff.get(k1));
 		assertNull(buff.get(k2));

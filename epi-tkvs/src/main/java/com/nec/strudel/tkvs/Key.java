@@ -29,7 +29,7 @@ public abstract class Key {
 
     public static Key parse(byte[] image) {
         String key = new String(image);
-        String[] ids = key.toString().split(INT_DELIM);
+        String[] ids = key.split(INT_DELIM);
         if (ids.length > 1) {
             return new CompoundKey(ids);
         } else {
@@ -63,27 +63,14 @@ public abstract class Key {
     }
 
     /**
-     * @throws NumberFormatException
-     * @return the value when the key is interpreted as an integer.
+     * Gets a raw array without type conversion
+     * @return an array of key elements.
      */
-    public abstract int toInt();
+    protected abstract Object[] toArray();
 
-    public abstract int[] toIntArray();
+    public abstract <T> T convert(Class<T> dstClass);
 
-    public abstract Object[] toArray();
-
-    public abstract Record toRecord();
-
-    /**
-     * TODO implement better
-     */
-    public <T> T convert(Class<T> dstClass) {
-        return Record.convert(key.toString(), dstClass);
-    }
-
-    public Object[] toTuple(Class<?>[] types) {
-        return toRecord().toTuple(types);
-    }
+    public abstract Object[] toTuple(Class<?>... types);
 
     public Key concat(Key key) {
         Object[] vec1 = this.toArray();
@@ -100,6 +87,24 @@ public abstract class Key {
 
     public byte[] toBytes() {
         return key.getBytes();
+    }
+
+    public byte[] toByteKey(String... prefix) {
+        StringBuilder sb = new StringBuilder();
+        for (String pre : prefix) {
+            sb.append(pre);
+        }
+        sb.append(key);
+        return sb.toString().getBytes();
+    }
+
+    public String toStringKey(String...prefix) {
+        StringBuilder sb = new StringBuilder();
+        for (String pre : prefix) {
+            sb.append(pre);
+        }
+        sb.append(key);
+        return sb.toString();
     }
 
     @Override
@@ -127,35 +132,23 @@ public abstract class Key {
             this.key = key;
         }
 
-        public int toInt() {
-            if (key instanceof Integer) {
-                return (Integer) key;
-            } else {
-                return Integer.parseInt(
-                        key.toString());
-            }
-        }
-
         @Override
-        public int[] toIntArray() {
-            return new int[] { toInt() };
-        }
-
-        @Override
-        public Object[] toArray() {
+        protected Object[] toArray() {
             return new Object[] { key };
         }
 
-        public Record toRecord() {
-            return Record.create(key);
+        @Override
+        public Object[] toTuple(Class<?>... types) {
+            if (types.length != 1) {
+                throw new TkvStoreException("mismatched key type");
+            }
+            final Object value = TypeUtil.convertType(key, types[0]);
+            return new Object[] {value};
         }
 
         @Override
         public <T> T convert(Class<T> dstClass) {
-            if (dstClass.isInstance(key)) {
-                return dstClass.cast(key);
-            }
-            return super.convert(dstClass);
+            return TypeUtil.convertType(key, dstClass);
         }
     }
 
@@ -167,33 +160,30 @@ public abstract class Key {
             this.keys = keys;
         }
 
-        public Record toRecord() {
-            return Record.create(keys);
-        }
-
         @Override
-        public int toInt() {
-            throw new NumberFormatException(
-                    "compound key cannot be converted to an integer");
-        }
-
-        public int[] toIntArray() {
-            int[] keyvec = new int[keys.length];
-            for (int i = 0; i < keys.length; i++) {
-                if (keys[i] instanceof Integer) {
-                    keyvec[i] = (Integer) keys[i];
-                } else {
-                    keyvec[i] = Integer.parseInt(
-                            keys[i].toString());
-                }
+        public Object[] toTuple(Class<?>... types) {
+            if (keys.length != types.length) {
+                throw new TkvStoreException("mismatched key type");
             }
-            return keyvec;
+            Object[] values = new Object[types.length];
+            for (int i = 0; i < values.length; i++) {
+                values[i] = TypeUtil.convertType(keys[i], types[i]);
+            }
+            return values;
         }
 
         @Override
-        public Object[] toArray() {
-            // TODO copy it for safety?
+        protected Object[] toArray() {
             return keys;
+        }
+
+        @Override
+        public <T> T convert(Class<T> dstClass) {
+            if (keys.length != 1) {
+                throw new TkvStoreException("mismatched key type");
+            } else {
+                return TypeUtil.convertType(keys[0], dstClass);
+            }
         }
 
         static String concat(Object[] ids) {

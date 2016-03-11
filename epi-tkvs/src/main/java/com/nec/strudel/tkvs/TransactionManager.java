@@ -21,13 +21,14 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.nec.strudel.entity.IsolationLevel;
 
 /**
- * A Key-Value Store that supports entity-group transactions.
+ * Interface to access a key-value store through entity-group
+ * transactions.
  * 
  * @author tatemura
  *
  */
 @NotThreadSafe
-public interface TransactionalDB {
+public interface TransactionManager {
 
     /**
      * Starts a transaction over one entity group. Multiple transactions can be

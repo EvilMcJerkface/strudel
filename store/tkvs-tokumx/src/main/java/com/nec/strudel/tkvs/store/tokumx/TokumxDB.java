@@ -22,11 +22,11 @@ import com.nec.strudel.entity.IsolationLevel;
 import com.nec.strudel.tkvs.BackoffPolicy;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Transaction;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 
 
-public class TokumxDB implements TransactionalDB {
+public class TokumxDB implements TransactionManager {
 	private final MongoClient[] mclients;
 	private final int numMongod;
 	private final String name;

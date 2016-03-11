@@ -41,10 +41,10 @@ public final class Indexes {
                             + " transaction=" + tx.getKey());
         }
         String name = idx.getName();
-        tx.put(name, idx.getKey(), idx.getRecord());
+        tx.put(name, idx.getKey(), idx.toRecord());
     }
 
-    public static IndexData get(TransactionalDB db,
+    public static IndexData get(TransactionManager db,
             final IndexType type, final Object key) {
         Object groupKey = type.toGroupKey(key);
         String groupName = type.getGroupName();
@@ -68,14 +68,14 @@ public final class Indexes {
             IndexType type, Object key) {
         Record record = Indexes.getRecord(tx, type, key);
         if (record != null) {
-            return create(type, tx.getKey(),
+            return IndexData.create(type, tx.getKey(),
                     Entities.toKey(key), record);
         } else {
-            return create(type, tx.getKey(), Entities.toKey(key));
+            return IndexData.create(type, tx.getKey(), Entities.toKey(key));
         }
     }
 
-    public static void remove(TransactionalDB db,
+    public static void remove(TransactionManager db,
             final IndexType type, final Object key, final Object ref) {
         Object groupKey = type.toGroupKey(key);
         String groupName = type.getGroupName();
@@ -104,7 +104,7 @@ public final class Indexes {
         store(tx, idx);
     }
 
-    public static Object newKey(TransactionalDB db,
+    public static Object newKey(TransactionManager db,
             final IndexType type,
             final Object key) {
         Object grpKey = type.toGroupKey(key);
@@ -122,22 +122,13 @@ public final class Indexes {
     public static Object newKey(Transaction tx,
             IndexType type, Object key) {
         IndexData idx = get(tx, type, key);
-        Object newKey = idx.addNewKeyEntry();
+        Object newKey = idx.createNewKey();
         store(tx, idx);
-        return idx.toTargetKey(idx.getKey(),
-                Entities.toKey(newKey));
+        return newKey;
 
     }
 
-    private static IndexData create(
-            IndexType type, Key groupKey, Key key) {
-        return new IndexData(type, groupKey, key);
-    }
 
-    private static IndexData create(IndexType type,
-            Key groupKey, Key key, Record record) {
-        return new IndexData(type, groupKey, key, record);
-    }
 
     @Nullable
     private static Record getRecord(Transaction tx,

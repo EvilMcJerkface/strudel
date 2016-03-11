@@ -23,7 +23,7 @@ import com.nec.strudel.instrument.Instrumented;
 import com.nec.strudel.instrument.ProfilerService;
 import com.nec.strudel.instrument.Profiling;
 import com.nec.strudel.target.Target;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.nec.strudel.tkvs.impl.TransactionalDbServer;
 import com.nec.strudel.tkvs.store.TransactionalStore;
@@ -35,11 +35,11 @@ public abstract class AbstractTransactionalStore implements TransactionalStore {
             String dbName, Properties props);
 
     @Override
-    public Target<TransactionalDB> create(String dbName, Properties props) {
+    public Target<TransactionManager> create(String dbName, Properties props) {
         return new DbServer(dbName, createDbServer(dbName, props));
     }
 
-    static class DbServer implements Target<TransactionalDB> {
+    static class DbServer implements Target<TransactionManager> {
         private final String dbName;
         private final TransactionalDbServer<TransactionProfiler> dbs;
 
@@ -50,12 +50,12 @@ public abstract class AbstractTransactionalStore implements TransactionalStore {
         }
 
         @Override
-        public TransactionalDB open() {
+        public TransactionManager open() {
             return dbs.open(TransactionProfiler.NO_PROF);
         }
 
         @Override
-        public Instrumented<TransactionalDB> open(ProfilerService profs) {
+        public Instrumented<TransactionManager> open(ProfilerService profs) {
             Instrumented<TransactionProfilerImpl> prof = profs.createProfiler(
                     TransactionProfilerImpl.class,
                     TransactionStat.create(dbName, profs));
@@ -64,12 +64,12 @@ public abstract class AbstractTransactionalStore implements TransactionalStore {
         }
 
         @Override
-        public void beginUse(TransactionalDB target) {
+        public void beginUse(TransactionManager target) {
             // nothing to do
         }
 
         @Override
-        public void endUse(TransactionalDB target) {
+        public void endUse(TransactionManager target) {
             // nothing to do
         }
 

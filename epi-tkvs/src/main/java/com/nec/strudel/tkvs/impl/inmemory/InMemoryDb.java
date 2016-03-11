@@ -27,13 +27,13 @@ import com.nec.strudel.tkvs.BackoffPolicy;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
 import com.nec.strudel.tkvs.Transaction;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.CollectionBuffer;
 import com.nec.strudel.tkvs.impl.CollectionBufferImpl;
-import com.nec.strudel.tkvs.impl.KVStore;
+import com.nec.strudel.tkvs.impl.KeyValueReader;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 
-public class InMemoryDb implements TransactionalDB {
+public class InMemoryDb implements TransactionManager {
     private final String name;
     private final ConcurrentHashMap<GKey, InMemoryKvStore> stores =
             new ConcurrentHashMap<GKey, InMemoryKvStore>();
@@ -93,7 +93,7 @@ public class InMemoryDb implements TransactionalDB {
         return store;
     }
 
-    static class InMemoryKvStore implements KVStore, Committer {
+    static class InMemoryKvStore implements KeyValueReader, Committer {
         private final GKey gkey;
         private volatile long version = 0;
         private final ConcurrentHashMap<GKey, Versioned> data =

@@ -16,11 +16,11 @@
 
 package com.nec.strudel.tkvs.impl;
 
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 
 public interface TransactionalDbServer<P> {
 
-    TransactionalDB open(P prof);
+    TransactionManager open(P prof);
 
     void close();
 }

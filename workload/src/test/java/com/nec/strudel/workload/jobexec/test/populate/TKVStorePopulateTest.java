@@ -33,7 +33,7 @@ import com.nec.strudel.target.TargetUtil;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
 import com.nec.strudel.tkvs.Transaction;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.store.impl.InMemoryStore;
 import com.nec.strudel.workload.job.PopulateTask;
 import com.nec.strudel.workload.job.PopulateWorkItem;
@@ -46,7 +46,7 @@ public class TKVStorePopulateTest {
 	private Properties props = new Properties();
 
 
-	public TransactionalDB getDB(String name) {
+	public TransactionManager getDB(String name) {
 		return STORE.create(name, props).open();
 	}
 	protected String newName() {
@@ -58,7 +58,7 @@ public class TKVStorePopulateTest {
         final int numOfRecords = 100;
         final String collection = TKVTestPopulatorFactory.COLLECTION_NAME;
         String dbName = newName();
-        TransactionalDB db = getDB(dbName);
+        TransactionManager db = getDB(dbName);
         populator(db, numOfRecords).run();
         for (int i = 0; i < numOfRecords; i++) {
             Key key = Key.create(i);
@@ -76,7 +76,7 @@ public class TKVStorePopulateTest {
             assertNull(r);
         }
     }
-	private PopulateRunner populator(TransactionalDB db, int numOfRecords) {
+	private PopulateRunner populator(TransactionManager db, int numOfRecords) {
 		ConstantParamSeq pseq = ConstantParamSeq.builder()
         		.param(TKVTestPopulatorFactory.InParam.COUNT.name(), numOfRecords)
         		.build();
@@ -95,7 +95,7 @@ public class TKVStorePopulateTest {
         pop.addItem(item);
         PopulateRunner runner =
                 PopulateRunner.create(pop, null,
-                		 new LocalPopulateExec<TransactionalDB>(
+                		 new LocalPopulateExec<TransactionManager>(
                          		/**
                          		 * OK for a single thread execution:
                          		 */

@@ -22,12 +22,12 @@ import com.nec.strudel.instrument.Profiler;
 import com.nec.strudel.instrument.ProfilerService;
 import com.nec.strudel.target.Target;
 import com.nec.strudel.tkvs.EntityDbImpl;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 
 public class EntityStore implements Target<EntityDB> {
-    private final Target<TransactionalDB> tkvStore;
+    private final Target<TransactionManager> tkvStore;
 
-    public EntityStore(Target<TransactionalDB> tkvStore) {
+    public EntityStore(Target<TransactionManager> tkvStore) {
         this.tkvStore = tkvStore;
     }
 
@@ -56,9 +56,9 @@ public class EntityStore implements Target<EntityDB> {
 
     private static class ConnectionWrapper
             implements Instrumented<EntityDB> {
-        private final Instrumented<TransactionalDB> con;
+        private final Instrumented<TransactionManager> con;
 
-        ConnectionWrapper(Instrumented<TransactionalDB> con) {
+        ConnectionWrapper(Instrumented<TransactionManager> con) {
             this.con = con;
         }
 

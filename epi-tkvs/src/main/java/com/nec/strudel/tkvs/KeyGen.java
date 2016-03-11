@@ -23,7 +23,7 @@ public final class KeyGen {
     private KeyGen() {
     }
 
-    public static void generateKey(TransactionalDB db,
+    public static void generateKey(TransactionManager db,
             final KeyGeneratorType keyGen, final Object entity) {
         String groupName = keyGen.getGroupName();
         Key groupKey = Entities.toKey(keyGen.getGroupKey(entity));

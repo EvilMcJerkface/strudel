@@ -24,14 +24,14 @@ import com.nec.strudel.tkvs.BackoffPolicy;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.TkvStoreException;
 import com.nec.strudel.tkvs.Transaction;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.yahoo.omid.transaction.HBaseTransactionManager;
 import com.yahoo.omid.transaction.TTable;
 import com.yahoo.omid.transaction.TransactionException;
 
 
-public class OmidDB implements TransactionalDB {
+public class OmidDB implements TransactionManager {
 	private final HBaseTransactionManager[] tms;
 	private final Configuration[] confs;
 	private final int numTso;

@@ -21,7 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import com.nec.strudel.entity.jpa.EntityDBImpl;
+import com.nec.strudel.entity.jpa.EntityDbImpl;
 
 public class DBTestStore {
 	private final EntityManagerFactory emf;
@@ -39,8 +39,8 @@ public class DBTestStore {
 	public void close() {
 		emf.close();
 	}
-	public EntityDBImpl open() {
+	public EntityDbImpl open() {
 		EntityManager em = emf.createEntityManager();
-		return new EntityDBImpl(em);
+		return new EntityDbImpl(em);
 	}
 }

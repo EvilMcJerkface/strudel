@@ -24,9 +24,9 @@ import org.apache.hadoop.hbase.client.Put;
 
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
-import com.nec.strudel.tkvs.SerDeUtil;
+import com.nec.strudel.tkvs.SimpleRecord;
 import com.nec.strudel.tkvs.impl.CollectionBuffer;
-import com.nec.strudel.tkvs.impl.KVStore;
+import com.nec.strudel.tkvs.impl.KeyValueReader;
 import com.nec.strudel.tkvs.impl.TransactionBaseImpl;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.yahoo.omid.transaction.HBaseTransactionManager;
@@ -75,15 +75,14 @@ public class OmidTransaction extends TransactionBaseImpl {
 				Key key = e.getKey();
 				Record r = e.getValue();
                 //rowid : dbName + collection name + key in collection
-                byte[] rowid = SerDeUtil.toBytes(dbName
-                		+ name + key.toString());
+                byte[] rowid = key.toByteKey(dbName, name);
 				//for put
 				if (r != null) {
 					try {
 						put = new Put(rowid);
 						put.add(OmidDbServer.ENTITYCF,
                                 OmidDbServer.ENTITYCF,
-                                SerDeUtil.toBytes(r));
+                                r.toBytes());
 						tt.put(tx, put);
 					} catch (IllegalArgumentException e1) {
                         // TODO Auto-generated catch block
@@ -126,7 +125,7 @@ public class OmidTransaction extends TransactionBaseImpl {
 		return true;
 	}
 
-	static class OmidKVStore implements KVStore {
+	static class OmidKVStore implements KeyValueReader {
 		private final TTable tt;
 		private final Transaction tx;
 		private final String dbName;
@@ -137,8 +136,7 @@ public class OmidTransaction extends TransactionBaseImpl {
 		}
 		@Override
 		public Record get(String name, Key key) {
-			Get get = new Get(SerDeUtil.toBytes(dbName
-					+ name + key.toString()));
+			Get get = new Get(key.toByteKey(dbName, name));
 			get.addColumn(OmidDbServer.ENTITYCF,
 					OmidDbServer.ENTITYCF);
 			byte[] value = null;
@@ -149,7 +147,7 @@ public class OmidTransaction extends TransactionBaseImpl {
 				e.printStackTrace();
 			}
 			if (value != null) {
-				return SerDeUtil.parseRecord(value);
+				return SimpleRecord.create(value);
 			} else {
 				return null;
 			}

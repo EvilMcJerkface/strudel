@@ -32,10 +32,10 @@ import com.nec.strudel.tkvs.BackoffTime;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
 import com.nec.strudel.tkvs.RetryException;
-import com.nec.strudel.tkvs.SerDeUtil;
+import com.nec.strudel.tkvs.SimpleRecord;
 import com.nec.strudel.tkvs.TkvStoreException;
 import com.nec.strudel.tkvs.impl.CollectionBuffer;
-import com.nec.strudel.tkvs.impl.KVStore;
+import com.nec.strudel.tkvs.impl.KeyValueReader;
 import com.nec.strudel.tkvs.impl.TransactionBaseImpl;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.nec.strudel.tkvs.store.mongodb.MongodbStore.MongoDbServer;
@@ -70,10 +70,10 @@ public class MongodbTransaction extends TransactionBaseImpl {
 	public MongodbTransaction(String gName,
 			Key gKey, DBCollection coll,
 			TransactionProfiler prof) {
-		super(gName, gKey, new MongodbKVStore(coll,
-				gName + gKey), prof);
+		super(gName, gKey, new MongodbReader(coll,
+				gKey.toStringKey(gName)), prof);
 		this.coll = coll;
-		this.docName = gName + gKey;
+		this.docName = gKey.toStringKey(gName);
 		this.vnum = getVnum(coll, docName);
     	this.gName = gName;
     	this.prof = prof;
@@ -131,10 +131,10 @@ public class MongodbTransaction extends TransactionBaseImpl {
 				Record r = e.getValue();
 				//for put
 				if (r != null) {
-					setdoc.append(name + key,
-						SerDeUtil.toBytes(r));
+					setdoc.append(key.toStringKey(name),
+						r.toBytes());
 				} else { // for delete
-					unsetdoc.append(name + key, "");
+					unsetdoc.append(key.toStringKey(name), "");
 				}
 			}
 		}
@@ -251,18 +251,19 @@ public class MongodbTransaction extends TransactionBaseImpl {
 			}
 		}, MongoException.class);
 	}
-	static class MongodbKVStore implements KVStore {
+	static class MongodbReader implements KeyValueReader {
 		private final DBCollection coll;
 		private final String docName;
-		MongodbKVStore(DBCollection coll, String docName) {
+		MongodbReader(DBCollection coll, String docName) {
 			this.coll = coll;
 			this.docName = docName;
 		}
 		@Override
 		public Record get(String name, Key key) {
-			DBObject obj = get(name, new BasicDBObject(name + key, 1));
-			if (obj != null && obj.containsField(name + key)) {
-                return SerDeUtil.parseRecord((byte[]) obj.get(name + key));
+			String strKey = key.toStringKey(name);
+			DBObject obj = get(name, new BasicDBObject(strKey, 1));
+			if (obj != null && obj.containsField(strKey)) {
+                return SimpleRecord.create((byte[]) obj.get(strKey));
 			} else {
 				return null;
 			}

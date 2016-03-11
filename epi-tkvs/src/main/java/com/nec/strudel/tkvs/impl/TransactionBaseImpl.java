@@ -27,16 +27,16 @@ import com.nec.strudel.tkvs.Transaction;
 public abstract class TransactionBaseImpl implements Transaction {
     private final Map<String, CollectionBufferImpl> buffers =
             new HashMap<String, CollectionBufferImpl>();
-    private final KVStore store;
+    private final KeyValueReader reader;
     private final String name;
     private final Key key;
     private final TransactionProfiler prof;
 
-    public TransactionBaseImpl(String name, Key key, KVStore store,
+    public TransactionBaseImpl(String name, Key key, KeyValueReader store,
             TransactionProfiler prof) {
         this.name = name;
         this.key = key;
-        this.store = store;
+        this.reader = store;
         this.prof = prof;
     }
 
@@ -73,13 +73,10 @@ public abstract class TransactionBaseImpl implements Transaction {
         CollectionBufferImpl buff = buffers.get(name);
         if (buff == null) {
             buff = new CollectionBufferImpl(name,
-                    store, prof);
+                    reader, prof);
             buffers.put(name, buff);
         }
         return buff;
     }
 
-    protected KVStore getStore() {
-        return store;
-    }
 }

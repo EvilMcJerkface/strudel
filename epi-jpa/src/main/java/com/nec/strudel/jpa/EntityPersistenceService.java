@@ -19,7 +19,7 @@ package com.nec.strudel.jpa;
 import javax.persistence.EntityManager;
 
 import com.nec.strudel.entity.EntityDB;
-import com.nec.strudel.entity.jpa.EntityDBImpl;
+import com.nec.strudel.entity.jpa.EntityDbImpl;
 import com.nec.strudel.instrument.InstrumentUtil;
 import com.nec.strudel.instrument.Instrumented;
 import com.nec.strudel.instrument.ProfilerService;
@@ -64,7 +64,7 @@ public class EntityPersistenceService implements TargetCreator<EntityDB> {
 
         @Override
         public EntityDB open() {
-            return new EntityDBImpl(store.open());
+            return new EntityDbImpl(store.open());
         }
 
         @Override
@@ -81,7 +81,7 @@ public class EntityPersistenceService implements TargetCreator<EntityDB> {
              * Entity manager may be used by somebody before. clear the internal
              * state before using.
              */
-            ((EntityDBImpl) target).getEntityManager().clear();
+            ((EntityDbImpl) target).getEntityManager().clear();
         }
 
         @Override

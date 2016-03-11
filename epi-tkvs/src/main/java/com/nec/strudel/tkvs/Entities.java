@@ -37,7 +37,7 @@ public final class Entities {
         }
     }
 
-    public static <T> T get(TransactionalDB db,
+    public static <T> T get(TransactionManager db,
             final Class<T> cls, final EntityDescriptor desc,
             Object groupKey, final Object key) {
         String groupName = desc.getGroupName();
@@ -78,7 +78,7 @@ public final class Entities {
         tx.put(name, toKey(key), Entities.toRecord(entity));
     }
 
-    public static void store(TransactionalDB db,
+    public static void store(TransactionManager db,
             EntityDescriptor desc, final Object entity) {
         String grpName = desc.getGroupName();
         final Object key = desc.getKey(entity);
@@ -110,7 +110,7 @@ public final class Entities {
     private static EntityConstructor getConstructorOf(Class<?> cls) {
         EntityConstructor cons = CONSTS.get(cls);
         if (cons == null) {
-            cons = new EntityConstructor(cls);
+            cons = EntityConstructor.of(cls);
             CONSTS.put(cls, cons);
         }
         return cons;
@@ -147,7 +147,7 @@ public final class Entities {
         tx.delete(name, toKey(key));
     }
 
-    public static void delete(TransactionalDB db, final EntityDescriptor desc,
+    public static void delete(TransactionManager db, final EntityDescriptor desc,
             final Object groupKey, final Object key) {
         String groupName = desc.getGroupName();
         TransactionRunner.run(db, groupName, toKey(groupKey),

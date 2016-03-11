@@ -21,12 +21,12 @@ import java.util.Properties;
 import com.nec.strudel.target.FactoryClass;
 import com.nec.strudel.target.Target;
 import com.nec.strudel.target.TargetLifecycle;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 
 @FactoryClass(TkvDbCreator.class)
 public interface TransactionalStore {
 
-    Target<TransactionalDB> create(String dbName, Properties props);
+    Target<TransactionManager> create(String dbName, Properties props);
 
     TargetLifecycle lifecycle(String dbName, Properties props);
 

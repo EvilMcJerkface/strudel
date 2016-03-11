@@ -33,10 +33,10 @@ import com.nec.strudel.tkvs.BackoffPolicy;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
 import com.nec.strudel.tkvs.RetryException;
-import com.nec.strudel.tkvs.SerDeUtil;
+import com.nec.strudel.tkvs.SimpleRecord;
 import com.nec.strudel.tkvs.TkvStoreException;
 import com.nec.strudel.tkvs.impl.CollectionBuffer;
-import com.nec.strudel.tkvs.impl.KVStore;
+import com.nec.strudel.tkvs.impl.KeyValueReader;
 import com.nec.strudel.tkvs.impl.TransactionBaseImpl;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 import com.nec.strudel.tkvs.store.tokumx.TokumxStore.TokumxDbServer;
@@ -65,14 +65,16 @@ public class TokumxTransaction extends TransactionBaseImpl {
 	private final DB db;
 	private final String gName;
 	private final TransactionProfiler prof;
-	private final MongodbKVStore kvs;
+	private final TokumxReader kvs;
+
 	public TokumxTransaction(String gName, Key gKey,
 			String dbname, DB db, DBCollection coll,
 			TransactionProfiler prof) {
-		this(gName, gKey, dbname, db, new MongodbKVStore(coll), coll, prof);
+		this(gName, gKey, dbname, db, new TokumxReader(coll), coll,
+				prof);
 	}
 	public TokumxTransaction(String gName, Key gKey,
-			String dbname, DB db, MongodbKVStore kvs, DBCollection coll,
+			String dbname, DB db, TokumxReader kvs, DBCollection coll,
 			TransactionProfiler prof) {
 		super(gName, gKey, kvs, prof);
 		db.requestStart();
@@ -126,7 +128,7 @@ public class TokumxTransaction extends TransactionBaseImpl {
 			for (Map.Entry<Key, Record> e : writes.entrySet()) {
 				Key key = e.getKey();
 				Record r = e.getValue();
-				String docName = name + key;
+				String docName = key.toStringKey(name);
 				//for put
 				if (r != null) {
                     //bulk or update? Tested: almost the same performance
@@ -137,7 +139,7 @@ public class TokumxTransaction extends TransactionBaseImpl {
 						docName)).upsert().update(
 						new BasicDBObject("$set",
                             new BasicDBObject(TokumxDbServer.VALUENAME,
-                                SerDeUtil.toBytes(r))));
+                                r.toBytes())));
 //					coll.update(new
 //                      BasicDBObject(TokumxDbServer.docname, docName),
 //						new BasicDBObject("$set",
@@ -198,17 +200,17 @@ public class TokumxTransaction extends TransactionBaseImpl {
 		}
 	}
 
-	static class MongodbKVStore implements KVStore {
+	static class TokumxReader implements KeyValueReader {
 		private final DBCollection coll;
 		private boolean aborted = false;
-		MongodbKVStore(DBCollection coll) {
+		TokumxReader(DBCollection coll) {
 			this.coll = coll;
 		}
 		@SuppressWarnings("deprecation")
 		@Override
 		public Record get(String name, Key key) {
 			final DBObject objkey = new BasicDBObject(TokumxDbServer.DOCNAME,
-					name + key);
+					key.toStringKey(name));
 			DBObject obj;
 			try {
 				obj = MONGO_BACKOFF.call(
@@ -246,7 +248,7 @@ public class TokumxTransaction extends TransactionBaseImpl {
 
 			if (obj != null && obj.
 				containsField(TokumxDbServer.VALUENAME)) {
-				return SerDeUtil.parseRecord((byte[]) obj
+				return SimpleRecord.create((byte[]) obj
 					.get(TokumxDbServer.VALUENAME));
 			} else {
 				return null;

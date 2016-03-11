@@ -23,12 +23,12 @@ import org.junit.BeforeClass;
 import com.nec.strudel.bench.micro.interactions.entity.ListItems;
 import com.nec.strudel.bench.test.interactions.TestOn;
 import com.nec.strudel.entity.EntityDB;
-import com.nec.strudel.entity.jpa.EntityDBImpl;
+import com.nec.strudel.entity.jpa.EntityDbImpl;
 
 @TestOn(ListItems.class)
 public class ListItemsTest extends com.nec.strudel.bench.micro.interactions.ListItemsTest {
 	private static DBTestStore store;
-	private EntityDBImpl db;
+	private EntityDbImpl db;
 	@BeforeClass
 	public static void startup() {
 		store = new DBTestStore();

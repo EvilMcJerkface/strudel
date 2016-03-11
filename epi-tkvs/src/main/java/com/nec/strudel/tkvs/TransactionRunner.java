@@ -23,13 +23,13 @@ import com.nec.strudel.entity.IsolationLevel;
 public class TransactionRunner {
     private static final Logger LOGGER = Logger
             .getLogger(TransactionRunner.class);
-    private final TransactionalDB db;
+    private final TransactionManager db;
     private final String name;
     private final Key key;
     private final IsolationLevel level;
     private final BackoffPolicy backoffPolicy;
 
-    public TransactionRunner(TransactionalDB db, String name, Key key) {
+    public TransactionRunner(TransactionManager db, String name, Key key) {
         this.db = db;
         this.name = name;
         this.key = key;
@@ -37,7 +37,7 @@ public class TransactionRunner {
         this.backoffPolicy = db.backoffPolicy();
     }
 
-    public TransactionRunner(TransactionalDB db,
+    public TransactionRunner(TransactionManager db,
             IsolationLevel level, String name, Key key) {
         this.db = db;
         this.name = name;
@@ -46,12 +46,12 @@ public class TransactionRunner {
         this.backoffPolicy = db.backoffPolicy();
     }
 
-    public static <T> T run(TransactionalDB db, String name, Key key,
+    public static <T> T run(TransactionManager db, String name, Key key,
             TransactionTask<T> task) {
         return new TransactionRunner(db, name, key).run(task);
     }
 
-    public static <T> T run(TransactionalDB db, IsolationLevel level,
+    public static <T> T run(TransactionManager db, IsolationLevel level,
             String name, Key key,
             TransactionTask<T> task) {
         return new TransactionRunner(db, level, name, key).run(task);

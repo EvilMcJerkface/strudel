@@ -26,16 +26,16 @@ import com.nec.strudel.tkvs.Record;
 
 public class CollectionBufferImpl implements CollectionBuffer {
     private final String name;
-    private final KVStore store;
+    private final KeyValueReader reader;
     private final Map<Key, Record> records = new HashMap<Key, Record>();
     private final Set<Key> reads = new HashSet<Key>();
     private final Set<Key> writes = new HashSet<Key>();
     private final TransactionProfiler prof;
 
     public CollectionBufferImpl(String name,
-            KVStore store, TransactionProfiler prof) {
+            KeyValueReader reader, TransactionProfiler prof) {
         this.name = name;
-        this.store = store;
+        this.reader = reader;
         this.prof = prof;
     }
 
@@ -57,7 +57,7 @@ public class CollectionBufferImpl implements CollectionBuffer {
             return records.get(key);
         }
         prof.getStart(name);
-        Record record = store.get(name, key);
+        Record record = reader.get(name, key);
         prof.getDone(name);
         if (record != null) {
             record.toString();

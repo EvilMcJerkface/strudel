@@ -22,27 +22,40 @@ import com.nec.strudel.entity.info.BeanInfo;
 
 public class EntityConstructor {
     private final BeanInfo info;
-    private final Class<?>[] types;
+    private final RecordFormat format;
 
-    public EntityConstructor(Class<?> entityClass) {
-        this(new BeanInfo(entityClass));
+    public EntityConstructor(BeanInfo info, RecordFormat format) {
+        this.info = info;
+        this.format = format;
     }
 
-    public EntityConstructor(BeanInfo info) {
-        this.info = info;
+    public static EntityConstructor of(Class<?> entityClass) {
+        BeanInfo info = new BeanInfo(entityClass);
+        RecordFormat format = formatFor(info);
+        return new EntityConstructor(info, format);
+    }
+
+    public static RecordFormat formatFor(BeanInfo info) {
         List<Class<?>> list = info.types();
-        types = list.toArray(new Class<?>[list.size()]);
+        Class<?>[] types = list.toArray(new Class<?>[list.size()]);
+        /*
+         * TODO use more efficient format
+         */
+        return new ArrayRecordFormat(types);
     }
 
     public Record toRecord(Object entity) {
-        Object[] vals = info.toTuple(entity);
-        return Record.create(vals);
+        Object[] values = info.toTuple(entity);
+        return SimpleRecord.create(
+                format.serialize(values));
     }
 
     public <T> T create(Record record) {
         @SuppressWarnings("unchecked")
-        T entity = (T) info.create(record.toTuple(types));
+        T entity = (T) info.create(
+                format.deserialize(record.toBytes()));
         return entity;
     }
+
 
 }

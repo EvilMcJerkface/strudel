@@ -28,9 +28,9 @@ import org.apache.hadoop.hbase.util.Bytes;
 import com.google.common.primitives.Longs;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Record;
-import com.nec.strudel.tkvs.SerDeUtil;
+import com.nec.strudel.tkvs.SimpleRecord;
 import com.nec.strudel.tkvs.impl.CollectionBuffer;
-import com.nec.strudel.tkvs.impl.KVStore;
+import com.nec.strudel.tkvs.impl.KeyValueReader;
 import com.nec.strudel.tkvs.impl.TransactionBaseImpl;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 
@@ -49,7 +49,7 @@ public class HBaseTransaction extends TransactionBaseImpl {
 	public HBaseTransaction(String gName, Key gKey, byte[] rowid,
 			HTableInterface table, TransactionProfiler prof)
 				throws IOException {
-		super(gName, gKey, new HBaseKVStore(table, rowid), prof);
+		super(gName, gKey, new HBaseReader(table, rowid), prof);
     	this.rowid = rowid;
 		//Get version number
     	Get get = new Get(rowid);
@@ -78,11 +78,11 @@ public class HBaseTransaction extends TransactionBaseImpl {
 				//for put
 				if (r != null) {
 					put.add(HBaseStore.ENTITYCF,
-                         SerDeUtil.toBytes(name + e.getKey()),
-							SerDeUtil.toBytes(r));
+							e.getKey().toByteKey(name),
+                         r.toBytes());
 				} else { // for delete
 					del.deleteColumn(HBaseStore.ENTITYCF,
-                        SerDeUtil.toBytes(name + e.getKey()));
+							e.getKey().toByteKey(name));
 				}
 			}
 		}
@@ -199,10 +199,10 @@ public class HBaseTransaction extends TransactionBaseImpl {
 		}
 	}
 
-	static class HBaseKVStore implements KVStore {
+	static class HBaseReader implements KeyValueReader {
 		private final HTableInterface htable;
 		private final byte[] rowid;
-		HBaseKVStore(HTableInterface htable, byte[] rowid) {
+		HBaseReader(HTableInterface htable, byte[] rowid) {
 			this.htable = htable;
 			this.rowid = rowid;
 		}
@@ -212,7 +212,7 @@ public class HBaseTransaction extends TransactionBaseImpl {
 			//Do we need to check version here?
 			//Or we'll just wait until commit
 			get.addColumn(HBaseStore.ENTITYCF,
-				SerDeUtil.toBytes(name + key));
+					key.toByteKey(name));
 			byte[] value = null;
 			try {
 				value = this.htable.get(get).value();
@@ -221,7 +221,7 @@ public class HBaseTransaction extends TransactionBaseImpl {
 				e.printStackTrace();
 			}
 			if (value != null) {
-				return SerDeUtil.parseRecord(value);
+				return SimpleRecord.create(value);
 			} else {
 				return null;
 			}

@@ -25,11 +25,11 @@ import com.nec.strudel.entity.EntityDescriptor;
 import com.nec.strudel.entity.EntityGroup;
 import com.nec.strudel.entity.EntityTask;
 
-public class EntityDBImpl implements EntityDB {
+public class EntityDbImpl implements EntityDB {
     private final EntityManager em;
     private final IndexQuery iq;
 
-    public EntityDBImpl(EntityManager em) {
+    public EntityDbImpl(EntityManager em) {
         this.em = em;
         this.iq = new IndexQuery(em);
     }

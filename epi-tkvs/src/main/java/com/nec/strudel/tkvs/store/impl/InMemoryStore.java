@@ -25,7 +25,7 @@ import com.nec.strudel.target.Target;
 import com.nec.strudel.target.TargetLifecycle;
 import com.nec.strudel.target.TargetUtil;
 import com.nec.strudel.tkvs.BackoffPolicy;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.inmemory.InMemoryDb;
 import com.nec.strudel.tkvs.store.TransactionalStore;
 
@@ -34,17 +34,17 @@ public class InMemoryStore implements TransactionalStore {
             new ConcurrentHashMap<String, InMemoryDb>();
 
     @Override
-    public Target<TransactionalDB> create(String dbName, Properties props) {
+    public Target<TransactionManager> create(String dbName, Properties props) {
         InMemoryDb db = dbs.get(dbName);
         if (db == null) {
             db = new InMemoryDb(dbName, new BackoffPolicy(props));
             InMemoryDb old = dbs.putIfAbsent(dbName, db);
             if (old != null) {
                 return TargetUtil.sharedTarget(
-                        (TransactionalDB) old);
+                        (TransactionManager) old);
             }
         }
-        return TargetUtil.sharedTarget((TransactionalDB) db);
+        return TargetUtil.sharedTarget((TransactionManager) db);
     }
 
     @Override

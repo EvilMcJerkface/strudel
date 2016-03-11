@@ -16,6 +16,8 @@
 
 package com.nec.strudel.tkvs;
 
+import java.nio.ByteBuffer;
+
 import javax.annotation.concurrent.NotThreadSafe;
 
 @NotThreadSafe
@@ -26,7 +28,7 @@ public class Counter {
 
     public Counter(Key key, Record record) {
         this.key = key;
-        this.value = record.getInt(0);
+        this.value = toValue(record);
     }
 
     public Counter(Key key) {
@@ -45,7 +47,15 @@ public class Counter {
     }
 
     public Record getRecord() {
-        return Record.create(value);
+        ByteBuffer buf = ByteBuffer.allocate(INT_SIZE);
+        buf.putInt(value);
+        return SimpleRecord.create(buf.array());
     }
 
+    static int toValue(Record record) {
+        byte[] img = record.toBytes();
+        return ByteBuffer.wrap(img).getInt();
+    }
+
+    private static final int INT_SIZE = 4;
 }

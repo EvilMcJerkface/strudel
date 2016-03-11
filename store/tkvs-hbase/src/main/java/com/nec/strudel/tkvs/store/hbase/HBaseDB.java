@@ -23,14 +23,13 @@ import org.apache.hadoop.hbase.client.HConnection;
 import com.nec.strudel.entity.IsolationLevel;
 import com.nec.strudel.tkvs.BackoffPolicy;
 import com.nec.strudel.tkvs.Key;
-import com.nec.strudel.tkvs.SerDeUtil;
 import com.nec.strudel.tkvs.TkvStoreException;
 import com.nec.strudel.tkvs.Transaction;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 
 
-public class HBaseDB implements TransactionalDB {
+public class HBaseDB implements TransactionManager {
 	private final String name;
 	private final HTableDescriptor tab;
 	private final HConnection hconn;
@@ -49,10 +48,11 @@ public class HBaseDB implements TransactionalDB {
 	@Override
 	public Transaction start(String groupName, Key groupKey) {
 		//rowid: groupName + groupKey
-        byte[] rowid = SerDeUtil.toBytes(groupName + groupKey);
+        byte[] rowid = groupKey.toByteKey(groupName);
 		try {
 			return new HBaseTransaction(groupName, groupKey, rowid,
-                hconn.getTable(tab.getName()), prof);
+                hconn.getTable(tab.getName()),
+                prof);
 		} catch (IOException e) {
 			throw new TkvStoreException(
 					  "Failed to start HBaseTransaction (IOException)", e);

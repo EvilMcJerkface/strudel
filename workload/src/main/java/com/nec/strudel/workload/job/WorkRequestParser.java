@@ -39,7 +39,7 @@ public class WorkRequestParser {
                 .add(NODE, req.getNode())
                 .add(item.tagName(), item.getConfig())
                 .add(DATABASE, req.getDatabase())
-                .toXMLString();
+                .toXmlString();
     }
 
     /**

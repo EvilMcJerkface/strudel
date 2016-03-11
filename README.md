@@ -7,6 +7,8 @@ to compose various workloads that run those stores.
 This work will be presented at EDBT 2016 as
 "Strudel: A Framework for Transaction Performance Analyses on SQL/NoSQL Systems."
 
+http://openproceedings.org/2016/conf/edbt/paper-131.pdf
+
 **This is a preview version.**
 We have included components that are
 used in our internal experiments (by excluding proprietary components).

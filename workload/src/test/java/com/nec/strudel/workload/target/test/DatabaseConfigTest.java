@@ -25,7 +25,7 @@ import com.nec.strudel.target.Target;
 import com.nec.strudel.target.TargetConfig;
 import com.nec.strudel.target.impl.DatabaseConfig;
 import com.nec.strudel.target.impl.TargetFactory;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.inmemory.InMemoryDb;
 import com.nec.strudel.tkvs.store.impl.InMemoryStore;
 import com.nec.strudel.workload.test.DBFiles;
@@ -47,8 +47,8 @@ public class DatabaseConfigTest {
 		for (int i = 1; i <= size; i++) {
 			assertEquals("v" + i, props.get("k" + i));
 		}
-		Target<TransactionalDB> store = TargetFactory.create(conf);
-		TransactionalDB db = store.open();
+		Target<TransactionManager> store = TargetFactory.create(conf);
+		TransactionManager db = store.open();
 		assertEquals("auction", db.getName());
 		assertTrue(db instanceof InMemoryDb);
 	}

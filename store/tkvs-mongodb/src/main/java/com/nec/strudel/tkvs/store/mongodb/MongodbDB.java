@@ -20,11 +20,11 @@ import com.nec.strudel.entity.IsolationLevel;
 import com.nec.strudel.tkvs.BackoffPolicy;
 import com.nec.strudel.tkvs.Key;
 import com.nec.strudel.tkvs.Transaction;
-import com.nec.strudel.tkvs.TransactionalDB;
+import com.nec.strudel.tkvs.TransactionManager;
 import com.nec.strudel.tkvs.impl.TransactionProfiler;
 
 
-public class MongodbDB implements TransactionalDB {
+public class MongodbDB implements TransactionManager {
 	private final DBCollection coll;
 	private final String name;
 	private final TransactionProfiler prof;

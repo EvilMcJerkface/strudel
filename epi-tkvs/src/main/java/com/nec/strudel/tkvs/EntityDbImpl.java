@@ -28,9 +28,9 @@ import com.nec.strudel.entity.IndexType;
 import com.nec.strudel.entity.KeyGeneratorType;
 
 public class EntityDbImpl implements EntityDB {
-    private final TransactionalDB db;
+    private final TransactionManager db;
 
-    public EntityDbImpl(TransactionalDB db) {
+    public EntityDbImpl(TransactionManager db) {
         this.db = db;
     }
 
@@ -154,7 +154,7 @@ public class EntityDbImpl implements EntityDB {
         }
     }
 
-    static void create(Transaction tx, TransactionalDB db,
+    static void create(Transaction tx, TransactionManager db,
             EntityDescriptor desc, Object entity) {
         KeyGeneratorType keyGen = desc.keyGenerator();
         if (keyGen != null) {
@@ -185,7 +185,7 @@ public class EntityDbImpl implements EntityDB {
         indexAndStore(tx, db, desc, key, entity);
     }
 
-    static void create(Transaction tx, TransactionalDB db,
+    static void create(Transaction tx, TransactionManager db,
             KeyGeneratorType keyGen, EntityDescriptor desc, Object entity) {
         if (keyGen.isInGroup()) {
             KeyGen.generateKey(tx, keyGen, entity);
@@ -198,7 +198,7 @@ public class EntityDbImpl implements EntityDB {
         }
     }
 
-    static void indexAndStore(Transaction tx, TransactionalDB db,
+    static void indexAndStore(Transaction tx, TransactionManager db,
             EntityDescriptor desc, Object key, Object entity) {
         try {
             index(tx, db, desc, key, entity);
@@ -209,7 +209,7 @@ public class EntityDbImpl implements EntityDB {
         }
     }
 
-    static void index(Transaction tx, TransactionalDB db,
+    static void index(Transaction tx, TransactionManager db,
             EntityDescriptor desc,
             final Object key, final Object entity) {
         for (IndexType index : desc.index()) {
@@ -246,7 +246,7 @@ public class EntityDbImpl implements EntityDB {
         }
     }
 
-    static void unindex(TransactionalDB db,
+    static void unindex(TransactionManager db,
             EntityDescriptor desc, Object key, Object entity) {
         for (IndexType index : desc.index()) {
             if (!index.isAuto()) {
@@ -258,9 +258,9 @@ public class EntityDbImpl implements EntityDB {
 
     static class EntityTransactionImpl implements EntityTransaction {
         private final Transaction tx;
-        private final TransactionalDB db;
+        private final TransactionManager db;
 
-        EntityTransactionImpl(Transaction tx, TransactionalDB db) {
+        EntityTransactionImpl(Transaction tx, TransactionManager db) {
             this.tx = tx;
             this.db = db;
         }
