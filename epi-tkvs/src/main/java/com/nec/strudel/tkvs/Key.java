@@ -27,16 +27,6 @@ public abstract class Key {
     private static final String INT_DELIM = "#";
     private final String key;
 
-    public static Key parse(byte[] image) {
-        String key = new String(image);
-        String[] ids = key.split(INT_DELIM);
-        if (ids.length > 1) {
-            return new CompoundKey(ids);
-        } else {
-            return new SingleKey(key);
-        }
-    }
-
     public static Key parse(String key) {
         String[] ids = key.split(INT_DELIM);
         if (ids.length > 1) {
@@ -92,7 +82,7 @@ public abstract class Key {
     public byte[] toByteKey(String... prefix) {
         StringBuilder sb = new StringBuilder();
         for (String pre : prefix) {
-            sb.append(pre);
+            sb.append(pre).append('_');
         }
         sb.append(key);
         return sb.toString().getBytes();
@@ -101,7 +91,7 @@ public abstract class Key {
     public String toStringKey(String...prefix) {
         StringBuilder sb = new StringBuilder();
         for (String pre : prefix) {
-            sb.append(pre);
+            sb.append(pre).append('_');
         }
         sb.append(key);
         return sb.toString();

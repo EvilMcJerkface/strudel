@@ -28,6 +28,10 @@ public abstract class KeyConstructor {
 
     public abstract Key toKey(Object key);
 
+    public abstract byte[] toBytes(Key key);
+
+    public abstract Key read(byte[] data);
+
     public static KeyConstructor constructorOf(Class<?> keyClass) {
         if (ValueTypes.isPrimitive(keyClass)) {
             return new PrimitiveKeyConstructor(keyClass);
@@ -47,11 +51,13 @@ public abstract class KeyConstructor {
     static class BeanKeyConstructor extends KeyConstructor {
         private final BeanInfo info;
         private final Class<?>[] types;
+        private final RecordFormat format;
 
         public BeanKeyConstructor(BeanInfo info) {
             this.info = info;
             List<Class<?>> list = info.types();
             types = list.toArray(new Class<?>[list.size()]);
+            this.format = new ArrayRecordFormat(types);
         }
 
         @SuppressWarnings("unchecked")
@@ -64,13 +70,25 @@ public abstract class KeyConstructor {
         public Key toKey(Object key) {
             return Key.create(info.toTuple(key));
         }
+
+        @Override
+        public byte[] toBytes(Key key) {
+            return format.serialize(key.toArray());
+        }
+
+        @Override
+        public Key read(byte[] data) {
+            return Key.create(format.deserialize(data));
+        }
     }
 
     static class PrimitiveKeyConstructor extends KeyConstructor {
         private final Class<?> keyClass;
+        private final TypeUtil.TypeConv<?> conv;
 
         public PrimitiveKeyConstructor(Class<?> keyClass) {
             this.keyClass = keyClass;
+            this.conv = TypeUtil.converterOf(keyClass);
         }
 
         @SuppressWarnings("unchecked")
@@ -79,8 +97,20 @@ public abstract class KeyConstructor {
             return key.convert((Class<T>) keyClass);
         }
 
+        @Override
         public Key toKey(Object key) {
             return Key.create(key);
+        }
+
+        @Override
+        public byte[] toBytes(Key key) {
+            return conv.toBytes(key.toArray()[0]);
+        }
+
+        @Override
+        public Key read(byte[] data) {
+            return Key.create(
+                    conv.fromBytes(data));
         }
 
     }
