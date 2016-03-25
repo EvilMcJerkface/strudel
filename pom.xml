@@ -30,6 +30,9 @@
   <module>session</module>
   <module>workload</module>
   <module>bench</module>
+  <module>store</module>
+  <module>exec</module>
+  <module>config</module>
  </modules>
  <dependencies>
      <dependency>

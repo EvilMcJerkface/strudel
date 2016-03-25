@@ -9,19 +9,19 @@
     <fileSet>
       <directory>jobs</directory>
       <excludes>
-        <exclude>**/congen.properties</exclude>
+        <exclude>**/congen-libs.properties</exclude>
       </excludes>
     </fileSet>
     <fileSet>
       <directory>conf</directory>
       <excludes>
-        <exclude>**/congen.properties</exclude>
+        <exclude>**/congen-libs.properties</exclude>
       </excludes>
     </fileSet>
     <fileSet>
       <directory>env</directory>
       <excludes>
-        <exclude>**/congen.properties</exclude>
+        <exclude>**/congen-libs.properties</exclude>
       </excludes>
     </fileSet>
     <fileSet>

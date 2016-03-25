@@ -53,11 +53,18 @@ public class JobSuite implements Iterable<Job> {
     private String id;
     private String output;
 
+    private JobSuite(JobInfo info, ConfigDescription cdl) {
+        this.info = info;
+        this.cdl = cdl;
+        this.id = info.getId();
+        this.output = info.getOutDir();
+    }
+
     public static JobSuite createWithoutBase(File file) {
         String path = file.getAbsolutePath();
         ConfigDescription cdl = ConfigDescription.create(file);
         JobInfo info = new JobInfo(path);
-        JobSuite js = new JobSuite(info, cdl);
+        JobSuite js = JobSuite.create(info, cdl);
         return js;
     }
 
@@ -66,7 +73,7 @@ public class JobSuite implements Iterable<Job> {
         String path = file.getAbsolutePath();
         ConfigDescription cdl = ConfigDescription.create(file, base);
         JobInfo info = new JobInfo(path);
-        JobSuite js = new JobSuite(info, cdl);
+        JobSuite js = JobSuite.create(info, cdl);
         return js;
     }
 
@@ -77,14 +84,25 @@ public class JobSuite implements Iterable<Job> {
         return ConfigDescription.create(JobSuite.class, SUPER_SUITE);
     }
 
-    public JobSuite(JobInfo info, ConfigDescription cdl) {
-        this.info = info;
-        this.cdl = cdl;
-        this.id = cdl.get(ID);
+    public static JobSuite create(JobInfo info, ConfigDescription cdl) {
+        setupInfo(info, cdl);
+        return new JobSuite(info, cdl);
+    }
+
+    public static String findId(ConfigDescription cdl) {
+        return cdl.get(ID);
+    }
+
+    public static String findOutput(ConfigDescription cdl) {
+        return cdl.get(ELEM_OUTPUT);
+    }
+
+    public static void setupInfo(JobInfo info, ConfigDescription cdl) {
+        String id = findId(cdl);
         if (id == null) {
             throw new ConfigException("mssing value: id");
         }
-        output = cdl.get(ELEM_OUTPUT);
+        String output = findOutput(cdl);
         if (output == null) {
             throw new ConfigException("mssing value: output");
         }

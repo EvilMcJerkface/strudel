@@ -61,7 +61,7 @@ public abstract class JobRunner implements Runnable {
                 JobSuite.baseDescription());
         if (JobSuite.TAG_NAME.equalsIgnoreCase(cxml.getName())) {
             return new JobSuiteRunner(
-                    new JobSuite(info, cxml));
+                    JobSuite.create(info, cxml));
         } else {
             return new SingleJobRunner(
                     new Job(info, cxml.resolve()));
@@ -202,7 +202,7 @@ public abstract class JobRunner implements Runnable {
     protected void runTasks(Job job) {
         long startTime = System.currentTimeMillis();
         for (Task t : job.createTasks()) {
-            Runnable runner = TaskRunnerFactory.create(t, job);
+            Runnable runner = new TaskRunnerFactory().create(t, job);
             long time = System.currentTimeMillis();
             LOGGER.info("start " + t.description());
             runner.run();

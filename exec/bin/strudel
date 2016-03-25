@@ -1,0 +1,22 @@
+#!/bin/bash
+# This script must be placed at "bin"
+# directory of the following structure:
+# [root_dir]
+#   bin/ (placed here with other scripts)
+#   lib/ (jar files used for workload engine)
+#   (classpaths for workload)*
+#
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do 
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+root_dir="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
+
+CPATH="$root_dir/lib/*"
+
+if [ -z "$STRUDEL_WKLD_OPTS" ]; then
+	STRUDEL_WKLD_OPTS="-Xmx1G"
+fi
+java "-Dstrudel.classpath.base=$root_dir" $STRUDEL_WKLD_OPTS -cp "$CPATH:$CLASSPATH" com.nec.strudel.workload.jobexec.JobCli $@

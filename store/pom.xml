@@ -17,7 +17,6 @@
     <module>tkvs-hbase</module>
     <module>tkvs-mongodb</module>
     <module>tkvs-tokumx</module>
-    <module>tkvs-omid</module>
    </modules>
    <dependencyManagement>
      <dependencies>

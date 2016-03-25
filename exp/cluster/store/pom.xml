@@ -13,7 +13,6 @@
 	</parent>
 	<modules>
 	  <module>tkvs-hbase</module>
-	  <module>tkvs-omid</module>
 	  <module>tkvs-mongodb</module>
 	  <module>tkvs-tokumx</module>
 	</modules>

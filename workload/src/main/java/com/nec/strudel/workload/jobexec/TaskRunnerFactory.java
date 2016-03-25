@@ -26,9 +26,9 @@ import com.nec.strudel.workload.jobexec.com.MeasureWorkloadCommand;
 import com.nec.strudel.workload.jobexec.com.WorkloadWorkflow;
 import com.nec.strudel.workload.measure.MeasurementConfig;
 
-public final class TaskRunnerFactory {
+public class TaskRunnerFactory {
 
-    public static Runnable create(Task task, Job job) {
+    public Runnable create(Task task, Job job) {
         if (task instanceof PopulateTask) {
             return PopulateRunner.create((PopulateTask) task, job);
         } else if (task instanceof WorkloadTask) {

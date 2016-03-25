@@ -1,0 +1,11 @@
+<jobSuite>
+  <output>tmp/jobsuite002</output>
+  <foreach name="threads" sep=",">1,2,3,4</foreach>
+  <job>
+    <tasks>
+      <workload>
+        <numOfThreads ref="threads"/>
+      </workload>
+    </tasks>
+  </job>
+</jobSuite>
