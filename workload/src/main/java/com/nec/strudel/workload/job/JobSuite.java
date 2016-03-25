@@ -17,7 +17,6 @@
 package com.nec.strudel.workload.job;
 
 import java.io.File;
-import java.io.Writer;
 import java.util.Iterator;
 
 import com.nec.congenio.ConfigDescription;
@@ -60,21 +59,14 @@ public class JobSuite implements Iterable<Job> {
         this.output = info.getOutDir();
     }
 
-    public static JobSuite createWithoutBase(File file) {
-        String path = file.getAbsolutePath();
-        ConfigDescription cdl = ConfigDescription.create(file);
-        JobInfo info = new JobInfo(path);
-        JobSuite js = JobSuite.create(info, cdl);
-        return js;
-    }
 
     public static JobSuite create(File file) {
         ConfigDescription base = baseDescription();
         String path = file.getAbsolutePath();
         ConfigDescription cdl = ConfigDescription.create(file, base);
         JobInfo info = new JobInfo(path);
-        JobSuite js = JobSuite.create(info, cdl);
-        return js;
+        setupInfo(info, cdl);
+        return new JobSuite(info, cdl);
     }
 
     /**
@@ -82,11 +74,6 @@ public class JobSuite implements Iterable<Job> {
      */
     public static ConfigDescription baseDescription() {
         return ConfigDescription.create(JobSuite.class, SUPER_SUITE);
-    }
-
-    public static JobSuite create(JobInfo info, ConfigDescription cdl) {
-        setupInfo(info, cdl);
-        return new JobSuite(info, cdl);
     }
 
     public static String findId(ConfigDescription cdl) {
@@ -110,21 +97,10 @@ public class JobSuite implements Iterable<Job> {
         info.setOutDir(output);
     }
 
-    public JobInfo info() {
-        return info;
-    }
-
     @Override
     public Iterator<Job> iterator() {
         return new JobIterator(info,
                 cdl.evaluate().iterator());
-    }
-
-    /**
-     * Write (save) JobSuite (before loop unfolding and reference resolution)
-     */
-    public void write(Writer writer) {
-        cdl.write(writer);
     }
 
     public String getOutput() {

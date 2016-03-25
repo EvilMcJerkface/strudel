@@ -21,6 +21,19 @@ import com.nec.strudel.workload.job.JobSuite;
 import com.nec.strudel.workload.job.Task;
 import com.nec.strudel.workload.util.TimeUtil;
 
+/**
+ * A handler class that runs a job or job suite. It will generate the following
+ * data when it executes a job suite:
+ * <ul>
+ * <li>${output}/jobsuite-${id}.xml - a configuration file after resolving
+ * inheritance
+ * <li>${output}/joblog-${id}.log - a Log4j log file during job execution
+ * <li>${output}/data/*.json - results of individual jobs in the job suite.
+ * </ul>
+ * 
+ * @author tatemura
+ *
+ */
 public class JobHandler implements ValueHandler {
     private static final Logger LOGGER = Logger.getLogger(JobHandler.class);
     private static final long SLEEP_BETWEEN_JOBS = 1000;
