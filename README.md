@@ -4,17 +4,17 @@ Strudel is a set of abstraction layers that wrap various
 transactional store, SQL or NoSQL, and help developers
 to compose various workloads that run those stores.
 
-This work will be presented at EDBT 2016 as
+This work was presented at EDBT 2016 as
 "Strudel: A Framework for Transaction Performance Analyses on SQL/NoSQL Systems."
 
-http://openproceedings.org/2016/conf/edbt/paper-131.pdf
+* [paper](http://openproceedings.org/2016/conf/edbt/paper-131.pdf)
+* [presentation slides](http://www.slideshare.net/tatemura/strudel-framework-for-transaction-performance-analyses-on-sqlnosql-systems)
 
-**This is a preview version.**
-We have included components that are
-used in our internal experiments (by excluding proprietary components).
-While they are fully functional, the current repository lacks (1) documentation
-(2) some code and scripts that integrate the released components to
-run experiments on a specific data store in a specific environment.
+This repository includes components that are
+used in the paper as well as our internal experiments
+(except components specific to our proprietary products).
+While they are fully functional, the current repository lacks documentation -- see
+the paper and presentation for introduction.
 
 Description
 -----------
@@ -63,13 +63,38 @@ to use a custom data access API to exploit advanced features of SQL/NoSQL system
 Submodules
 ----------
 The following submodules are the main part of Strudel:
-- epi: Entity DB (Entity Persistence Interface)
-- epi-jpa: JPA implementation of Entity DB
-- epi-tkvs: Entity DB implemented with a generic KVS interface
-- session: Session Workload framework
-- workload: workload execution engine
-- bench: benchmark submodules
-- store: data store submodules (for HBase, MongoDB, etc.)
+- [epi](https://github.com/tatemura/strudel/tree/master/epi): Entity DB (Entity Persistence Interface)
+- [epi-jpa](https://github.com/tatemura/strudel/tree/master/epi-jpa): JPA implementation of Entity DB
+- [epi-tkvs](https://github.com/tatemura/strudel/tree/master/epi-tkvs): Entity DB implemented with a generic KVS interface
+- [session](https://github.com/tatemura/strudel/tree/master/session): Session Workload framework
+- [workload](https://github.com/tatemura/strudel/tree/master/workload): workload execution engine
+- [bench](https://github.com/tatemura/strudel/tree/master/bench): benchmark submodules
+- [store](https://github.com/tatemura/strudel/tree/master/store): data store submodules (for HBase, MongoDB, etc.)
+
+An example of experiment environment build with this framework
+is included as the following submodule:
+- [exp/cluster](https://github.com/tatemura/strudel/tree/master/exp/cluster): experiments in a cluster environment
+
+Installation
+------------
+Use Maven to install the framework to your local repository.
+First, install [Congenio](https://github.com/tatemura/congenio) manually
+to the repository (see its [README](https://github.com/tatemura/congenio/blob/master/README.md) for introduction).
+Then run Maven at the main directory:
+
+    % mvn -DskipTests install
+
+After that you can build an example experiment environment:
+
+    % cd exp/cluster
+    % mvn -DskipTests package
+
+To use [Omid](https://github.com/yahoo/omid) for experiments,
+install it to maven repository manually and then install
+a TKVS implementation for Omid:
+
+    % (cd store/tkvs-omid; mvn -DskipTests install)
+
 
 Requirements
 ------------
